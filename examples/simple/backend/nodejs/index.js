@@ -43,13 +43,27 @@ const conversations = [
         "lines": [
             {
                 "name": "Person A-1",
-                "text": "2. How are you, Person B-1?",
-                "sentiment": "neutral"
+                "text": "2. How are you, Person B-1?"
             },
             {
                 "name": "Person B-1",
-                "text": "I'm doing great, thanks, Person A-1! How about you?",
-                "sentiment": "positive"
+                "text": "I'm doing great, thanks, Person A-1! How about you?"
+            },
+            {
+                "name": "Person A-1",
+                "text": "Been trying to make a game"
+            },
+            {
+                "name": "Person B-1",
+                "text": "Oh yeah, how goes the endeavor"
+            },
+            {
+                "name": "Person A-1",
+                "text": "Learning lots!"
+            },
+            {
+                "name": "Person B-1",
+                "text": "When can I play it?"
             }
         ],
         "currentLineIndex": 0
