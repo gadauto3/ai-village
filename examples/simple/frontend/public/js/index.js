@@ -13,51 +13,35 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var config = {
   apiPrefix: '/dev'
 };
+var defaultHeadIcon = 'icons8-head-profile-50.png';
 
-var App = function (_React$Component) {
-  _inherits(App, _React$Component);
+var Village = function (_React$Component) {
+  _inherits(Village, _React$Component);
 
-  function App(props) {
-    _classCallCheck(this, App);
+  function Village(props) {
+    _classCallCheck(this, Village);
 
-    var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+    var _this = _possibleConstructorReturn(this, (Village.__proto__ || Object.getPrototypeOf(Village)).call(this, props));
 
     _this.state = {
-      info: {
-        application: "",
-        version: ""
-      },
-      config: config,
-      clicks: [_this.newClickData()]
+      conversations: [],
+      config: config
     };
-    _this.state.clicks = [].concat(_toConsumableArray(_this.state.clicks), [_this.newClickData()]); // Add another row
-    _this.addPersonRow = _this.addPersonRow.bind(_this);
-    _this.reverseRandomPersonText = _this.reverseRandomPersonText.bind(_this);
-    _this.newClickData = _this.newClickData.bind(_this);
+    _this.addConversation = _this.addConversation.bind(_this);
+    _this.makeMockConversation = _this.makeMockConversation.bind(_this);
     return _this;
   }
 
-  _createClass(App, [{
-    key: 'newClickData',
-    value: function newClickData() {
-      var now = new Date();
-      var timeString = now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds() + (now.getHours() < 12 ? "am" : "pm");
-      // const numClicks = this.state?.clicks?.length + 1 || 1; // The OR condition ensures it works for the initial state
-      var numClicks = this.state && this.state.clicks && this.state.clicks.length ? this.state.clicks.length + 1 : 1;
+  // Fetch conversations from the API
 
-      return {
-        button: 'Click #' + numClicks,
-        icon: "⭐",
-        textField: 'Button click #' + numClicks + ' at ' + timeString
-      };
-    }
-  }, {
-    key: 'getApiInfo',
-    value: function getApiInfo(e) {
+
+  _createClass(Village, [{
+    key: 'addConversation',
+    value: function addConversation() {
       var _this2 = this;
 
-      e.preventDefault();
-
+      // TODO: change api path
+      //fetch(this.state.config.apiPrefix + "/api/getConversations", {
       fetch(this.state.config.apiPrefix + "/api/info", {
         method: "GET",
         headers: {
@@ -65,148 +49,148 @@ var App = function (_React$Component) {
         }
       }).then(function (response) {
         return response.json();
-      }).then(function (response) {
+      }).then(function (village) {
+        console.log('Received: ');
+        console.log(village);
         _this2.setState({
-          info: response
+          conversations: village.conversations
         });
+        alert('Conversations fetched successfully!');
       }).catch(function (err) {
-        console.log(err);
+        console.log('addConvo api error, making mock object\n' + err);
+        var convo = _this2.makeMockConversation(_this2.state.conversations.length + 1);
+        console.log(convo);
+        _this2.setState({
+          conversations: [].concat(_toConsumableArray(_this2.state.conversations), [convo])
+        });
+        console.log(_this2.state.conversations);
+        // alert('Error fetching conversations.');
       });
     }
   }, {
-    key: 'addPersonRow',
-    value: function addPersonRow() {
-      var _this3 = this;
+    key: 'makeMockConversation',
+    value: function makeMockConversation(id) {
+      // This function creates a new mock conversation with the given int (id) appended to the strings.
 
-      this.setState(function (prevState) {
-        return {
-          clicks: [].concat(_toConsumableArray(prevState.clicks), [_this3.newClickData()])
-        };
-      });
-    }
-  }, {
-    key: 'componentDidMount',
-    value: function componentDidMount() {}
-  }, {
-    key: 'handleChange',
-    value: function handleChange(changeObject) {
-      this.setState(changeObject);
-    }
-  }, {
-    key: 'reverseTextAtIndex',
-    value: function reverseTextAtIndex(index) {
-      var clicksCopy = [].concat(_toConsumableArray(this.state.clicks));
-      clicksCopy[index].button = clicksCopy[index].button.split("").reverse().join("");
-      clicksCopy[index].textField = clicksCopy[index].textField.split("").reverse().join("");
+      // Generate a random HTML-friendly color
+      var randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
 
-      this.setState({
-        clicks: clicksCopy
-      });
-    }
-  }, {
-    key: 'reverseRandomPersonText',
-    value: function reverseRandomPersonText() {
-      if (this.state.clicks.length === 0) return;
+      var conversation = {
+        color: randomColor,
+        persons: [{
+          name: 'Person A-' + id,
+          icon: defaultHeadIcon,
+          currentLine: '1: Hello from Person A-' + id + '!'
+        }, {
+          name: 'Person B-' + id,
+          icon: defaultHeadIcon,
+          currentLine: 'Greetings from Person B-' + id + '!'
+        }],
+        lines: [{
+          name: 'Person A-' + id,
+          text: '2. How are you, Person B-' + id + '?',
+          sentiment: "neutral"
+        }, {
+          name: 'Person B-' + id,
+          text: 'I\'m doing great, thanks, Person A-' + id + '! How about you?',
+          sentiment: "positive"
+        }],
+        currentLineIndex: 0
+      };
 
-      var randomIndex = Math.floor(Math.random() * this.state.clicks.length);
-      var clicksCopy = [].concat(_toConsumableArray(this.state.clicks));
-      clicksCopy[randomIndex].button = clicksCopy[randomIndex].button.split("").reverse().join("");
-      clicksCopy[randomIndex].textField = clicksCopy[randomIndex].textField.split("").reverse().join("");
-
-      this.setState({
-        clicks: clicksCopy
-      });
+      return conversation;
     }
   }, {
     key: 'render',
     value: function render() {
-      var _this4 = this;
+      var _this3 = this;
 
       return React.createElement(
         'div',
         { className: 'container' },
         React.createElement(
-          'div',
-          { className: 'row justify-content-center' },
-          React.createElement(
-            'div',
-            { className: 'col-md-8' },
-            React.createElement(
-              'h1',
-              { className: 'display-4 text-center' },
-              'A Village of Wonder'
-            ),
-            React.createElement(
-              'form',
-              { className: 'd-flex flex-column' },
-              React.createElement(
-                'legend',
-                { className: 'text-center' },
-                'Meet the people'
-              ),
-              this.state.info.application !== "" ? React.createElement(
-                'legend',
-                { className: 'text-center' },
-                'Application: ',
-                this.state.info.application,
-                '. Version:',
-                " ",
-                this.state.info.version
-              ) : null,
-              React.createElement(
-                'button',
-                {
-                  className: 'btn btn-primary',
-                  type: 'button',
-                  onClick: function onClick(e) {
-                    return _this4.getApiInfo(e);
-                  }
-                },
-                'Get API Info'
-              ),
-              React.createElement(
-                'div',
-                { className: 'mt-2' },
-                React.createElement(
-                  'button',
-                  {
-                    className: 'btn btn-secondary wide-btn',
-                    type: 'button',
-                    onClick: this.addPersonRow
-                  },
-                  'Add Entry'
-                ),
-                React.createElement(
-                  'button',
-                  {
-                    className: 'btn btn-warning ml-2',
-                    type: 'button',
-                    onClick: this.reverseRandomPersonText
-                  },
-                  'Reverse Random Person Text'
-                )
-              ),
-              this.state.clicks.map(function (click, index) {
-                return React.createElement(Person, {
-                  key: index,
-                  data: click,
-                  handleReverse: function handleReverse() {
-                    return _this4.reverseTextAtIndex(index);
-                  }
-                });
-              })
-            )
-          )
-        )
+          'h1',
+          { className: 'display-4 text-center' },
+          'A Village of Wonder'
+        ),
+        React.createElement(
+          'button',
+          { className: 'btn btn-secondary', type: 'button', onClick: this.addConversation },
+          'Add Conversation'
+        ),
+        this.state.conversations.map(function (conversation, index) {
+          return React.createElement(Conversation, { key: index, data: conversation, iconsPath: _this3.state.config.apiPrefix + '/icons/' });
+        })
       );
     }
   }]);
 
-  return App;
+  return Village;
+}(React.Component);
+// Conversation component represents a conversation between Persons.
+
+
+var Conversation = function (_React$Component2) {
+  _inherits(Conversation, _React$Component2);
+
+  function Conversation(props) {
+    _classCallCheck(this, Conversation);
+
+    var _this4 = _possibleConstructorReturn(this, (Conversation.__proto__ || Object.getPrototypeOf(Conversation)).call(this, props));
+
+    var persons = _this4.createPersonsFromLines(props.data.lines, props.data.color, props.iconsPath);
+    _this4.state = {
+      persons: persons,
+      currentLineIndex: 0 // Start from the first line
+    };
+    return _this4;
+  }
+
+  // Create an array of Persons from the lines of a conversation.
+
+
+  _createClass(Conversation, [{
+    key: 'createPersonsFromLines',
+    value: function createPersonsFromLines(lines, color, iconsPath) {
+      var personMap = {};
+      console.log('iconsPath: ' + iconsPath);
+      lines.forEach(function (line) {
+        if (!personMap[line.name]) {
+          personMap[line.name] = {
+            name: line.name,
+            currentLine: line.text,
+            icon: iconsPath + defaultHeadIcon, // Placeholder icon, update as per requirement.
+            color: color || '#FFF' // Default to white if no color is provided
+          };
+        } else {
+          personMap[line.name].currentLine = line.text;
+        }
+      });
+      return Object.values(personMap);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return React.createElement(
+        'div',
+        null,
+        this.state.persons.map(function (person, index) {
+          return React.createElement(Person, { key: index, data: person, color: person.color, updateLine: function updateLine() {
+              return alert('hello from ' + person.name);
+            } });
+        })
+      );
+    }
+  }]);
+
+  return Conversation;
 }(React.Component);
 
-var Person = function (_React$Component2) {
-  _inherits(Person, _React$Component2);
+// Person component represents an individual with a name, icon, and a line of text they've spoken.
+
+
+var Person = function (_React$Component3) {
+  _inherits(Person, _React$Component3);
 
   function Person() {
     _classCallCheck(this, Person);
@@ -219,26 +203,18 @@ var Person = function (_React$Component2) {
     value: function render() {
       return React.createElement(
         'div',
-        { className: 'd-flex align-items-center mt-2' },
+        { className: 'd-flex align-items-center mt-2 rounded-div', style: { backgroundColor: this.props.color } },
         React.createElement(
           'button',
-          {
-            className: 'btn btn-outline-info mr-3 wide-btn',
-            type: 'button',
-            onClick: this.props.handleReverse
-          },
-          this.props.data.button
+          { className: 'mr-2 wide-btn spacing', type: 'button', onClick: this.props.updateLine },
+          this.props.data.name
         ),
-        React.createElement(
-          'span',
-          { className: 'icon mr-2' },
-          this.props.data.icon
-        ),
+        React.createElement('img', { src: this.props.data.icon, alt: 'Icon', className: 'icon mr-2 spacing' }),
         React.createElement('input', {
           type: 'text',
           readOnly: true,
-          className: 'form-control',
-          value: this.props.data.textField
+          className: 'form-control spacing',
+          value: this.props.data.currentLine
         })
       );
     }
@@ -247,5 +223,5 @@ var Person = function (_React$Component2) {
   return Person;
 }(React.Component);
 
-var domContainer = document.querySelector("#App");
-ReactDOM.render(React.createElement(App, null), domContainer);
+var domContainer = document.querySelector("#Village");
+ReactDOM.render(React.createElement(Village, null), domContainer);

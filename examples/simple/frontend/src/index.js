@@ -4,41 +4,26 @@ const config = {
   apiPrefix: '/dev'
 };
 
-class App extends React.Component {
+// Handle localhost vs on S3 static site
+const iconsPath = ((typeof process.env === 'undefined') ? config.apiPrefix : process.env.PUBLIC_URL) + '/icons/';
+const defaultHeadIcon = 'icons8-head-profile-50.png';
+
+class Village extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      info: {
-        application: "",
-        version: "",
-      },
-      config: config,
-      clicks: [this.newClickData()],
+      conversations: [],
+      config: config
     };
-    this.state.clicks = [...this.state.clicks, this.newClickData()]; // Add another row
-    this.addPersonRow = this.addPersonRow.bind(this);
-    this.reverseRandomPersonText = this.reverseRandomPersonText.bind(this);
-    this.newClickData = this.newClickData.bind(this);
+    this.addConversation = this.addConversation.bind(this);
+    this.makeMockConversation = this.makeMockConversation.bind(this);
   }
 
-  newClickData() {
-    const now = new Date();
-    const timeString = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}${
-      now.getHours() < 12 ? "am" : "pm"
-    }`;
-    // const numClicks = this.state?.clicks?.length + 1 || 1; // The OR condition ensures it works for the initial state
-    const numClicks = (this.state && this.state.clicks && this.state.clicks.length) ? this.state.clicks.length + 1 : 1;
+  // Fetch conversations from the API
+  addConversation() {
 
-    return {
-      button: `Click #${numClicks}`,
-      icon: "⭐",
-      textField: `Button click #${numClicks} at ${timeString}`,
-    };
-  }
-
-  getApiInfo(e) {
-    e.preventDefault();
-
+    // TODO: change api path
+    //fetch(this.state.config.apiPrefix + "/api/getConversations", {
     fetch(this.state.config.apiPrefix + "/api/info", {
       method: "GET",
       headers: {
@@ -46,137 +31,133 @@ class App extends React.Component {
       },
     })
       .then((response) => response.json())
-      .then((response) => {
+      .then((village) => {
         this.setState({
-          info: response,
+          conversations: village.conversations
         });
+        alert('Conversations fetched successfully!');
       })
       .catch((err) => {
-        console.log(err);
+        console.log('addConvo api error, making mock object\n'+err);
+        const convo = this.makeMockConversation(this.state.conversations.length+1);
+        console.log(convo);
+        this.setState({
+          conversations: [...this.state.conversations, convo ]
+        });
+        // alert('Error fetching conversations.');
       });
   }
 
-  addPersonRow() {
-    this.setState((prevState) => ({
-      clicks: [...prevState.clicks, this.newClickData()],
-    }));
-  }
+  makeMockConversation(id) {
+    // This function creates a new mock conversation with the given int (id) appended to the strings.
 
-  componentDidMount() {}
+    // Generate a random HTML-friendly color
+    const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
 
-  handleChange(changeObject) {
-    this.setState(changeObject);
-  }
+    const conversation = {
+        color: randomColor,
+        persons: [
+            {
+                name: `Person A-${id}`,
+                icon: defaultHeadIcon,
+                currentLine: `1: Hello from Person A-${id}!`
+            },
+            {
+                name: `Person B-${id}`,
+                icon: defaultHeadIcon,
+                currentLine: `Greetings from Person B-${id}!`
+            }
+        ],
+        lines: [
+            {
+                name: `Person A-${id}`,
+                text: `2. How are you, Person B-${id}?`,
+                sentiment: "neutral"
+            },
+            {
+                name: `Person B-${id}`,
+                text: `I'm doing great, thanks, Person A-${id}! How about you?`,
+                sentiment: "positive"
+            }
+        ],
+        currentLineIndex: 0
+    };
 
-  reverseTextAtIndex(index) {
-    let clicksCopy = [...this.state.clicks];
-    clicksCopy[index].button = clicksCopy[index].button
-      .split("")
-      .reverse()
-      .join("");
-    clicksCopy[index].textField = clicksCopy[index].textField
-      .split("")
-      .reverse()
-      .join("");
-
-    this.setState({
-      clicks: clicksCopy,
-    });
-  }
-
-  reverseRandomPersonText() {
-    if (this.state.clicks.length === 0) return;
-
-    const randomIndex = Math.floor(Math.random() * this.state.clicks.length);
-    let clicksCopy = [...this.state.clicks];
-    clicksCopy[randomIndex].button = clicksCopy[randomIndex].button
-      .split("")
-      .reverse()
-      .join("");
-    clicksCopy[randomIndex].textField = clicksCopy[randomIndex].textField
-      .split("")
-      .reverse()
-      .join("");
-
-    this.setState({
-      clicks: clicksCopy,
-    });
-  }
+    return conversation;
+}
 
   render() {
     return (
       <div className="container">
-        <div className="row justify-content-center">
-          <div className="col-md-8">
-            <h1 className="display-4 text-center">A Village of Wonder</h1>
-            <form className="d-flex flex-column">
-              <legend className="text-center">Meet the people</legend>
-              {this.state.info.application !== "" ? (
-                <legend className="text-center">
-                  Application: {this.state.info.application}. Version:{" "}
-                  {this.state.info.version}
-                </legend>
-              ) : null}
-              <button
-                className="btn btn-primary"
-                type="button"
-                onClick={(e) => this.getApiInfo(e)}
-              >
-                Get API Info
-              </button>
-              <div className="mt-2">
-                <button
-                  className="btn btn-secondary wide-btn"
-                  type="button"
-                  onClick={this.addPersonRow}
-                >
-                  Add Entry
-                </button>
-                <button
-                  className="btn btn-warning ml-2"
-                  type="button"
-                  onClick={this.reverseRandomPersonText}
-                >
-                  Reverse Random Person Text
-                </button>
-              </div>
-              {this.state.clicks.map((click, index) => (
-                <Person
-                  key={index}
-                  data={click}
-                  handleReverse={() => this.reverseTextAtIndex(index)}
-                />
-              ))}
-            </form>
-          </div>
-        </div>
+        <h1 className="display-4 text-center">A Village of Wonder</h1>
+        <button className="btn btn-secondary" type="button" onClick={this.addConversation}>Add Conversation</button>
+        {this.state.conversations.map((conversation, index) => (
+          <Conversation key={index} data={conversation} />
+        ))}
+      </div>
+    );
+  }
+}
+// Conversation component represents a conversation between Persons.
+class Conversation extends React.Component {
+  constructor(props) {
+    super(props);
+    const persons = this.createPersonsFromLines(props.data.lines, props.data.color);
+    this.state = {
+      persons: persons,
+      currentLineIndex: 0 // Start from the first line
+    };
+  }
+
+  // Create an array of Persons from the lines of a conversation.
+  createPersonsFromLines(lines, color) {
+    const personMap = {};
+
+    lines.forEach(line => {
+      if (!personMap[line.name]) {
+        personMap[line.name] = {
+          name: line.name,
+          currentLine: line.text,
+          icon: iconsPath + defaultHeadIcon, // Placeholder icon, update as per requirement.
+          color: color || '#FFF' // Default to white if no color is provided
+        };
+      } else {
+        personMap[line.name].currentLine = line.text;
+      }
+    });
+    return Object.values(personMap);
+  }
+
+  render() {
+    return (
+      <div>
+        {this.state.persons.map((person, index) => (
+          <Person key={index} data={person} color={person.color} updateLine={() => alert('hello from '+person.name) } />
+        ))}
       </div>
     );
   }
 }
 
+// Person component represents an individual with a name, icon, and a line of text they've spoken.
 class Person extends React.Component {
+
   render() {
     return (
-      <div className="d-flex align-items-center mt-2">
-        <button
-          className="btn btn-outline-info mr-3 wide-btn"
-          type="button"
-          onClick={this.props.handleReverse}
-        >
-          {this.props.data.button}
-        </button>
-        <span className="icon mr-2">{this.props.data.icon}</span>
+      <div className="d-flex align-items-center mt-2 rounded-div" style={{ backgroundColor: this.props.color }}>
+        <button className="mr-2 wide-btn spacing" type="button" onClick={this.props.updateLine}>{this.props.data.name}</button>
+        <img src={this.props.data.icon} alt="Icon" className="icon mr-2 spacing" />
+
         <input
           type="text"
           readOnly
-          className="form-control"
-          value={this.props.data.textField}
+          className="form-control spacing"
+          value={this.props.data.currentLine}
         />
       </div>
     );
   }
 }
 
-let domContainer = document.querySelector("#App");
-ReactDOM.render(<App />, domContainer);
+let domContainer = document.querySelector("#Village");
+ReactDOM.render(<Village />, domContainer);
