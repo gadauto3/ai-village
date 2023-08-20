@@ -48,6 +48,12 @@ class Village extends React.Component {
       });
   }
 
+  updateLineIndexForConversation(index, newLineIndex) {
+    const updatedConversations = [...this.state.conversations];
+    updatedConversations[index].currentLineIndex = newLineIndex;
+    this.setState({ conversations: updatedConversations });
+  }
+  
   makeMockConversation(id) {
     // This function creates a new mock conversation with the given int (id) appended to the strings.
 
@@ -56,7 +62,7 @@ class Village extends React.Component {
 
     const conversation = {
         color: randomColor,
-        persons: [
+        people: [
             {
                 name: `Person A-${id}`,
                 icon: defaultHeadIcon,
@@ -71,16 +77,30 @@ class Village extends React.Component {
         lines: [
             {
                 name: `Person A-${id}`,
-                text: `2. How are you, Person B-${id}?`,
-                sentiment: "neutral"
+                text: `2. How are you, Person B-${id}?`
             },
             {
                 name: `Person B-${id}`,
-                text: `I'm doing great, thanks, Person A-${id}! How about you?`,
-                sentiment: "positive"
+                text: `I'm doing great, thanks, Person A-${id}! How about you?`
+            },
+            {
+                name: `Person A-${id}`,
+                text: `I'm good.'`
+            },
+            {
+                name: `Person B-${id}`,
+                text: `I'm looking up.`
+            },
+            {
+                name: `Person A-${id}`,
+                text: `I'm hearing around.`
+            },
+            {
+                name: `Person B-${id}`,
+                text: `I'm finding time.`
             }
         ],
-        currentLineIndex: 0
+        currentLineIndex: -1
     };
 
     return conversation;
@@ -91,9 +111,19 @@ class Village extends React.Component {
       <div className="container">
         <h1 className="display-4 text-center">A Village of Wonder</h1>
         <button className="btn btn-secondary" type="button" onClick={this.addConversation}>Add Conversation</button>
-        {this.state.conversations.map((conversation, index) => (
-          <Conversation key={index} data={conversation} />
-        ))}
+        <div className="tall-div">
+          {this.state.conversations.map((conversation, index) => (
+            <Conversation key={index} data={conversation} updateLineIndex={(newLineIndex) => this.updateLineIndexForConversation(index, newLineIndex)} />
+          ))}
+        </div>
+        <div className="hud">
+          <h5>Scoreboard</h5>
+          {this.state.conversations.map((conversation, index) => (
+            <div key={index} style={{backgroundColor: conversation.color, display: 'inline-block', padding: '10px', margin: '5px'}}>
+              {conversation.currentLineIndex}
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
@@ -102,37 +132,63 @@ class Village extends React.Component {
 class Conversation extends React.Component {
   constructor(props) {
     super(props);
-    const persons = this.createPersonsFromLines(props.data.lines, props.data.color);
+    const persons = this.createPeople(props.data.people, props.data.color);
     this.state = {
       persons: persons,
-      currentLineIndex: 0 // Start from the first line
+      lines: props.data.lines,
+      currentLineIndex: -1 // The first line checked will be the first element in the array
     };
   }
 
   // Create an array of Persons from the lines of a conversation.
-  createPersonsFromLines(lines, color) {
+  createPeople(people, color) {
     const personMap = {};
 
-    lines.forEach(line => {
-      if (!personMap[line.name]) {
-        personMap[line.name] = {
-          name: line.name,
-          currentLine: line.text,
-          icon: iconsPath + defaultHeadIcon, // Placeholder icon, update as per requirement.
+    people.forEach(person => {
+      if (!personMap[person.name]) {
+        personMap[person.name] = {
+          name: person.name,
+          currentLine: person.currentLine,
+          icon: iconsPath + person.icon, // Placeholder icon, update as per requirement.
           color: color || '#FFF' // Default to white if no color is provided
         };
       } else {
-        personMap[line.name].currentLine = line.text;
+        personMap[person.name].currentLine = person.currentLine;
       }
     });
     return Object.values(personMap);
+  }
+
+  updateConversationFor(person) {
+    let newIndex = this.state.currentLineIndex + 1;
+
+    // If out of lines
+    if (newIndex >= this.state.lines.length) {
+      person.currentLine = "Oops, I'm out of ideas";
+      alert('out of lines');
+      this.setState({ persons: this.state.persons });
+      return;
+    }
+
+    const nextLine = this.state.lines[newIndex];
+
+    // If the person is the speaker of the next line
+    if (nextLine.name === person.name) {
+      person.currentLine = nextLine.text;
+      this.props.updateLineIndex(newIndex);
+      this.setState({ currentLineIndex: newIndex, persons: this.state.persons });
+    } else {
+      // If the person is not the speaker of the next line
+      person.currentLine = `Would you check with ${nextLine.name}? Remember, I said, "${person.currentLine}"`;
+      this.setState({ persons: this.state.persons });
+    }
   }
 
   render() {
     return (
       <div>
         {this.state.persons.map((person, index) => (
-          <Person key={index} data={person} color={person.color} updateLine={() => alert('hello from '+person.name) } />
+          <Person key={index} data={person} color={person.color} updateLine={() => this.updateConversationFor(person)} />
         ))}
       </div>
     );
@@ -154,6 +210,30 @@ class Person extends React.Component {
           className="form-control spacing"
           value={this.props.data.currentLine}
         />
+      </div>
+    );
+  }
+}
+
+// HUD Component
+class HUD extends React.Component {
+  render() {
+    return (
+      <div className="hud mt-3">
+        <h5>Scoreboard</h5>
+        <div className="d-flex">
+          {this.props.conversations.map((conversation, index) => (
+            <div key={index} className="mr-2">
+              <input
+                type="text"
+                readOnly
+                className="form-control"
+                value={conversation.currentLineIndex}
+                style={{ backgroundColor: conversation.color, color: '#000' }}
+              />
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
