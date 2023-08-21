@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
@@ -12,5 +12,9 @@
     "express": "^4.18.2",
     "serverless-http": "^3.2.0"
   },
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "jest": "^29.6.2",
+    "jest-mock-extended": "^3.0.5"
+  }
 }

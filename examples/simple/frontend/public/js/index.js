@@ -13,6 +13,18 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var config = {
   apiPrefix: '/dev'
 };
+
+function isLocalHost() {
+  if (typeof window !== 'undefined' && window.location.host.includes('localhost')) {
+    console.log('You are running on localhost!');
+    return true;
+  } else {
+    return false;
+  }
+}
+
+// Handle localhost vs on S3 static site
+var iconsPath = (isLocalHost() ? process.env.PUBLIC_URL : config.apiPrefix) + '/icons/';
 var defaultHeadIcon = 'icons8-head-profile-50.png';
 
 var Village = function (_React$Component) {
@@ -50,7 +62,6 @@ var Village = function (_React$Component) {
       }).then(function (response) {
         return response.json();
       }).then(function (village) {
-        console.log('Received: ');
         console.log(village);
         _this2.setState({
           conversations: village.conversations
@@ -63,9 +74,15 @@ var Village = function (_React$Component) {
         _this2.setState({
           conversations: [].concat(_toConsumableArray(_this2.state.conversations), [convo])
         });
-        console.log(_this2.state.conversations);
         // alert('Error fetching conversations.');
       });
+    }
+  }, {
+    key: 'updateLineIndexForConversation',
+    value: function updateLineIndexForConversation(index, newLineIndex) {
+      var updatedConversations = [].concat(_toConsumableArray(this.state.conversations));
+      updatedConversations[index].currentLineIndex = newLineIndex;
+      this.setState({ conversations: updatedConversations });
     }
   }, {
     key: 'makeMockConversation',
@@ -77,7 +94,7 @@ var Village = function (_React$Component) {
 
       var conversation = {
         color: randomColor,
-        persons: [{
+        people: [{
           name: 'Person A-' + id,
           icon: defaultHeadIcon,
           currentLine: '1: Hello from Person A-' + id + '!'
@@ -88,14 +105,24 @@ var Village = function (_React$Component) {
         }],
         lines: [{
           name: 'Person A-' + id,
-          text: '2. How are you, Person B-' + id + '?',
-          sentiment: "neutral"
+          text: '2. How are you, Person B-' + id + '?'
         }, {
           name: 'Person B-' + id,
-          text: 'I\'m doing great, thanks, Person A-' + id + '! How about you?',
-          sentiment: "positive"
+          text: 'I\'m doing great, thanks, Person A-' + id + '! How about you?'
+        }, {
+          name: 'Person A-' + id,
+          text: 'I\'m good.\''
+        }, {
+          name: 'Person B-' + id,
+          text: 'I\'m looking up.'
+        }, {
+          name: 'Person A-' + id,
+          text: 'I\'m hearing around.'
+        }, {
+          name: 'Person B-' + id,
+          text: 'I\'m finding time.'
         }],
-        currentLineIndex: 0
+        currentLineIndex: -1
       };
 
       return conversation;
@@ -118,16 +145,38 @@ var Village = function (_React$Component) {
           { className: 'btn btn-secondary', type: 'button', onClick: this.addConversation },
           'Add Conversation'
         ),
-        this.state.conversations.map(function (conversation, index) {
-          return React.createElement(Conversation, { key: index, data: conversation, iconsPath: _this3.state.config.apiPrefix + '/icons/' });
-        })
+        React.createElement(
+          'div',
+          { className: 'tall-div' },
+          this.state.conversations.map(function (conversation, index) {
+            return React.createElement(Conversation, { key: index, data: conversation, updateLineIndex: function updateLineIndex(newLineIndex) {
+                return _this3.updateLineIndexForConversation(index, newLineIndex);
+              } });
+          })
+        ),
+        React.createElement(
+          'div',
+          { className: 'hud' },
+          React.createElement(
+            'h5',
+            null,
+            'Scoreboard'
+          ),
+          this.state.conversations.map(function (conversation, index) {
+            return React.createElement(
+              'div',
+              { key: index, style: { backgroundColor: conversation.color, display: 'inline-block', padding: '10px', margin: '5px' } },
+              conversation.currentLineIndex
+            );
+          })
+        )
       );
     }
   }]);
 
   return Village;
 }(React.Component);
-// Conversation component represents a conversation between Persons.
+// Conversation component represents a conversation between people.
 
 
 var Conversation = function (_React$Component2) {
@@ -138,45 +187,75 @@ var Conversation = function (_React$Component2) {
 
     var _this4 = _possibleConstructorReturn(this, (Conversation.__proto__ || Object.getPrototypeOf(Conversation)).call(this, props));
 
-    var persons = _this4.createPersonsFromLines(props.data.lines, props.data.color, props.iconsPath);
+    var people = _this4.createPeople(props.data.people, props.data.color);
     _this4.state = {
-      persons: persons,
-      currentLineIndex: 0 // Start from the first line
+      people: people,
+      lines: props.data.lines,
+      currentLineIndex: -1 // The first line checked will be the first element in the array
     };
     return _this4;
   }
 
-  // Create an array of Persons from the lines of a conversation.
+  // Create an array of people from the lines of a conversation.
 
 
   _createClass(Conversation, [{
-    key: 'createPersonsFromLines',
-    value: function createPersonsFromLines(lines, color, iconsPath) {
+    key: 'createPeople',
+    value: function createPeople(people, color) {
       var personMap = {};
-      console.log('iconsPath: ' + iconsPath);
-      lines.forEach(function (line) {
-        if (!personMap[line.name]) {
-          personMap[line.name] = {
-            name: line.name,
-            currentLine: line.text,
-            icon: iconsPath + defaultHeadIcon, // Placeholder icon, update as per requirement.
+
+      console.log(people);
+      people.forEach(function (person) {
+        if (!personMap[person.name]) {
+          personMap[person.name] = {
+            name: person.name,
+            currentLine: person.currentLine,
+            icon: iconsPath + person.icon, // Placeholder icon, update as per requirement.
             color: color || '#FFF' // Default to white if no color is provided
           };
         } else {
-          personMap[line.name].currentLine = line.text;
+          personMap[person.name].currentLine = person.currentLine;
         }
       });
       return Object.values(personMap);
     }
   }, {
+    key: 'updateConversationFor',
+    value: function updateConversationFor(person) {
+      var newIndex = this.state.currentLineIndex + 1;
+
+      // If out of lines
+      if (newIndex >= this.state.lines.length) {
+        person.currentLine = "Oops, I'm out of ideas";
+        alert('out of lines');
+        this.setState({ people: this.state.people });
+        return;
+      }
+
+      var nextLine = this.state.lines[newIndex];
+
+      // If the person is the speaker of the next line
+      if (nextLine.name === person.name) {
+        person.currentLine = nextLine.text;
+        this.props.updateLineIndex(newIndex);
+        this.setState({ currentLineIndex: newIndex, people: this.state.people });
+      } else {
+        // If the person is not the speaker of the next line
+        person.currentLine = 'Would you check with ' + nextLine.name + '? Remember, I said, "' + person.currentLine + '"';
+        this.setState({ people: this.state.people });
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
+      var _this5 = this;
+
       return React.createElement(
         'div',
         null,
-        this.state.persons.map(function (person, index) {
+        this.state.people.map(function (person, index) {
           return React.createElement(Person, { key: index, data: person, color: person.color, updateLine: function updateLine() {
-              return alert('hello from ' + person.name);
+              return _this5.updateConversationFor(person);
             } });
         })
       );
@@ -221,6 +300,53 @@ var Person = function (_React$Component3) {
   }]);
 
   return Person;
+}(React.Component);
+
+// HUD Component
+
+
+var HUD = function (_React$Component4) {
+  _inherits(HUD, _React$Component4);
+
+  function HUD() {
+    _classCallCheck(this, HUD);
+
+    return _possibleConstructorReturn(this, (HUD.__proto__ || Object.getPrototypeOf(HUD)).apply(this, arguments));
+  }
+
+  _createClass(HUD, [{
+    key: 'render',
+    value: function render() {
+      return React.createElement(
+        'div',
+        { className: 'hud mt-3' },
+        React.createElement(
+          'h5',
+          null,
+          'Scoreboard'
+        ),
+        React.createElement(
+          'div',
+          { className: 'd-flex' },
+          this.props.conversations.map(function (conversation, index) {
+            return React.createElement(
+              'div',
+              { key: index, className: 'mr-2' },
+              React.createElement('input', {
+                type: 'text',
+                readOnly: true,
+                className: 'form-control',
+                value: conversation.currentLineIndex,
+                style: { backgroundColor: conversation.color, color: '#000' }
+              })
+            );
+          })
+        )
+      );
+    }
+  }]);
+
+  return HUD;
 }(React.Component);
 
 var domContainer = document.querySelector("#Village");
