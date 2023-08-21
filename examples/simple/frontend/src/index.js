@@ -4,8 +4,17 @@ const config = {
   apiPrefix: '/dev'
 };
 
+function isLocalHost() {
+  if (typeof window !== 'undefined' && window.location.host.includes('localhost')) {
+      console.log('You are running on localhost!');
+      return true;
+  } else {
+      return false;
+  }
+}
+
 // Handle localhost vs on S3 static site
-const iconsPath = ((typeof process.env === 'undefined') ? config.apiPrefix : process.env.PUBLIC_URL) + '/icons/';
+const iconsPath = (isLocalHost() ? process.env.PUBLIC_URL : config.apiPrefix) + '/icons/';
 const defaultHeadIcon = 'icons8-head-profile-50.png';
 
 class Village extends React.Component {
@@ -32,6 +41,7 @@ class Village extends React.Component {
     })
       .then((response) => response.json())
       .then((village) => {
+        console.log(village);
         this.setState({
           conversations: village.conversations
         });
@@ -128,22 +138,23 @@ class Village extends React.Component {
     );
   }
 }
-// Conversation component represents a conversation between Persons.
+// Conversation component represents a conversation between people.
 class Conversation extends React.Component {
   constructor(props) {
     super(props);
-    const persons = this.createPeople(props.data.people, props.data.color);
+    const people = this.createPeople(props.data.people, props.data.color);
     this.state = {
-      persons: persons,
+      people: people,
       lines: props.data.lines,
       currentLineIndex: -1 // The first line checked will be the first element in the array
     };
   }
 
-  // Create an array of Persons from the lines of a conversation.
+  // Create an array of people from the lines of a conversation.
   createPeople(people, color) {
     const personMap = {};
 
+    console.log(people);
     people.forEach(person => {
       if (!personMap[person.name]) {
         personMap[person.name] = {
@@ -166,7 +177,7 @@ class Conversation extends React.Component {
     if (newIndex >= this.state.lines.length) {
       person.currentLine = "Oops, I'm out of ideas";
       alert('out of lines');
-      this.setState({ persons: this.state.persons });
+      this.setState({ people: this.state.people });
       return;
     }
 
@@ -176,18 +187,18 @@ class Conversation extends React.Component {
     if (nextLine.name === person.name) {
       person.currentLine = nextLine.text;
       this.props.updateLineIndex(newIndex);
-      this.setState({ currentLineIndex: newIndex, persons: this.state.persons });
+      this.setState({ currentLineIndex: newIndex, people: this.state.people });
     } else {
       // If the person is not the speaker of the next line
       person.currentLine = `Would you check with ${nextLine.name}? Remember, I said, "${person.currentLine}"`;
-      this.setState({ persons: this.state.persons });
+      this.setState({ people: this.state.people });
     }
   }
 
   render() {
     return (
       <div>
-        {this.state.persons.map((person, index) => (
+        {this.state.people.map((person, index) => (
           <Person key={index} data={person} color={person.color} updateLine={() => this.updateConversationFor(person)} />
         ))}
       </div>

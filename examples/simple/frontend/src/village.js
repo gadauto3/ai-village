@@ -50,20 +50,20 @@ class Village extends React.Component {
   }
 }
 
-// Conversation component represents a conversation between Persons.
+// Conversation component represents a conversation between people.
 class Conversation extends React.Component {
   constructor(props) {
     super(props);
-    const persons = this.createPersonsFromLines(props.data.lines);
+    const people = this.createPeopleFromLines(props.data.lines);
     this.state = {
-      persons: persons,
+      people: people,
       currentLineIndex: 0, // Start from the first line
       color: props.data.color || '#FFF' // Default to white if no color is provided
     };
   }
 
-  // Create an array of Persons from the lines of a conversation.
-  createPersonsFromLines(lines) {
+  // Create an array of people from the lines of a conversation.
+  createPeopleFromLines(lines) {
     const personMap = {};
     lines.forEach(line => {
       if (!personMap[line.name]) {
@@ -82,7 +82,7 @@ class Conversation extends React.Component {
   render() {
     return (
       <div style={{ backgroundColor: this.state.color }}>
-        {this.state.persons.map((person, index) => (
+        {this.state.people.map((person, index) => (
           <Person key={index} data={person} />
         ))}
       </div>

@@ -1,0 +1,124 @@
+[
+    {
+        "color": "#6b0dd9",
+        "people": [
+            {
+                "name": "Person A-1",
+                "icon": "icons8-head-profile-50.png",
+                "currentLine": "I'm Person A-1, hello!"
+            },
+            {
+                "name": "Person B-1",
+                "icon": "icons8-head-profile-50.png",
+                "currentLine": "Cool, I'm Person B-1.  Welcome!"
+            }
+        ],
+        "lines": [
+            {
+                "name": "Person A-1",
+                "text": "2. How are you, Person B-1?"
+            },
+            {
+                "name": "Person B-1",
+                "text": "I'm doing great, thanks, Person A-1! How about you?"
+            },
+            {
+                "name": "Person A-1",
+                "text": "Been trying to make a game"
+            },
+            {
+                "name": "Person B-1",
+                "text": "Oh yeah, how goes the endeavor?"
+            },
+            {
+                "name": "Person A-1",
+                "text": "I am learning very much!"
+            },
+            {
+                "name": "Person B-1",
+                "text": "When can I play it?"
+            }
+        ],
+        "currentLineIndex": 0
+    },
+    {
+        "color": "#909d6f",
+        "people": [
+            {
+                "name": "Person A-2",
+                "icon": "icons8-head-profile-50.png",
+                "currentLine": "1: Hello from Person A-2!"
+            },
+            {
+                "name": "Person B-2",
+                "icon": "icons8-head-profile-50.png",
+                "currentLine": "Greetings from Person B-2!"
+            }
+        ],
+        "lines": [
+            {
+                "name": "Person A-2",
+                "text": "2. How are you, Person B-2?"
+            },
+            {
+                "name": "Person B-2",
+                "text": "I'm doing great, thanks, Person A-2! How about you?"
+            },
+            {
+                "name": "Person A-2",
+                "text": "Where is this convo going?"
+            },
+            {
+                "name": "Person B-2",
+                "text": "Meandering around the world I imagine."
+            },
+            {
+                "name": "Person A-2",
+                "text": "Where might you go this year?"
+            },
+            {
+                "name": "Person B-2",
+                "text": "Having done Banff and Montreal, maybe PEI?"
+            },
+            {
+                "name": "Person A-2",
+                "text": "I went there when visiting Maine."
+            },
+            {
+                "name": "Person B-2",
+                "text": "Great, I'll follow up!"
+            }
+        ],
+        "currentLineIndex": 0
+    },
+    {
+        "color": "#1b9193",
+        "people": [
+            {
+                "name": "Person A-3",
+                "icon": "icons8-head-profile-50.png",
+                "currentLine": "1: Hello from Person A-3!"
+            },
+            {
+                "name": "Person B-3",
+                "icon": "icons8-head-profile-50.png",
+                "currentLine": "Greetings from Person B-3!"
+            }
+        ],
+        "lines": [
+            {
+                "name": "Person A-3",
+                "text": "2. How are you, Person B-3?"
+            },
+            {
+                "name": "Person B-3",
+                "text": "I'm doing great, thanks, Person A-3! How about you?"
+            },
+            {
+                "name": "Person A-3",
+                "text": "Could be better, could be worse."
+            }
+        ],
+        "currentLineIndex": 0
+    }
+]

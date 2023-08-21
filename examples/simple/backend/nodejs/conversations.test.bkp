@@ -1,0 +1,45 @@
+const fs = require('fs');
+const Conversations = require('./conversations');
+
+// Mock the fs.readFileSync method
+jest.mock('fs');
+
+describe('Conversations', () => {
+    beforeEach(() => {
+        // Reset the mock before each test
+        fs.readFileSync.mockReset();
+    });
+
+    it('loads data from the JSON file correctly', () => {
+        fs.readFileSync.mockReturnValueOnce(JSON.stringify([{ "test": "data" }]));
+        const conversations = new Conversations();
+        expect(conversations.data).toEqual([{ "test": "data" }]);
+    });
+
+    it('fetches the specified number of conversations', () => {
+        const mockData = [{ "test": "data1" }, { "test": "data2" }, { "test": "data3" }];
+        fs.readFileSync.mockReturnValueOnce(JSON.stringify(mockData));
+
+        const conversations = new Conversations();
+        const result = conversations.getConversations(2);
+        expect(result).toEqual([{ "test": "data1" }, { "test": "data2" }]);
+    });
+
+    it('returns all available conversations if requested count is more than available', () => {
+        const mockData = [{ "test": "data1" }, { "test": "data2" }];
+        fs.readFileSync.mockReturnValueOnce(JSON.stringify(mockData));
+
+        const conversations = new Conversations();
+        const result = conversations.getConversations(5);
+        expect(result).toEqual(mockData);
+    });
+
+    it('handles JSON parsing errors gracefully', () => {
+        fs.readFileSync.mockReturnValueOnce("invalid JSON");
+        
+        expect(() => new Conversations()).not.toThrow();
+        const conversations = new Conversations();
+        expect(conversations.data).toEqual([]);
+    });
+});
+
