@@ -31,31 +31,30 @@ class Village extends React.Component {
   // Fetch conversations from the API
   addConversation() {
 
-    // TODO: change api path
-    //fetch(this.state.config.apiPrefix + "/api/getConversations", {
-    fetch(this.state.config.apiPrefix + "/api/info", {
+    fetch(this.state.config.apiPrefix + "/api/getConversations", {
       method: "GET",
       headers: {
         accept: "application/json",
       },
     })
-      .then((response) => response.json())
-      .then((village) => {
-        console.log(village);
-        this.setState({
-          conversations: village.conversations
-        });
-        alert('Conversations fetched successfully!');
-      })
-      .catch((err) => {
-        console.log('addConvo api error, making mock object\n'+err);
-        const convo = this.makeMockConversation(this.state.conversations.length+1);
-        console.log(convo);
-        this.setState({
-          conversations: [...this.state.conversations, convo ]
-        });
-        // alert('Error fetching conversations.');
+    .then((response) => response.json())
+    .then((village) => {
+      console.log(village);
+      this.setState({
+        conversations: village.conversations
+      }, () => {
+        // Update lines after the state has been updated and the component re-rendered
+        console.log("Conversations fetched successfully!", this.state.conversations);
       });
+    })
+    .catch((err) => {
+      console.log('addConvo api error, making mock object\n'+err);
+      const convo = this.makeMockConversation(this.state.conversations.length+1);
+      console.log(convo);
+      this.setState({
+        conversations: [...this.state.conversations, convo ]
+      });
+    });
   }
 
   updateLineIndexForConversation(index, newLineIndex) {
@@ -95,7 +94,7 @@ class Village extends React.Component {
             },
             {
                 name: `Person A-${id}`,
-                text: `I'm good.'`
+                text: `I'm good.`
             },
             {
                 name: `Person B-${id}`,
@@ -123,7 +122,7 @@ class Village extends React.Component {
         <button className="btn btn-secondary" type="button" onClick={this.addConversation}>Add Conversation</button>
         <div className="tall-div">
           {this.state.conversations.map((conversation, index) => (
-            <Conversation key={index} data={conversation} updateLineIndex={(newLineIndex) => this.updateLineIndexForConversation(index, newLineIndex)} />
+            <Conversation key={index} data={conversation} apiPrefix={this.state.config.apiPrefix} updateLineIndex={(newLineIndex) => this.updateLineIndexForConversation(index, newLineIndex)} />
           ))}
         </div>
         <div className="hud">
@@ -146,6 +145,7 @@ class Conversation extends React.Component {
     this.state = {
       people: people,
       lines: props.data.lines,
+      apiPrefix: props.apiPrefix,
       currentLineIndex: -1 // The first line checked will be the first element in the array
     };
   }
@@ -170,14 +170,50 @@ class Conversation extends React.Component {
     return Object.values(personMap);
   }
 
-  updateConversationFor(person) {
+  retrieveAdditionalConversation(person) {
+    
+    fetch(this.state.apiPrefix + "/api/addToConversation", {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+      },
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log('Conversations fetched successfully!', data);
+
+      // Check if moreLines is empty
+      if (data.moreLines.length) {
+        const addedLines = this.state.lines.concat(data.moreLines);
+
+        this.setState(prevState => {
+          return { lines: prevState.lines.concat(data.moreLines) };
+        }, () => {
+          // Update lines after the state has been updated and the component re-rendered
+          this.updateConversationFor(person, false);
+        });
+      } else {
+        console.log('No moreLines');
+        this.updateConversationFor(person, false);
+      }
+    })
+    .catch((err) => {
+      console.log('addToConvo api error');
+      this.updateConversationFor(person, false);
+    });
+  }
+
+  updateConversationFor(person, canUseAPI) {
     let newIndex = this.state.currentLineIndex + 1;
 
     // If out of lines
     if (newIndex >= this.state.lines.length) {
-      person.currentLine = "Oops, I'm out of ideas";
-      alert('out of lines');
-      this.setState({ people: this.state.people });
+      if (canUseAPI) {
+        this.retrieveAdditionalConversation(person);
+      } else {
+        person.currentLine = "Oops, I'm out of ideas";
+        this.setState({ people: this.state.people });
+      }
       return;
     }
 
@@ -199,7 +235,7 @@ class Conversation extends React.Component {
     return (
       <div>
         {this.state.people.map((person, index) => (
-          <Person key={index} data={person} color={person.color} updateLine={() => this.updateConversationFor(person)} />
+          <Person key={index} data={person} color={person.color} updateLine={() => this.updateConversationFor(person, true)} />
         ))}
       </div>
     );
@@ -214,12 +250,17 @@ class Person extends React.Component {
       <div className="d-flex align-items-center mt-2 rounded-div" style={{ backgroundColor: this.props.color }}>
         <button className="mr-2 wide-btn spacing" type="button" onClick={this.props.updateLine}>{this.props.data.name}</button>
         <img src={this.props.data.icon} alt="Icon" className="icon mr-2 spacing" />
-
-        <input
-          type="text"
-          readOnly
-          className="form-control spacing"
-          value={this.props.data.currentLine}
+        <textarea
+            readOnly
+            className="form-control spacing"
+            value={this.props.data.currentLine}
+            style={{ 
+                overflow: 'auto', 
+                whiteSpace: 'pre-wrap',
+                resize: 'none', 
+                border: 'none',
+                outline: 'none'
+            }}
         />
       </div>
     );

@@ -1,121 +1,121 @@
 [
     {
-        "color": "#6b0dd9",
+        "color": "#A8DADC",
         "people": [
             {
-                "name": "Person A-1",
+                "name": "Maria",
                 "icon": "icons8-head-profile-50.png",
-                "currentLine": "I'm Person A-1, hello!"
+                "currentLine": "I'm Maria, hello!"
             },
             {
-                "name": "Person B-1",
+                "name": "Pablo",
                 "icon": "icons8-head-profile-50.png",
-                "currentLine": "Cool, I'm Person B-1.  Welcome!"
+                "currentLine": "Cool, I'm Pablo.  Welcome!"
             }
         ],
         "lines": [
             {
-                "name": "Person A-1",
-                "text": "2. How are you, Person B-1?"
+                "name": "Maria",
+                "text": "2. How are you, Pablo?"
             },
             {
-                "name": "Person B-1",
-                "text": "I'm doing great, thanks, Person A-1! How about you?"
+                "name": "Pablo",
+                "text": "I'm doing great, thanks, Maria! How about you?"
             },
             {
-                "name": "Person A-1",
+                "name": "Maria",
                 "text": "Been trying to make a game"
             },
             {
-                "name": "Person B-1",
+                "name": "Pablo",
                 "text": "Oh yeah, how goes the endeavor?"
             },
             {
-                "name": "Person A-1",
+                "name": "Maria",
                 "text": "I am learning very much!"
             },
             {
-                "name": "Person B-1",
+                "name": "Pablo",
                 "text": "When can I play it?"
             }
         ],
         "currentLineIndex": 0
     },
     {
-        "color": "#909d6f",
+        "color": "#F4A261",
         "people": [
             {
-                "name": "Person A-2",
+                "name": "Mika",
                 "icon": "icons8-head-profile-50.png",
-                "currentLine": "1: Hello from Person A-2!"
+                "currentLine": "1: Hello from Mika!"
             },
             {
-                "name": "Person B-2",
+                "name": "Helen",
                 "icon": "icons8-head-profile-50.png",
-                "currentLine": "Greetings from Person B-2!"
+                "currentLine": "Greetings from Helen!"
             }
         ],
         "lines": [
             {
-                "name": "Person A-2",
-                "text": "2. How are you, Person B-2?"
+                "name": "Mika",
+                "text": "2. How are you, Helen?"
             },
             {
-                "name": "Person B-2",
-                "text": "I'm doing great, thanks, Person A-2! How about you?"
+                "name": "Helen",
+                "text": "I'm doing great, thanks, Mika! How about you?"
             },
             {
-                "name": "Person A-2",
+                "name": "Mika",
                 "text": "Where is this convo going?"
             },
             {
-                "name": "Person B-2",
+                "name": "Helen",
                 "text": "Meandering around the world I imagine."
             },
             {
-                "name": "Person A-2",
+                "name": "Mika",
                 "text": "Where might you go this year?"
             },
             {
-                "name": "Person B-2",
+                "name": "Helen",
                 "text": "Having done Banff and Montreal, maybe PEI?"
             },
             {
-                "name": "Person A-2",
+                "name": "Mika",
                 "text": "I went there when visiting Maine."
             },
             {
-                "name": "Person B-2",
+                "name": "Helen",
                 "text": "Great, I'll follow up!"
             }
         ],
         "currentLineIndex": 0
     },
     {
-        "color": "#1b9193",
+        "color": "#2A9D8F",
         "people": [
             {
-                "name": "Person A-3",
+                "name": "Sivan",
                 "icon": "icons8-head-profile-50.png",
-                "currentLine": "1: Hello from Person A-3!"
+                "currentLine": "1: Hello from Sivan!"
             },
             {
-                "name": "Person B-3",
+                "name": "Violet",
                 "icon": "icons8-head-profile-50.png",
-                "currentLine": "Greetings from Person B-3!"
+                "currentLine": "Greetings from Violet!"
             }
         ],
         "lines": [
             {
-                "name": "Person A-3",
-                "text": "2. How are you, Person B-3?"
+                "name": "Sivan",
+                "text": "2. How are you, Violet?"
             },
             {
-                "name": "Person B-3",
-                "text": "I'm doing great, thanks, Person A-3! How about you?"
+                "name": "Violet",
+                "text": "I'm doing great, thanks, Sivan! How about you?"
             },
             {
-                "name": "Person A-3",
+                "name": "Sivan",
                 "text": "Could be better, could be worse."
             }
         ],

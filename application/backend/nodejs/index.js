@@ -8,10 +8,40 @@ const conversations = new Conversations();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.get('/api/info', (req, res) => {
-    const count = 2;//parseInt(req.query.count) || conversations.data.length; // Get count from query or return all
+app.get('/api/getConversations', (req, res) => {
+    const count = 3;//parseInt(req.query.count) || conversations.data.length; // Get count from query or return all
     const data = conversations.getConversations(count);
     res.send({ conversations: data });
+});
+
+app.get('/api/addToConversation', (req, res) => {
+    const data = [
+        {
+            "name": "Maria",
+            "text": "You can play it in a few days"
+        },
+        {
+            "name": "Pablo",
+            "text": "A few days.  Gimme now!"
+        },
+        {
+            "name": "Maria",
+            "text": "Gimme, gimme never gets. Don't you..."
+        },
+        {
+            "name": "Pablo",
+            "text": "know my manners yet. Good point."
+        },
+        {
+            "name": "Maria",
+            "text": "All good, I want it done too."
+        },
+        {
+            "name": "Pablo",
+            "text": "Can I help in any way?"
+        }
+    ];
+    res.send({ moreLines: data });
 });
 
 // app.post('/api/v1/getback', (req, res) => {
