@@ -3,9 +3,9 @@ const Conversations = require('./conversations');
 
 describe('Conversations - Real File Tests', () => {
 
-    it('ensures data.json is valid JSON and contains an array of five elements', () => {
+    it('ensures conversationSeeds.json is valid JSON and contains an array of five elements', () => {
         // The actual readFileSync call without mocking
-        const rawData = fs.readFileSync('./data.json', 'utf-8');
+        const rawData = fs.readFileSync('./conversationSeeds.json', 'utf-8');
 
         // Validate it's a valid JSON
         let jsonData;
@@ -22,7 +22,7 @@ describe('Conversations - Real File Tests', () => {
 
     beforeAll(() => {
         // Read and parse the JSON file once for all tests in this block
-        const rawData = fs.readFileSync('./data.json', 'utf-8');
+        const rawData = fs.readFileSync('./conversationSeeds.json', 'utf-8');
         jsonData = JSON.parse(rawData);
     });
 
