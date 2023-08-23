@@ -4,7 +4,7 @@ const OpenAI = require("openai");
 
 // Read and clean up the prompt text
 const promptText = fs.readFileSync(path.join(__dirname, 'prompt.txt'), 'utf8').trim().replace(/\s+/g, ' ');
-const contextFromFile = fs.readFileSync(path.join(__dirname, 'context.json'), 'utf8').trim().replace(/\s+/g, ' ');
+// FOR TESTING: const contextFromFile = fs.readFileSync(path.join(__dirname, 'context.json'), 'utf8').trim().replace(/\s+/g, ' ');
 
 class ConversationExtender {
   constructor() {
@@ -15,7 +15,7 @@ class ConversationExtender {
     console.log("Context: ", context);
     this.openai.completions.create({
       model: "text-davinci-003",
-      prompt: `${promptText} ${contextFromFile}`,  // Use the cleaned-up prompt
+      prompt: `${promptText} ${context}`,  // Use the cleaned-up prompt
       temperature: 1,
       max_tokens: 256,
       top_p: 1,

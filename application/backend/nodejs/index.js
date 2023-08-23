@@ -19,39 +19,18 @@ app.get('/api/getConversations', (req, res) => {
 // Modified addToConversation route
 app.post('/api/addToConversation', (req, res) => {
     // Get data from request body
-    // const data = req.body;
-    console.log(req.body);
+    const data = req.body;
+    console.log(data);
 
-    // Logic for adding data to conversation
-    const data = [
-        {
-            "name": "Maria",
-            "text": "You can play it in a few days"
-        },
-        {
-            "name": "Pablo",
-            "text": "A few days.  Gimme now!"
-        },
-        {
-            "name": "Maria",
-            "text": "Gimme, gimme never gets. Don't you..."
-        },
-        {
-            "name": "Pablo",
-            "text": "know my manners yet. Good point."
-        },
-        {
-            "name": "Maria",
-            "text": "All good, I want it done too."
-        },
-        {
-            "name": "Pablo",
-            "text": "Can I help in any way?"
+    conversationExtender.extendConversation(data, (err, response) => {
+        if (err) {
+            console.error("Conversation extension failed: ", err);
+            res.send({ moreLines: [] });
+            return;
+        } else {
+            res.send({ moreLines: response });
         }
-    ];
-
-    // For now, it just sends back the received data
-    res.send({ moreLines: data });
+    });
 });
 
 // app.listen(3000, () => console.log(`Listening on: 3000`));

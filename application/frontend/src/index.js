@@ -137,6 +137,7 @@ class Village extends React.Component {
     );
   }
 }
+
 // Conversation component represents a conversation between people.
 class Conversation extends React.Component {
   constructor(props) {
@@ -175,8 +176,10 @@ class Conversation extends React.Component {
     fetch(this.state.apiPrefix + "/api/addToConversation", {
       method: "POST",
       headers: {
-        accept: "application/json",
+        "accept": "application/json",
+        "Content-Type": "application/json" // Indicates the content type of the request body
       },
+      body: JSON.stringify({ lines: this.state.lines }) // Send the current lines as the request body
     })
     .then((response) => response.json())
     .then((data) => {
@@ -202,7 +205,7 @@ class Conversation extends React.Component {
       this.updateConversationFor(person, false);
     });
   }
-  
+
   updateConversationFor(person, canUseAPI) {
     let newIndex = this.state.currentLineIndex + 1;
 

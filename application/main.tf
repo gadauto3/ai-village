@@ -37,12 +37,12 @@ module "app" {
 
     source     = "${data.archive_file.backend.output_path}"
     entrypoint = "index.handler"
-    runtime    = "nodejs14.x"
+    runtime    = "nodejs16.x"
     memory_mb  = 128
 
     modules = [{
       source  = "${data.archive_file.modules.output_path}"
-      runtime = "nodejs14.x"
+      runtime = "nodejs16.x"
     }]
   }
 
