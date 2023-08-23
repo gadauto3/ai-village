@@ -4,11 +4,13 @@ describe('ConversationExtender', () => {
   let extender;
 
   beforeAll(() => {
-    extender = new ConversationExtender();
+    // If OPENAI_API_KEY is not defined, skip the test
+    if (process.env.OPENAI_API_KEY) {
+        extender = new ConversationExtender();
+    }
   });
 
   test('extendConversation returns valid JSON', (done) => {
-    // If OPENAI_API_KEY is not defined, skip the test
     if (!process.env.OPENAI_API_KEY) {
         console.warn("Skipping ConversationExtender tests since OPENAI_API_KEY is not defined");
         done();

@@ -1,9 +1,11 @@
 const serverless = require('serverless-http');
 const express = require('express');
 const Conversations = require('./conversations');
+const ConversationExtender = require('./conversationExtender');
 
 const app = express();
 const conversations = new Conversations();
+const conversationExtender = new ConversationExtender();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -18,7 +20,8 @@ app.get('/api/getConversations', (req, res) => {
 app.post('/api/addToConversation', (req, res) => {
     // Get data from request body
     // const data = req.body;
-    
+    console.log(req.body);
+
     // Logic for adding data to conversation
     const data = [
         {
