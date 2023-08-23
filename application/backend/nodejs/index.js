@@ -14,7 +14,12 @@ app.get('/api/getConversations', (req, res) => {
     res.send({ conversations: data });
 });
 
-app.get('/api/addToConversation', (req, res) => {
+// Modified addToConversation route
+app.post('/api/addToConversation', (req, res) => {
+    // Get data from request body
+    // const data = req.body;
+    
+    // Logic for adding data to conversation
     const data = [
         {
             "name": "Maria",
@@ -41,12 +46,10 @@ app.get('/api/addToConversation', (req, res) => {
             "text": "Can I help in any way?"
         }
     ];
+
+    // For now, it just sends back the received data
     res.send({ moreLines: data });
 });
-
-// app.post('/api/v1/getback', (req, res) => {
-//     res.send({ ...req.body });
-// });
 
 // app.listen(3000, () => console.log(`Listening on: 3000`));
 module.exports.handler = serverless(app);

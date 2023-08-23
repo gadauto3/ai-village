@@ -173,7 +173,7 @@ class Conversation extends React.Component {
   retrieveAdditionalConversation(person) {
     
     fetch(this.state.apiPrefix + "/api/addToConversation", {
-      method: "GET",
+      method: "POST",
       headers: {
         accept: "application/json",
       },
@@ -202,7 +202,7 @@ class Conversation extends React.Component {
       this.updateConversationFor(person, false);
     });
   }
-
+  
   updateConversationFor(person, canUseAPI) {
     let newIndex = this.state.currentLineIndex + 1;
 
