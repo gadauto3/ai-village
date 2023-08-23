@@ -116,14 +116,42 @@ var Conversation = function (_React$Component2) {
             icon: '' // Placeholder icon, update as per requirement.
           };
         } else {
-          personMap[line.name].currentLine = line.text;
+          personMap[person.name].currentLine = person.currentLine;
         }
       });
       return Object.values(personMap);
     }
   }, {
+    key: 'updateConversationFor',
+    value: function updateConversationFor(person) {
+      var newIndex = this.state.currentLineIndex + 1;
+
+      // If out of lines
+      if (newIndex >= this.state.lines.length) {
+        person.currentLine = "Oops, I'm out of ideas";
+        alert('out of lines');
+        this.setState({ people: this.state.people });
+        return;
+      }
+
+      var nextLine = this.state.lines[newIndex];
+
+      // If the person is the speaker of the next line
+      if (nextLine.name === person.name) {
+        person.currentLine = nextLine.text;
+        this.props.updateLineIndex(newIndex);
+        this.setState({ currentLineIndex: newIndex, people: this.state.people });
+      } else {
+        // If the person is not the speaker of the next line
+        person.currentLine = 'Would you check with ' + nextLine.name + '? Remember, I said, "' + person.currentLine + '"';
+        this.setState({ people: this.state.people });
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
+      var _this5 = this;
+
       return React.createElement(
         'div',
         { style: { backgroundColor: this.state.color } },
