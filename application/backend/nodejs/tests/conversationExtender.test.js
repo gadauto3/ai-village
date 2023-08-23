@@ -1,4 +1,4 @@
-const ConversationExtender = require('./conversationExtender');
+const ConversationExtender = require('../conversationExtender');
 
 describe('ConversationExtender', () => {
   let extender;

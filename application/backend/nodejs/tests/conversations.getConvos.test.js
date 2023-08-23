@@ -1,4 +1,4 @@
-const Conversations = require('./conversations');
+const Conversations = require('../conversations');
 const fs = require('fs');
 
 // Mocking the fs module

@@ -1,5 +1,5 @@
 const fs = require('fs');
-const Conversations = require('./conversations');
+const Conversations = require('../conversations');
 
 describe('Conversations - Real File Tests', () => {
 
