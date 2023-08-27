@@ -129,7 +129,7 @@ class Village extends React.Component {
             <Conversation key={index} data={conversation} apiPrefix={this.state.config.apiPrefix} updateLineIndex={(newLineIndex) => this.updateLineIndexForConversation(index, newLineIndex)} />
           ))}
         </div>
-        <div className="hud">
+        <div className="hud rounded-div">
           <h5>Scoreboard</h5>
           {this.state.conversations.map((conversation, index) => (
             <div key={index} style={{backgroundColor: conversation.color, display: 'inline-block', padding: '10px', margin: '5px'}}>
