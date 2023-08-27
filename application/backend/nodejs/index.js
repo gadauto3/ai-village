@@ -20,7 +20,6 @@ app.get('/api/getConversations', (req, res) => {
 app.post('/api/addToConversation', (req, res) => {
     // Get data from request body
     const data = req.body;
-    console.log(data);
 
     conversationExtender.extendConversation(data, (err, response) => {
         if (err) {

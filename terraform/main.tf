@@ -127,7 +127,7 @@ module "backend" {
   stage = var.stage_name
   tags  = var.tags
 
-  # Example lambda function configuration
+  # Lambda function configuration
   function = {
     name        = var.backend.name
     description = try(var.backend.description, "Sample API")
@@ -142,6 +142,26 @@ module "backend" {
     zip                 = var.backend.modules[0].source
     compatible_runtimes = [var.backend.modules[0].runtime]
   }
+}
+
+#### Add SSM parameter store access to Lambda
+resource "aws_iam_policy" "ssm_get_parameters" {
+  name   = "${var.name}-ssm-get-parameters"
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect   = "Allow",
+        Action   = "ssm:GetParameters",
+        Resource = "arn:aws:ssm:${var.region}:${data.aws_caller_identity.current.account_id}:parameter/aivillage/apikeys/openai"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "backend_ssm_attachment" {
+  role       = module.backend.lambda_function.role_id
+  policy_arn = aws_iam_policy.ssm_get_parameters.arn
 }
 
 #### COGNITO USER POOL CLIENT

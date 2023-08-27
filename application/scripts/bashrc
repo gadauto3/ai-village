@@ -5,3 +5,5 @@ export PATH="$PATH:~/repos/ai-village/application/scripts"
 alias tf=terraform
 alias tfa='terraform apply -auto-approve'
 alias tfd='terraform destroy -auto-approve'
+alias trace='export TF_LOG=TRACE'
+alias untrace='export TF_LOG='

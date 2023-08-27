@@ -42,5 +42,5 @@ describe('ConversationExtender', () => {
         done(e);
       }
     });
-  }, 12000); // 30s wait
+  }, 12000); // 12s wait
 });

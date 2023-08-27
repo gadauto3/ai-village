@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "us-east-1"
+  region = local.region
 }
 
 resource "random_pet" "app_name" {}
@@ -7,6 +7,7 @@ resource "random_pet" "backend_name" {}
 
 locals {
   stage_name = "dev"
+  region = "us-east-1"
 
   app_name = random_pet.app_name.id
   api_name = random_pet.backend_name.id
@@ -17,14 +18,14 @@ locals {
 }
 
 module "app" {
-  source     = "../"
+  source     = "../terraform/"
   name       = local.app_name
   stage_name = local.stage_name
 
   frontend = {
     path = "/"
 
-    description = "Sample Frontend App"
+    description = "AI Village Frontend"
     entrypoint  = "index.html"
     source      = "${path.module}/frontend/public"
   }
@@ -33,12 +34,14 @@ module "app" {
     path = "/api"
 
     name        = local.api_name
-    description = "Sample API"
+    description = "AI Village backend"
 
     source     = "${data.archive_file.backend.output_path}"
     entrypoint = "index.handler"
     runtime    = "nodejs16.x"
     memory_mb  = 128
+
+    api_key_path = "/aivillage/apikeys/openai"
 
     modules = [{
       source  = "${data.archive_file.modules.output_path}"
