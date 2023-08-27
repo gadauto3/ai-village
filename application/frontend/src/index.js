@@ -24,6 +24,8 @@ class Village extends React.Component {
       conversations: [],
       config: config
     };
+    
+    this.colorIndex = 0;
     this.addConversation = this.addConversation.bind(this);
     this.makeMockConversation = this.makeMockConversation.bind(this);
   }
@@ -67,10 +69,12 @@ class Village extends React.Component {
     // This function creates a new mock conversation with the given int (id) appended to the strings.
 
     // Generate a random HTML-friendly color
-    const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+    const colors = ["#FFCCCC", "#FFDFCC", "#FFFFCC", "#DFFFD8", "#CCDDFF", "#D1CCFF", "#E8CCFF"];
+    const rainbowColor = colors[this.colorIndex];
+    this.colorIndex = (this.colorIndex + 1) % colors.length;
 
     const conversation = {
-        color: randomColor,
+        color: rainbowColor,
         people: [
             {
                 name: `Person A-${id}`,
