@@ -1,0 +1,25 @@
+<a target="_blank" href="https://icons8.com/icon/0vaVm83zOz4T/man-curly-hair-medium-skin-tone">Man Curly Hair Medium Skin Tone</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+<a target="_blank" href="https://icons8.com/icon/ERTZEN4gjaul/older-person-medium-skin-tone">Older Person Medium Skin Tone</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+<a target="_blank" href="https://icons8.com/icon/DpeCZRfbeBDo/man-curly-hair-dark-skin-tone">Man Curly Hair Dark Skin Tone</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+<a target="_blank" href="https://icons8.com/icon/KmOPufVS3OJL/older-person-medium-dark-skin-tone">Older Person Medium Dark Skin Tone</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+<a target="_blank" href="https://icons8.com/icon/5kexTSWREPhQ/girl-medium-dark-skin-tone">Girl Medium Dark Skin Tone</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+<a target="_blank" href="https://icons8.com/icon/kw3NXcl3LD1b/boy-medium-skin-tone">Boy Medium Skin Tone</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+<a target="_blank" href="https://icons8.com/icon/rBVJAXTj4fKS/girl-medium-skin-tone">Girl Medium Skin Tone</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+<a target="_blank" href="https://icons8.com/icon/uDTbNcfDA3n1/girl-dark-skin-tone">Girl Dark Skin Tone</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+<a target="_blank" href="https://icons8.com/icon/ewzKqtCD6KIr/boy-medium-dark-skin-tone">Boy Medium Dark Skin Tone</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+<a target="_blank" href="https://icons8.com/icon/SDKGN4R0jyDR/child-medium-skin-tone">Child Medium Skin Tone</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+<a target="_blank" href="https://icons8.com/icon/BFrg8eSpelJi/child-light-skin-tone">Child Light Skin Tone</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+<a target="_blank" href="https://icons8.com/icon/IBPkX6dGdAZv/woman-medium-skin-tone">Woman Medium Skin Tone</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+<a target="_blank" href="https://icons8.com/icon/p7UccFBX0LG2/man-medium-skin-tone">Man Medium Skin Tone</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+<a target="_blank" href="https://icons8.com/icon/NELF2q2Q4Wn9/old-woman-medium-light-skin-tone">Old Woman Medium Light Skin Tone</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+<a target="_blank" href="https://icons8.com/icon/6aAnjKV1CPPY/woman-dark-skin-tone">Woman Dark Skin Tone</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+<a target="_blank" href="https://icons8.com/icon/4aiBwOZA1pNt/woman-with-beard-light-skin-tone">Woman With Beard Light Skin Tone</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+<a target="_blank" href="https://icons8.com/icon/XcNg43MyMfzw/old-woman-medium-dark-skin-tone">Old Woman Medium Dark Skin Tone</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+<a target="_blank" href="https://icons8.com/icon/LRjPbBqeLoyg/old-woman-dark-skin-tone">Old Woman Dark Skin Tone</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+<a target="_blank" href="https://icons8.com/icon/qeYxlZaoymoc/head-profile">Head Profile</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+
+
+
+ls -1 | while read file; do printf '"%s", ' "$file"; done | paste -sd, -
+
+"icons8-boy-medium-dark-skin-tone-48.png", "icons8-boy-medium-dark-skin-tone-96.png", "icons8-boy-medium-skin-tone-48.png", "icons8-boy-medium-skin-tone-96.png", "icons8-child-light-skin-tone-48.png", "icons8-child-light-skin-tone-96.png", "icons8-child-medium-skin-tone-48.png", "icons8-child-medium-skin-tone-96.png", "icons8-girl-dark-skin-tone-48.png", "icons8-girl-dark-skin-tone-96.png", "icons8-girl-medium-dark-skin-tone-48.png", "icons8-girl-medium-dark-skin-tone-96.png", "icons8-girl-medium-skin-tone-48.png", "icons8-girl-medium-skin-tone-96.png", "icons8-head-profile-50.png", "icons8-man-curly-hair-dark-skin-tone-48.png", "icons8-man-curly-hair-dark-skin-tone-96.png", "icons8-man-curly-hair-medium-skin-tone-48.png", "icons8-man-curly-hair-medium-skin-tone-96.png", "icons8-man-medium-skin-tone-48.png", "icons8-man-medium-skin-tone-96.png", "icons8-old-woman-dark-skin-tone-48.png", "icons8-old-woman-dark-skin-tone-96.png", "icons8-old-woman-medium-dark-skin-tone-48.png", "icons8-old-woman-medium-dark-skin-tone-96.png", "icons8-old-woman-medium-light-skin-tone-48.png", "icons8-old-woman-medium-light-skin-tone-96.png", "icons8-older-person-medium-dark-skin-tone-48.png", "icons8-older-person-medium-dark-skin-tone-96.png", "icons8-older-person-medium-skin-tone-48.png", "icons8-older-person-medium-skin-tone-96.png", "icons8-woman-dark-skin-tone-48.png", "icons8-woman-dark-skin-tone-96.png", "icons8-woman-medium-skin-tone-48.png", "icons8-woman-medium-skin-tone-96.png", "icons8-woman-with-beard-light-skin-tone-48.png", "icons8-woman-with-beard-light-skin-tone-96.png",

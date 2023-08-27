@@ -188,4 +188,5 @@ sketch
 # End of https://www.toptal.com/developers/gitignore/api/node,react
 
 #Generated files
-examples/simple/*.zip
+application/*.zip
+application/frontend/public/js/index.js
