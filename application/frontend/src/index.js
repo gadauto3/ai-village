@@ -1,141 +1,228 @@
-'use strict';
+"use strict";
 
 const config = {
-  apiPrefix: '/dev'
+  apiPrefix: "/dev",
 };
 
 function isLocalHost() {
-  if (typeof window !== 'undefined' && window.location.host.includes('localhost')) {
-      console.log('You are running on localhost!');
-      return true;
+  if (
+    typeof window !== "undefined" &&
+    window.location.host.includes("localhost")
+  ) {
+    console.log("You are running on localhost!");
+    return true;
   } else {
-      return false;
+    return false;
   }
 }
 
 // Handle localhost vs on S3 static site
-const iconsPath = (isLocalHost() ? process.env.PUBLIC_URL : config.apiPrefix) + '/icons/';
-const defaultHeadIcon = 'icons8-head-profile-50.png';
+const iconsPath =
+  (isLocalHost() ? process.env.PUBLIC_URL : config.apiPrefix) + "/icons/";
+const defaultHeadIcon = "icons8-head-profile-50.png";
 
 class Village extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       conversations: [],
-      config: config
+      config: config,
+      scores: [],
+      totalScore: 0,
     };
-    
+
     this.colorIndex = 0;
+    this.lastSelectedConversation = -1;
     this.addConversation = this.addConversation.bind(this);
     this.makeMockConversation = this.makeMockConversation.bind(this);
+    this.handleScoreNotice = this.handleScoreNotice.bind(this);
+  }
+
+  // Score calculation
+  componentDidMount() {
+    this.scoreCalculator = new ScoreCalculator(
+      this.state.conversations.map((conv) => conv.lines.length)
+    );
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.conversations.length != this.state.conversations.length) {
+      this.scoreCalculator = new ScoreCalculator(
+        this.state.conversations.map((conv) => conv.lines.length)
+      );
+    }
+  }
+
+  handleScoreNotice(index) {
+    let scores = [...this.state.scores];
+
+    if (scores[index] > 0) {
+      return; // Score already calculated
+    }
+    const score = this.scoreCalculator.calculateScore(index);
+    scores[index] = score;
+
+    const totalScore = this.scoreCalculator.getTotalScore();
+    this.setState({ scores: scores, totalScore: totalScore });
   }
 
   // Fetch conversations from the API
   addConversation() {
-
     fetch(this.state.config.apiPrefix + "/api/getConversations", {
       method: "GET",
       headers: {
         accept: "application/json",
       },
     })
-    .then((response) => response.json())
-    .then((village) => {
-      console.log(village);
-      this.setState({
-        conversations: village.conversations
-      }, () => {
-        // Update lines after the state has been updated and the component re-rendered
-        console.log("Conversations fetched successfully!", this.state.conversations);
+      .then((response) => response.json())
+      .then((village) => {
+        console.log(village);
+        this.setState(
+          {
+            conversations: village.conversations,
+          },
+          () => {
+            // Update lines after the state has been updated and the component re-rendered
+            console.log(
+              "Conversations fetched successfully!",
+              this.state.conversations
+            );
+          }
+        );
+      })
+      .catch((err) => {
+        console.log("addConvo api error, making mock object\n" + err);
+        const convo = this.makeMockConversation(
+          this.state.conversations.length + 1
+        );
+        console.log(convo);
+        this.setState({
+          conversations: [...this.state.conversations, convo],
+        });
       });
-    })
-    .catch((err) => {
-      console.log('addConvo api error, making mock object\n'+err);
-      const convo = this.makeMockConversation(this.state.conversations.length+1);
-      console.log(convo);
-      this.setState({
-        conversations: [...this.state.conversations, convo ]
-      });
-    });
   }
 
   updateLineIndexForConversation(index, newLineIndex) {
     const updatedConversations = [...this.state.conversations];
     updatedConversations[index].currentLineIndex = newLineIndex;
+    this.lastSelectedConversation = index;
     this.setState({ conversations: updatedConversations });
   }
-  
+
   makeMockConversation(id) {
     // This function creates a new mock conversation with the given int (id) appended to the strings.
 
     // Generate a random HTML-friendly color
-    const colors = ["#FFCCCC", "#FFDFCC", "#FFFFCC", "#DFFFD8", "#CCDDFF", "#D1CCFF", "#E8CCFF"];
+    const colors = [ "#FFCCCC", "#FFDFCC", "#FFFFCC", "#DFFFD8", "#CCDDFF", "#D1CCFF", "#E8CCFF" ];
     const rainbowColor = colors[this.colorIndex];
     this.colorIndex = (this.colorIndex + 1) % colors.length;
 
     const conversation = {
-        color: rainbowColor,
-        people: [
-            {
-                name: `Person A-${id}`,
-                icon: defaultHeadIcon,
-                currentLine: `1: Hello from Person A-${id}!`
-            },
-            {
-                name: `Person B-${id}`,
-                icon: defaultHeadIcon,
-                currentLine: `Greetings from Person B-${id}!`
-            }
-        ],
-        lines: [
-            {
-                name: `Person A-${id}`,
-                text: `2. How are you, Person B-${id}?`
-            },
-            {
-                name: `Person B-${id}`,
-                text: `I'm doing great, thanks, Person A-${id}! How about you?`
-            },
-            {
-                name: `Person A-${id}`,
-                text: `I'm good.`
-            },
-            {
-                name: `Person B-${id}`,
-                text: `I'm looking up.`
-            },
-            {
-                name: `Person A-${id}`,
-                text: `I'm hearing around.`
-            },
-            {
-                name: `Person B-${id}`,
-                text: `I'm finding time.`
-            }
-        ],
-        currentLineIndex: -1
+      color: rainbowColor,
+      people: [
+        {
+          name: `Person A-${id}`,
+          icon: defaultHeadIcon,
+          currentLine: `1: Hello from Person A-${id}!`,
+        },
+        {
+          name: `Person B-${id}`,
+          icon: defaultHeadIcon,
+          currentLine: `Greetings from Person B-${id}!`,
+        },
+      ],
+      lines: [
+        {
+          name: `Person A-${id}`,
+          text: `2. How are you, Person B-${id}?`,
+        },
+        {
+          name: `Person B-${id}`,
+          text: `I'm doing great, thanks, Person A-${id}! How about you?`,
+        },
+        {
+          name: `Person A-${id}`,
+          text: `I'm good.`,
+        },
+        {
+          name: `Person B-${id}`,
+          text: `I'm looking up.`,
+        },
+        {
+          name: `Person A-${id}`,
+          text: `I'm hearing around.`,
+        },
+        {
+          name: `Person B-${id}`,
+          text: `I'm finding time.`,
+        },
+      ],
+      currentLineIndex: -1,
     };
 
     return conversation;
-}
+  }
 
   render() {
     return (
       <div className="container">
         <h1 className="display-4 text-center">A Village of Wonder</h1>
-        <button className="btn btn-secondary" type="button" onClick={this.addConversation}>Add Conversation</button>
+        <button
+          className="btn btn-secondary"
+          type="button"
+          onClick={this.addConversation}
+        >
+          Add Conversation
+        </button>
         <div className="tall-div">
           {this.state.conversations.map((conversation, index) => (
-            <Conversation key={index} data={conversation} apiPrefix={this.state.config.apiPrefix} updateLineIndex={(newLineIndex) => this.updateLineIndexForConversation(index, newLineIndex)} />
+            <Conversation
+              key={index}
+              data={conversation}
+              apiPrefix={this.state.config.apiPrefix}
+              updateLineIndex={(newLineIndex) =>
+                this.updateLineIndexForConversation(index, newLineIndex)
+              }
+            />
           ))}
         </div>
         <div className="hud rounded-div">
           <h5>Scoreboard</h5>
-          {this.state.conversations.map((conversation, index) => (
-            <div key={index} style={{backgroundColor: conversation.color, display: 'inline-block', padding: '10px', margin: '5px'}}>
-              {conversation.currentLineIndex}
-            </div>
-          ))}
+          <div className="conversation-row">
+            {this.state.conversations.map((conversation, index) => (
+              <div
+                key={index}
+                className="conversation-div"
+                style={{ backgroundColor: conversation.color }}
+              >
+                {conversation.currentLineIndex + 1}
+              </div>
+            ))}
+          </div>
+
+          <div className="conversation-row">
+            {this.state.conversations.map((conversation, index) => (
+              <div
+                key={index}
+                className="conversation-div"
+                style={{ backgroundColor: conversation.color }}
+              >
+                {this.state.scores[index] || 0}
+              </div>
+            ))}
+          </div>
+
+          <div>
+            <button
+              className="btn btn-primary spacing"
+              onClick={() =>
+                this.handleScoreNotice(this.lastSelectedConversation)
+              }
+            >
+              I’m noticing AI generation
+            </button>
+            <h5>Total Score: {this.state.totalScore}</h5>
+          </div>
         </div>
       </div>
     );
@@ -151,7 +238,7 @@ class Conversation extends React.Component {
       people: people,
       lines: props.data.lines,
       apiPrefix: props.apiPrefix,
-      currentLineIndex: -1 // The first line checked will be the first element in the array
+      currentLineIndex: -1, // The first line checked will be the first element in the array
     };
   }
 
@@ -160,13 +247,13 @@ class Conversation extends React.Component {
     const personMap = {};
 
     console.log(people);
-    people.forEach(person => {
+    people.forEach((person) => {
       if (!personMap[person.name]) {
         personMap[person.name] = {
           name: person.name,
           currentLine: person.currentLine,
-          icon: iconsPath + person.icon, // Placeholder icon, update as per requirement.
-          color: color || '#FFF' // Default to white if no color is provided
+          icon: iconsPath + person.icon,
+          color: color || "#FFF", // Default to white if no color is provided
         };
       } else {
         personMap[person.name].currentLine = person.currentLine;
@@ -176,38 +263,40 @@ class Conversation extends React.Component {
   }
 
   retrieveAdditionalConversation(person) {
-    
     fetch(this.state.apiPrefix + "/api/addToConversation", {
       method: "POST",
       headers: {
-        "accept": "application/json",
-        "Content-Type": "application/json" // Indicates the content type of the request body
+        accept: "application/json",
+        "Content-Type": "application/json", // Indicates the content type of the request body
       },
-      body: JSON.stringify({ lines: this.state.lines }) // Send the current lines as the request body
+      body: JSON.stringify({ lines: this.state.lines }), // Send the current lines as the request body
     })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log('Conversations fetched successfully!', data);
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Conversations fetched successfully!", data);
 
-      // Check if moreLines is empty
-      if (data.moreLines.length) {
-        const addedLines = this.state.lines.concat(data.moreLines);
+        // Check if moreLines is empty
+        if (data.moreLines.length) {
+          const addedLines = this.state.lines.concat(data.moreLines);
 
-        this.setState(prevState => {
-          return { lines: prevState.lines.concat(data.moreLines) };
-        }, () => {
-          // Update lines after the state has been updated and the component re-rendered
+          this.setState(
+            (prevState) => {
+              return { lines: prevState.lines.concat(data.moreLines) };
+            },
+            () => {
+              // Update lines after the state has been updated and the component re-rendered
+              this.updateConversationFor(person, false);
+            }
+          );
+        } else {
+          console.log("No moreLines");
           this.updateConversationFor(person, false);
-        });
-      } else {
-        console.log('No moreLines');
+        }
+      })
+      .catch((err) => {
+        console.log("addToConvo api error");
         this.updateConversationFor(person, false);
-      }
-    })
-    .catch((err) => {
-      console.log('addToConvo api error');
-      this.updateConversationFor(person, false);
-    });
+      });
   }
 
   updateConversationFor(person, canUseAPI) {
@@ -242,7 +331,12 @@ class Conversation extends React.Component {
     return (
       <div>
         {this.state.people.map((person, index) => (
-          <Person key={index} data={person} color={person.color} updateLine={() => this.updateConversationFor(person, true)} />
+          <Person
+            key={index}
+            data={person}
+            color={person.color}
+            updateLine={() => this.updateConversationFor(person, true)}
+          />
         ))}
       </div>
     );
@@ -251,23 +345,35 @@ class Conversation extends React.Component {
 
 // Person component represents an individual with a name, icon, and a line of text they've spoken.
 class Person extends React.Component {
-
   render() {
     return (
-      <div className="d-flex align-items-center mt-2 rounded-div" style={{ backgroundColor: this.props.color }}>
-        <button className="mr-2 wide-btn spacing" type="button" onClick={this.props.updateLine}>{this.props.data.name}</button>
-        <img src={this.props.data.icon} alt="Icon" className="icon mr-2 spacing" />
+      <div
+        className="d-flex align-items-center mt-2 rounded-div"
+        style={{ backgroundColor: this.props.color }}
+      >
+        <button
+          className="mr-2 wide-btn spacing"
+          type="button"
+          onClick={this.props.updateLine}
+        >
+          {this.props.data.name}
+        </button>
+        <img
+          src={this.props.data.icon}
+          alt="Icon"
+          className="icon mr-2 spacing"
+        />
         <textarea
-            readOnly
-            className="form-control spacing"
-            value={this.props.data.currentLine}
-            style={{ 
-                overflow: 'auto', 
-                whiteSpace: 'pre-wrap',
-                resize: 'none', 
-                border: 'none',
-                outline: 'none'
-            }}
+          readOnly
+          className="form-control spacing"
+          value={this.props.data.currentLine}
+          style={{
+            overflow: "auto",
+            whiteSpace: "pre-wrap",
+            resize: "none",
+            border: "none",
+            outline: "none",
+          }}
         />
       </div>
     );
@@ -288,13 +394,62 @@ class HUD extends React.Component {
                 readOnly
                 className="form-control"
                 value={conversation.currentLineIndex}
-                style={{ backgroundColor: conversation.color, color: '#000' }}
+                style={{ backgroundColor: conversation.color, color: "#000" }}
               />
             </div>
           ))}
         </div>
       </div>
     );
+  }
+}
+
+// ScoreCalculator class
+class ScoreCalculator {
+  constructor(linesLengths) {
+      this.linesLengths = linesLengths;
+      this.scores = new Array(linesLengths.length).fill(0);
+      this.PERFECT_SCORE = 15;
+      this.OVERESTIMATE_MULTIPLIER = 2;
+      this.UNDERESTIMATE_MULTIPLIER = 3;
+  }
+
+  // Setter method to update scores directly if needed
+  setScoreValues(scores) {
+      if (scores.length !== this.linesLengths.length) {
+          throw new Error("Scores array length doesn't match linesLengths array length");
+      }
+      this.scores = scores;
+  }
+
+  // This method will use the logic from the provided Node class
+  getScoreForIndex(index, selection) {
+      if (index < 0 || index >= this.scores.length) {
+          throw new Error("Index out of range");
+      }
+
+      const difference = this.scores[index] - selection;
+
+      if (difference > 0) {
+          return difference * this.OVERESTIMATE_MULTIPLIER;
+      } else if (difference < 0) {
+          return -difference * this.UNDERESTIMATE_MULTIPLIER;
+      }
+
+      return 0;
+  }
+
+  // Original method from the React class
+  calculateScore(index) {
+      if (index >= 0 && index < this.linesLengths.length) {
+          this.scores[index] = this.linesLengths[index] * 10; // assuming a scoring mechanism. Modify accordingly.
+      }
+      return this.scores[index];
+  }
+
+  // Original method from the React class
+  getTotalScore() {
+      return this.scores.reduce((acc, curr) => acc + curr, 0);
   }
 }
 
