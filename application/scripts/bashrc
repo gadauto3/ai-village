@@ -1,5 +1,5 @@
 # Make it so I can call scripts in this directory easily
-export PATH="$PATH:~/repos/ai-village/application/scripts"
+export PATH="$PATH:/Users/gdawgg/repos/ai-village/application/scripts"
 
 # Terraform
 alias tf=terraform
