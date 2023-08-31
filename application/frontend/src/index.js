@@ -1,5 +1,7 @@
 "use strict";
 
+import ScoreCalculator from './ScoreCalculator';
+
 const config = {
   apiPrefix: "/dev",
 };
@@ -59,11 +61,12 @@ class Village extends React.Component {
     if (scores[index] > 0) {
       return; // Score already calculated
     }
-    const score = this.scoreCalculator.calculateScore(index);
-    scores[index] = score;
+    const convoIndex = this.state.conversations[index].currentLineIndex;
+    const updatedScores = this.scoreCalculator.updateScoresForIndex(index, convoIndex);
 
     const totalScore = this.scoreCalculator.getTotalScore();
-    this.setState({ scores: scores, totalScore: totalScore });
+    this.setState({ scores: [...updatedScores], totalScore: totalScore });
+    console.log("scores", updatedScores);
   }
 
   // Fetch conversations from the API
@@ -401,55 +404,6 @@ class HUD extends React.Component {
         </div>
       </div>
     );
-  }
-}
-
-// ScoreCalculator class
-class ScoreCalculator {
-  constructor(linesLengths) {
-      this.linesLengths = linesLengths;
-      this.scores = new Array(linesLengths.length).fill(0);
-      this.PERFECT_SCORE = 15;
-      this.OVERESTIMATE_MULTIPLIER = 2;
-      this.UNDERESTIMATE_MULTIPLIER = 3;
-  }
-
-  // Setter method to update scores directly if needed
-  setScoreValues(scores) {
-      if (scores.length !== this.linesLengths.length) {
-          throw new Error("Scores array length doesn't match linesLengths array length");
-      }
-      this.scores = scores;
-  }
-
-  // This method will use the logic from the provided Node class
-  getScoreForIndex(index, selection) {
-      if (index < 0 || index >= this.scores.length) {
-          throw new Error("Index out of range");
-      }
-
-      const difference = this.scores[index] - selection;
-
-      if (difference > 0) {
-          return difference * this.OVERESTIMATE_MULTIPLIER;
-      } else if (difference < 0) {
-          return -difference * this.UNDERESTIMATE_MULTIPLIER;
-      }
-
-      return 0;
-  }
-
-  // Original method from the React class
-  calculateScore(index) {
-      if (index >= 0 && index < this.linesLengths.length) {
-          this.scores[index] = this.linesLengths[index] * 10; // assuming a scoring mechanism. Modify accordingly.
-      }
-      return this.scores[index];
-  }
-
-  // Original method from the React class
-  getTotalScore() {
-      return this.scores.reduce((acc, curr) => acc + curr, 0);
   }
 }
 
