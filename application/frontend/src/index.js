@@ -115,7 +115,7 @@ class Village extends React.Component {
   makeMockConversation(id) {
     // This function creates a new mock conversation with the given int (id) appended to the strings.
 
-    // Generate a random HTML-friendly color
+    // Generate HTML-friendly rainbow colors
     const colors = [ "#FFCCCC", "#FFDFCC", "#FFFFCC", "#DFFFD8", "#CCDDFF", "#D1CCFF", "#E8CCFF" ];
     const rainbowColor = colors[this.colorIndex];
     this.colorIndex = (this.colorIndex + 1) % colors.length;
@@ -126,18 +126,18 @@ class Village extends React.Component {
         {
           name: `Person A-${id}`,
           icon: defaultHeadIcon,
-          currentLine: `1: Hello from Person A-${id}!`,
+          currentLine: ``,
         },
         {
           name: `Person B-${id}`,
           icon: defaultHeadIcon,
-          currentLine: `Greetings from Person B-${id}!`,
+          currentLine: ``,
         },
       ],
       lines: [
         {
           name: `Person A-${id}`,
-          text: `2. How are you, Person B-${id}?`,
+          text: `How are you, Person B-${id}?`,
         },
         {
           name: `Person B-${id}`,
@@ -306,7 +306,7 @@ class Conversation extends React.Component {
     let newIndex = this.state.currentLineIndex + 1;
 
     // If out of lines
-    if (newIndex >= this.state.lines.length) {
+    if (newIndex >= this.state.lines.length - 1) {
       if (canUseAPI) {
         this.retrieveAdditionalConversation(person);
       } else {
