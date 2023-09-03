@@ -121,6 +121,16 @@ class Village extends React.Component {
     });
   }
 
+  updateConversationLines(conversation, lines) {
+    const updatedConversations = this.state.conversations.map((c) => {
+      if (c === conversation) {
+        c.lines = lines;
+      }
+      return c;
+    });
+    this.setState({ conversations: updatedConversations });
+  }
+
   updateLineIndexForConversation(index, newLineIndex) {
     const updatedConversations = [...this.state.conversations];
     updatedConversations[index].currentLineIndex = newLineIndex;
@@ -132,15 +142,7 @@ class Village extends React.Component {
     // This function creates a new mock conversation with the given int (id) appended to the strings.
 
     // Generate HTML-friendly rainbow colors
-    const colors = [
-      "#FFCCCC",
-      "#FFDFCC",
-      "#FFFFCC",
-      "#DFFFD8",
-      "#CCDDFF",
-      "#D1CCFF",
-      "#E8CCFF",
-    ];
+    const colors = [ "#FFCCCC", "#FFDFCC", "#FFFFCC", "#DFFFD8", "#CCDDFF", "#D1CCFF", "#E8CCFF" ];
     const rainbowColor = colors[this.colorIndex];
     this.colorIndex = (this.colorIndex + 1) % colors.length;
 
@@ -205,18 +207,6 @@ class Village extends React.Component {
       });
   }
   
-  static getDerivedStateFromProps(nextProps, prevState) {
-    console.log("does this get called?");
-    console.log(nextProps.data.lines !== prevState.lines);
-  //   if (nextProps.data.lines !== prevState.lines) {
-  //     return {
-  //       lines: nextProps.data.lines,
-  //       people: this.createPeople(nextProps.data.people, nextProps.data.color),
-  //     };
-  //   }
-  //   return null; // No state update necessary
-  }
-
   render() {
     return (
       <div className="container">
@@ -247,6 +237,7 @@ class Village extends React.Component {
               data={conversation}
               isApiSuccess={this.state.isApiSuccess}
               apiPrefix={this.state.config.apiPrefix}
+              updateConversationLines={this.updateConversationLines}
               updateLineIndex={(newLineIndex) =>
                 this.updateLineIndexForConversation(index, newLineIndex)
               }
@@ -303,7 +294,6 @@ class Conversation extends React.Component {
     const people = this.createPeople(props.data.people, props.data.color);
     this.state = {
       people: people,
-      lines: props.data.lines,
       apiPrefix: props.apiPrefix,
       currentLineIndex: -1, // The first line checked will be the first element in the array
     };
@@ -355,6 +345,7 @@ class Conversation extends React.Component {
             () => {
               // Update lines after the state has been updated and the component re-rendered
               this.updateConversationFor(person, false);
+              this.props.updateConversationLines(this.props.data, this.state.lines);
             }
           );
         } else {
@@ -367,13 +358,12 @@ class Conversation extends React.Component {
         this.updateConversationFor(person, false);
       });
   }
-
+  
   updateConversationFor(person, canUseAPI) {
-    let newIndex = this.state.currentLineIndex + 1;
+    let newIndex = this.props.data.currentLineIndex + 1;
 
     // If out of lines
-    console.log("lines:", this.state.lines, "for", person, "and canUseAPI?", canUseAPI);
-    if (newIndex >= this.state.lines.length - 1) {
+    if (newIndex >= this.props.data.lines.length - 1) {
       if (canUseAPI) {
         this.retrieveAdditionalConversation(person);
       } else {
@@ -383,13 +373,12 @@ class Conversation extends React.Component {
       return;
     }
 
-    const nextLine = this.state.lines[newIndex];
+    const nextLine = this.props.data.lines[newIndex];
 
     // If the person is the speaker of the next line
     if (nextLine.name === person.name) {
       person.currentLine = nextLine.text;
       this.props.updateLineIndex(newIndex);
-      this.setState({ currentLineIndex: newIndex, people: this.state.people });
     } else {
       // If the person is not the speaker of the next line
       person.currentLine = `Would you check with ${nextLine.name}? Remember, I said, "${person.currentLine}"`;
@@ -407,7 +396,7 @@ class Conversation extends React.Component {
             color={person.color}
             isApiSuccess={this.props.isApiSuccess}
             updateLine={() => this.updateConversationFor(person, true)}
-            isClickable={this.state.lines.length > 0}
+            isClickable={this.props.data.lines.length > 0}
           />
         ))}
       </div>
