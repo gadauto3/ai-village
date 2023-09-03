@@ -92,7 +92,8 @@ class Village extends React.Component {
         isRetrieveCalled: true,
     });
 
-    fetch(this.state.config.apiPrefix + "/api/getConversations", {
+    const apiPath = "/api/getConversations?numConvos=" + this.state.conversations.length;
+    fetch(this.state.config.apiPrefix + apiPath, {
         method: "GET",
         headers: {
             accept: "application/json",

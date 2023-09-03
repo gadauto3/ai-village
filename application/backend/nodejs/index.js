@@ -11,7 +11,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.get('/api/getConversations', (req, res) => {
-    const count = 3;//parseInt(req.query.count) || conversations.data.length; // Get count from query or return all
+    const count = parseInt(req.query.numConvos); // Get convo count from query or return all
+    console.log("count", count)
     const data = conversations.getConversations(count);
     res.send({ conversations: data });
 });
