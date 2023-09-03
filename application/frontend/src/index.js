@@ -22,6 +22,7 @@ function isLocalHost() {
 const iconsPath =
   (isLocalHost() ? process.env.PUBLIC_URL : config.apiPrefix) + "/icons/";
 const defaultHeadIcon = "icons8-head-profile-50.png";
+const MAX_CONVOS = 7;
 
 class Village extends React.Component {
   constructor(props) {
@@ -31,11 +32,14 @@ class Village extends React.Component {
       config: config,
       scores: [],
       totalScore: 0,
+      isApiSuccess: false,
+      isRetrieveCalled: false,
     };
 
     this.colorIndex = 0;
     this.lastSelectedConversation = -1;
     this.addConversation = this.addConversation.bind(this);
+    this.retrieveConversations = this.retrieveConversations.bind(this);
     this.makeMockConversation = this.makeMockConversation.bind(this);
     this.handleScoreNotice = this.handleScoreNotice.bind(this);
   }
@@ -62,47 +66,59 @@ class Village extends React.Component {
       return; // Score already calculated
     }
     const convoIndex = this.state.conversations[index].currentLineIndex;
-    const updatedScores = this.scoreCalculator.updateScoresForIndex(index, convoIndex);
+    const updatedScores = this.scoreCalculator.updateScoresForIndex(
+      index,
+      convoIndex
+    );
 
     const totalScore = this.scoreCalculator.getTotalScore();
     this.setState({ scores: [...updatedScores], totalScore: totalScore });
     console.log("scores", updatedScores);
   }
 
-  // Fetch conversations from the API
+  // Add conversation to the list
   addConversation() {
-    fetch(this.state.config.apiPrefix + "/api/getConversations", {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((village) => {
-        console.log(village);
-        this.setState(
-          {
-            conversations: village.conversations,
-          },
-          () => {
-            // Update lines after the state has been updated and the component re-rendered
-            console.log(
-              "Conversations fetched successfully!",
-              this.state.conversations
-            );
-          }
-        );
-      })
-      .catch((err) => {
-        console.log("addConvo api error, making mock object\n" + err);
-        const convo = this.makeMockConversation(
-          this.state.conversations.length + 1
-        );
-        console.log(convo);
-        this.setState({
-          conversations: [...this.state.conversations, convo],
-        });
+    if (this.state.conversations.length < MAX_CONVOS) {
+      const convo = this.makeMockConversation(
+        this.state.conversations.length + 1
+      );
+      this.setState({
+        conversations: [...this.state.conversations, convo],
       });
+    }
+  }
+
+  retrieveConversations() {
+    this.retrieveBtn.disabled = true;  // Disable the Retrieve button
+    this.setState({
+        isRetrieveCalled: true,
+    });
+
+    fetch(this.state.config.apiPrefix + "/api/getConversations", {
+        method: "GET",
+        headers: {
+            accept: "application/json",
+        },
+    })
+    .then((response) => response.json())
+    .then((village) => {
+        this.setState({
+            conversations: village.conversations,
+            isApiSuccess: true,
+        });
+    })
+    .catch((err) => {
+        console.log("retrieveConversations api error\n", err);
+
+        if (isLocalHost()) {
+          this.makeMockLines();
+        } else {
+          alert("Sorry, failed to retrieve conversations due to an error, try refreshing.\n"+err);
+        }
+        // this.setState({
+        //   isRetrieveCalled: false,
+        // });
+    });
   }
 
   updateLineIndexForConversation(index, newLineIndex) {
@@ -116,7 +132,15 @@ class Village extends React.Component {
     // This function creates a new mock conversation with the given int (id) appended to the strings.
 
     // Generate HTML-friendly rainbow colors
-    const colors = [ "#FFCCCC", "#FFDFCC", "#FFFFCC", "#DFFFD8", "#CCDDFF", "#D1CCFF", "#E8CCFF" ];
+    const colors = [
+      "#FFCCCC",
+      "#FFDFCC",
+      "#FFFFCC",
+      "#DFFFD8",
+      "#CCDDFF",
+      "#D1CCFF",
+      "#E8CCFF",
+    ];
     const rainbowColor = colors[this.colorIndex];
     this.colorIndex = (this.colorIndex + 1) % colors.length;
 
@@ -134,36 +158,63 @@ class Village extends React.Component {
           currentLine: ``,
         },
       ],
-      lines: [
-        {
-          name: `Person A-${id}`,
-          text: `How are you, Person B-${id}?`,
-        },
-        {
-          name: `Person B-${id}`,
-          text: `I'm doing great, thanks, Person A-${id}! How about you?`,
-        },
-        {
-          name: `Person A-${id}`,
-          text: `I'm good.`,
-        },
-        {
-          name: `Person B-${id}`,
-          text: `I'm looking up.`,
-        },
-        {
-          name: `Person A-${id}`,
-          text: `I'm hearing around.`,
-        },
-        {
-          name: `Person B-${id}`,
-          text: `I'm finding time.`,
-        },
-      ],
+      lines: [],
       currentLineIndex: -1,
     };
 
     return conversation;
+  }
+
+  makeMockLines() {
+    const conversations = [...this.state.conversations];
+    conversations.forEach(conversation => {
+      const personA = conversation.people[0].name;
+      const personB = conversation.people[1].name;
+      const lines = [
+        {
+          name: personA,
+          text: `How are you, ${personB}?`,
+        },
+        {
+          name: personB,
+          text: `I'm doing great, thanks, ${personA}! How about you?`,
+        },
+        {
+          name: personA,
+          text: `I'm good.`,
+        },
+        {
+          name: personB,
+          text: `I'm looking up.`,
+        },
+        {
+          name: personA,
+          text: `I'm hearing around.`,
+        },
+        {
+          name: personB,
+          text: `I'm finding time.`,
+        },
+      ];
+      conversation.lines = lines;
+    });
+    this.setState({ conversations, isApiSuccess: true},
+      () => {
+        // Update lines after the state has been updated and the component re-rendered
+        console.log("====conversations:::", this.state.conversations);
+      });
+  }
+  
+  static getDerivedStateFromProps(nextProps, prevState) {
+    console.log("does this get called?");
+    console.log(nextProps.data.lines !== prevState.lines);
+  //   if (nextProps.data.lines !== prevState.lines) {
+  //     return {
+  //       lines: nextProps.data.lines,
+  //       people: this.createPeople(nextProps.data.people, nextProps.data.color),
+  //     };
+  //   }
+  //   return null; // No state update necessary
   }
 
   render() {
@@ -171,17 +222,30 @@ class Village extends React.Component {
       <div className="container">
         <h1 className="display-4 text-center">A Village of Wonder</h1>
         <button
-          className="btn btn-secondary"
+          className="btn btn-secondary ml-2"
           type="button"
           onClick={this.addConversation}
+          disabled={this.state.conversations.length >= MAX_CONVOS || this.state.isRetrieveCalled}
         >
           Add Conversation
+        </button>
+        <button
+          className="btn btn-secondary ml-2"
+          type="button"
+          onClick={this.retrieveConversations}
+          disabled={!this.state.conversations.length}
+          ref={(btn) => {
+            this.retrieveBtn = btn;
+          }}
+        >
+          Retrieve
         </button>
         <div className="tall-div">
           {this.state.conversations.map((conversation, index) => (
             <Conversation
               key={index}
               data={conversation}
+              isApiSuccess={this.state.isApiSuccess}
               apiPrefix={this.state.config.apiPrefix}
               updateLineIndex={(newLineIndex) =>
                 this.updateLineIndexForConversation(index, newLineIndex)
@@ -243,13 +307,15 @@ class Conversation extends React.Component {
       apiPrefix: props.apiPrefix,
       currentLineIndex: -1, // The first line checked will be the first element in the array
     };
+
+    this.retrieveAdditionalConversation = this.retrieveAdditionalConversation.bind(this);
+    this.updateConversationFor = this.updateConversationFor.bind(this);
   }
 
   // Create an array of people from the lines of a conversation.
   createPeople(people, color) {
     const personMap = {};
 
-    console.log(people);
     people.forEach((person) => {
       if (!personMap[person.name]) {
         personMap[person.name] = {
@@ -306,6 +372,7 @@ class Conversation extends React.Component {
     let newIndex = this.state.currentLineIndex + 1;
 
     // If out of lines
+    console.log("lines:", this.state.lines, "for", person, "and canUseAPI?", canUseAPI);
     if (newIndex >= this.state.lines.length - 1) {
       if (canUseAPI) {
         this.retrieveAdditionalConversation(person);
@@ -338,7 +405,9 @@ class Conversation extends React.Component {
             key={index}
             data={person}
             color={person.color}
+            isApiSuccess={this.props.isApiSuccess}
             updateLine={() => this.updateConversationFor(person, true)}
+            isClickable={this.state.lines.length > 0}
           />
         ))}
       </div>
@@ -358,6 +427,7 @@ class Person extends React.Component {
           className="mr-2 wide-btn spacing"
           type="button"
           onClick={this.props.updateLine}
+          disabled={!this.props.isClickable && !this.props.isApiSuccess}
         >
           {this.props.data.name}
         </button>
