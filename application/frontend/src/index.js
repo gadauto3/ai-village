@@ -1,4 +1,5 @@
 "use strict";
+const _ = require('lodash');
 
 const config = {
   apiPrefix: "/dev",
@@ -38,7 +39,7 @@ class Village extends React.Component {
     this.lastSelectedConversation = -1;
     this.addConversation = this.addConversation.bind(this);
     this.retrieveConversations = this.retrieveConversations.bind(this);
-    this.makeMockConversation = this.makeMockConversation.bind(this);
+    this.makeMockConversation = this.makeStartingConversation.bind(this);
     this.handleScoreNotice = this.handleScoreNotice.bind(this);
   }
 
@@ -77,7 +78,7 @@ class Village extends React.Component {
   // Add conversation to the list
   addConversation() {
     if (this.state.conversations.length < MAX_CONVOS) {
-      const convo = this.makeMockConversation(
+      const convo = this.makeStartingConversation(
         this.state.conversations.length + 1
       );
       this.setState({
@@ -87,7 +88,7 @@ class Village extends React.Component {
   }
 
   retrieveConversations() {
-    this.retrieveBtn.disabled = true;  // Disable the Retrieve button
+    this.retrieveBtn.disabled = true; // Disable the Retrieve button
     this.setState({
         isRetrieveCalled: true,
     });
@@ -114,9 +115,6 @@ class Village extends React.Component {
         } else {
           alert("Sorry, failed to retrieve conversations due to an error, try refreshing.\n"+err);
         }
-        // this.setState({
-        //   isRetrieveCalled: false,
-        // });
     });
   }
 
@@ -137,9 +135,7 @@ class Village extends React.Component {
     this.setState({ conversations: updatedConversations });
   }
 
-  makeMockConversation(id) {
-    // This function creates a new mock conversation with the given int (id) appended to the strings.
-
+  makeStartingConversation(id) {
     // Generate HTML-friendly rainbow colors
     const colors = [ "#FFCCCC", "#FFDFCC", "#FFFFCC", "#DFFFD8", "#CCDDFF", "#D1CCFF", "#E8CCFF" ];
     const rainbowColor = colors[this.colorIndex];
@@ -149,12 +145,12 @@ class Village extends React.Component {
       color: rainbowColor,
       people: [
         {
-          name: `Person A-${id}`,
+          name: `Person ${id * 2 - 1}`,
           icon: defaultHeadIcon,
           currentLine: ``,
         },
         {
-          name: `Person B-${id}`,
+          name: `Person ${id * 2}`,
           icon: defaultHeadIcon,
           currentLine: ``,
         },
@@ -167,10 +163,15 @@ class Village extends React.Component {
   }
 
   makeMockLines() {
-    const conversations = [...this.state.conversations];
-    conversations.forEach(conversation => {
-      const personA = conversation.people[0].name;
-      const personB = conversation.people[1].name;
+    const conversations = _.cloneDeep(this.state.conversations);
+    const names = [ "George", "Carlos", "Jimena", "Vanessa", "Chris", "Cri-Cri", "Leo", "Rosa", "Liliana", "Lianna", "Camden" ];
+    let nameIndex = 0;
+    conversations.forEach((conversation) => {
+      const personA = names[nameIndex++];
+      const personB = names[nameIndex++];
+      conversation.people[0].name = personA;
+      conversation.people[1].name = personB;
+
       const lines = [
         {
           name: personA,
@@ -299,6 +300,14 @@ class Conversation extends React.Component {
 
     this.retrieveAdditionalConversation = this.retrieveAdditionalConversation.bind(this);
     this.updateConversationFor = this.updateConversationFor.bind(this);
+  }
+
+  componentDidUpdate(prevProps) {
+      // Check if the people prop has changed
+      if (this.props.data.people !== prevProps.data.people) {
+          const people = this.createPeople(this.props.data.people, this.props.data.color);
+          this.setState({ people: people });
+      }
   }
 
   // Create an array of people from the lines of a conversation.
