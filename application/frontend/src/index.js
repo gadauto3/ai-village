@@ -26,6 +26,7 @@ class Village extends React.Component {
     this.lastSelectedConversation = -1;
     this.addConversation = this.addConversation.bind(this);
     this.retrieveConversations = this.retrieveConversations.bind(this);
+    this.updateConversationLines = this.updateConversationLines.bind(this);
     this.makeMockConversation = this.makeStartingConversation.bind(this);
     this.handleScoreNotice = this.handleScoreNotice.bind(this);
   }
@@ -332,25 +333,15 @@ class Conversation extends React.Component {
 
         // Check if moreLines is empty
         if (data.moreLines.length) {
-          const addedLines = currentLines.concat(data.moreLines);
-
-          this.setState(
-            (prevState) => {
-              return { lines: prevState.lines.concat(data.moreLines) };
-            },
-            () => {
-              // Update lines after the state has been updated and the component re-rendered
-              this.updateConversationFor(person, false);
-              this.props.updateConversationLines(this.props.data, currentLines);
-            }
-          );
+          const addedLines = this.props.data.lines.concat(data.moreLines);
+          this.props.updateConversationLines(this.props.data, addedLines);
         } else {
           console.log("No moreLines");
           this.updateConversationFor(person, false);
         }
       })
       .catch((err) => {
-        console.log("addToConvo api error");
+        console.log("addToConvo api error", err);
         this.updateConversationFor(person, false);
       });
   }
