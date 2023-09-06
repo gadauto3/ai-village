@@ -190,3 +190,4 @@ sketch
 #Generated files
 application/*.zip
 application/frontend/public/js/index.js
+*.code-workspace
