@@ -1,21 +1,8 @@
 "use strict";
-const _ = require('lodash');
 
 const config = {
   apiPrefix: "/dev",
 };
-
-function isLocalHost() {
-  if (
-    typeof window !== "undefined" &&
-    window.location.host.includes("localhost")
-  ) {
-    console.log("You are running on localhost!");
-    return true;
-  } else {
-    return false;
-  }
-}
 
 // Handle localhost vs on S3 static site
 const iconsPath =
@@ -163,7 +150,7 @@ class Village extends React.Component {
   }
 
   makeMockLines() {
-    const conversations = _.cloneDeep(this.state.conversations);
+    const conversations = deepCopy(this.state.conversations);
     const names = [ "George", "Carlos", "Jimena", "Vanessa", "Chris", "Cri-Cri", "Leo", "Rosa", "Liliana", "Lianna", "Camden" ];
     let nameIndex = 0;
     conversations.forEach((conversation) => {
@@ -330,13 +317,14 @@ class Conversation extends React.Component {
   }
 
   retrieveAdditionalConversation(person) {
+    const currentLines = this.props.data.lines;
     fetch(this.state.apiPrefix + "/api/addToConversation", {
       method: "POST",
       headers: {
         accept: "application/json",
         "Content-Type": "application/json", // Indicates the content type of the request body
       },
-      body: JSON.stringify({ lines: this.state.lines }), // Send the current lines as the request body
+      body: JSON.stringify({ lines: currentLines }), // Send the current lines as the request body
     })
       .then((response) => response.json())
       .then((data) => {
@@ -344,7 +332,7 @@ class Conversation extends React.Component {
 
         // Check if moreLines is empty
         if (data.moreLines.length) {
-          const addedLines = this.state.lines.concat(data.moreLines);
+          const addedLines = currentLines.concat(data.moreLines);
 
           this.setState(
             (prevState) => {
@@ -353,7 +341,7 @@ class Conversation extends React.Component {
             () => {
               // Update lines after the state has been updated and the component re-rendered
               this.updateConversationFor(person, false);
-              this.props.updateConversationLines(this.props.data, this.state.lines);
+              this.props.updateConversationLines(this.props.data, currentLines);
             }
           );
         } else {
@@ -515,3 +503,39 @@ class ScoreCalculator {
 
 let domContainer = document.querySelector("#Village");
 ReactDOM.render(<Village />, domContainer);
+
+/** Helper functions */
+
+function isLocalHost() {
+  if (
+    typeof window !== "undefined" &&
+    window.location.host.includes("localhost")
+  ) {
+    console.log("You are running on localhost!");
+    return true;
+  } else {
+    return false;
+  }
+}
+
+// TODO: fix deployment system so I can just use lodash
+function deepCopy(obj) {
+  if (obj === null) return null;
+  if (typeof obj !== "object") return obj;
+
+  if (Array.isArray(obj)) {
+    const copy = obj.slice();
+    for (let i = 0; i < copy.length; i++) {
+      copy[i] = deepCopy(copy[i]);
+    }
+    return copy;
+  } else {
+    const copy = {};
+    for (let key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        copy[key] = deepCopy(obj[key]);
+      }
+    }
+    return copy;
+  }
+}
