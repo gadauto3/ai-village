@@ -31,21 +31,6 @@ class Village extends React.Component {
     this.handleScoreNotice = this.handleScoreNotice.bind(this);
   }
 
-  // Score calculation
-  componentDidMount() {
-    this.scoreCalculator = new ScoreCalculator(
-      this.state.conversations.map((conv) => conv.lines.length)
-    );
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.conversations.length != this.state.conversations.length) {
-      this.scoreCalculator = new ScoreCalculator(
-        this.state.conversations.map((conv) => conv.lines.length)
-      );
-    }
-  }
-
   handleScoreNotice(index) {
     let scores = [...this.state.scores];
 
@@ -93,6 +78,11 @@ class Village extends React.Component {
         this.setState({
             conversations: village.conversations,
             isApiSuccess: true,
+        },
+        () => {
+          this.scoreCalculator = new ScoreCalculator(
+            this.state.conversations.map((conv) => conv.lines.length)
+          );
         });
     })
     .catch((err) => {
@@ -190,8 +180,9 @@ class Village extends React.Component {
     });
     this.setState({ conversations, isApiSuccess: true},
       () => {
-        // Update lines after the state has been updated and the component re-rendered
-        console.log("====conversations:::", this.state.conversations);
+        this.scoreCalculator = new ScoreCalculator(
+          this.state.conversations.map((conv) => conv.lines.length)
+        );
       });
   }
   
@@ -199,25 +190,36 @@ class Village extends React.Component {
     return (
       <div className="container">
         <h1 className="display-4 text-center">A Village of Wonder</h1>
-        <button
-          className="btn btn-secondary ml-2"
-          type="button"
-          onClick={this.addConversation}
-          disabled={this.state.conversations.length >= MAX_CONVOS || this.state.isRetrieveCalled}
-        >
-          Add Conversation
-        </button>
-        <button
-          className="btn btn-secondary ml-2"
-          type="button"
-          onClick={this.retrieveConversations}
-          disabled={!this.state.conversations.length}
-          ref={(btn) => {
-            this.retrieveBtn = btn;
-          }}
-        >
-          Retrieve
-        </button>
+
+        {!this.state.isRetrieveCalled ? (
+        <p>Start by using Add Conversation. The more you choose, the higher the potential score. <br />
+          When you've selected your desired number, click Retrieve to begin.</p>
+        ) : null}
+
+        {/* Conditional Rendering for "Add Conversation" Button */}
+        {this.state.conversations.length < MAX_CONVOS - 1 && !this.state.isRetrieveCalled ? (
+          <button
+            className="btn btn-secondary ml-2"
+            type="button"
+            onClick={this.addConversation}
+          >
+            Add Conversation
+          </button>
+        ) : null}
+
+        {!this.state.isRetrieveCalled ? (
+          <button
+            className="btn btn-secondary ml-2"
+            type="button"
+            onClick={this.retrieveConversations}
+            disabled={!this.state.conversations.length}
+            ref={(btn) => {
+              this.retrieveBtn = btn;
+            }}
+          >
+            Retrieve
+          </button>
+        ) : null}
         <div className="tall-div">
           {this.state.conversations.map((conversation, index) => (
             <Conversation
@@ -231,6 +233,17 @@ class Village extends React.Component {
               }
             />
           ))}
+        </div>
+        <div>
+
+          {this.state.isRetrieveCalled ? (
+            <p>
+              Now your goal is to select the "I'm noticing AI generation" button <em>once 
+              per conversation</em> when you think you notice that the 
+              AI is creating further conversation between the villagers. <br />
+              The highest score is 105 if you select the max of 7 conversations.
+              You can guess once per conversation, and refresh to start over.</p>
+          ) : null}
         </div>
         <div className="hud rounded-div">
           <h5>Scoreboard</h5>
@@ -257,7 +270,6 @@ class Village extends React.Component {
               </div>
             ))}
           </div>
-
           <div>
             <button
               className="btn btn-primary spacing"
@@ -349,14 +361,16 @@ class Conversation extends React.Component {
   updateConversationFor(person, canUseAPI) {
     let newIndex = this.props.data.currentLineIndex + 1;
 
-    // If out of lines
-    if (newIndex >= this.props.data.lines.length - 1) {
+    if (newIndex == this.props.data.lines.length - 1) {
       if (canUseAPI) {
         this.retrieveAdditionalConversation(person);
-      } else {
-        person.currentLine = "Oops, I'm out of ideas";
-        this.setState({ people: this.state.people });
       }
+    }
+
+    // If out of lines
+    if (newIndex >= this.props.data.lines.length) {
+      person.currentLine = "Oops, I'm out of ideas";
+      this.setState({ people: this.state.people });
       return;
     }
 
@@ -475,13 +489,12 @@ class ScoreCalculator {
     if (index < 0 || index >= this.scores.length) {
       throw new Error("Index out of range");
     }
-
+    
     const delta = this.linesLengths[index] - selection;
 
     const deltaMul = delta * ((delta < 0) ? this.OVERESTIMATE_MULTIPLIER : this.UNDERESTIMATE_MULTIPLIER);
     const score = this.PERFECT_SCORE - Math.abs(deltaMul);
     this.scores[index] = score;
-    console.log("scores in getScoreForIndex", this.scores);
 
     return this.scores;
   }

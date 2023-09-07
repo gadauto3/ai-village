@@ -4,39 +4,39 @@
         "people": [
             {
                 "name": "Maria",
-                "icon": "icons8-head-profile-50.png",
-                "currentLine": "I'm Maria, hello!"
+                "icon": "icons8-old-woman-medium-light-skin-tone-48.png",
+                "currentLine": "-"
             },
             {
-                "name": "Pablo",
-                "icon": "icons8-head-profile-50.png",
-                "currentLine": "Cool, I'm Pablo.  Welcome!"
+                "name": "Leo",
+                "icon": "icons8-man-medium-skin-tone-48.png",
+                "currentLine": "-"
             }
         ],
         "lines": [
             {
                 "name": "Maria",
-                "text": "2. How are you, Pablo?"
+                "text": "Leo, did you ever hear about those moths with a sneaky relationship with ants?"
             },
             {
-                "name": "Pablo",
-                "text": "I'm doing great, thanks, Maria! How about you?"
-            },
-            {
-                "name": "Maria",
-                "text": "Been trying to make a game"
-            },
-            {
-                "name": "Pablo",
-                "text": "Oh yeah, how goes the endeavor?"
+                "name": "Leo",
+                "text": "Oh, I think so! They produce a sweet secretion that ants love, right?"
             },
             {
                 "name": "Maria",
-                "text": "I am learning very much!"
+                "text": "Exactly! The caterpillars bribe the ants with this treat, and in return, ants protect them from predators. Some ants even bring them into their nests."
             },
             {
-                "name": "Pablo",
-                "text": "When can I play it?"
+                "name": "Leo",
+                "text": "But doesn't it turn a bit dark inside the nest? I've heard some caterpillars then start feasting on ant babies!"
+            },
+            {
+                "name": "Maria",
+                "text": "You're spot on. While some caterpillars just enjoy the protection, others go carnivorous. And then, after their trickery, they fly away as moths to start the cycle anew."
+            },
+            {
+                "name": "Leo",
+                "text": "Nature's full of such fascinating dynamics. A mix of collaboration and cunning!"
             }
         ],
         "currentLineIndex": 0
@@ -46,47 +46,51 @@
         "people": [
             {
                 "name": "Mika",
-                "icon": "icons8-head-profile-50.png",
-                "currentLine": "1: Hello from Mika!"
+                "icon": "icons8-woman-with-beard-light-skin-tone-48.png",
+                "currentLine": "-"
             },
             {
                 "name": "Helen",
-                "icon": "icons8-head-profile-50.png",
-                "currentLine": "Greetings from Helen!"
+                "icon": "icons8-old-woman-medium-dark-skin-tone-48.png",
+                "currentLine": "-"
             }
         ],
         "lines": [
             {
                 "name": "Mika",
-                "text": "2. How are you, Helen?"
+                "text": "You know, Helen, I was reading about that crazy stunt the artist Banksy pulled off a while ago, sneaking his own art into world-famous museums."
             },
             {
                 "name": "Helen",
-                "text": "I'm doing great, thanks, Mika! How about you?"
+                "text": "Oh, you mean when he slipped those real-looking paintings into the main art museums in San Francisco and New York? Brilliant and hilarious!"
             },
             {
                 "name": "Mika",
-                "text": "Where is this convo going?"
+                "text": "Didn't he also place that insect with fighter jet wings in the American Museum of Natural History? Imagine visitors walking by, thinking it's genuine."
             },
             {
                 "name": "Helen",
-                "text": "Meandering around the world I imagine."
+                "text": "Exactly! It's like he was playfully mocking the sanctity of these revered institutions. Making people think: who gets to decide what is art?"
             },
             {
                 "name": "Mika",
-                "text": "Where might you go this year?"
+                "text": "Apparently, his sister once teased him, saying,\"It's not like any of your pieces will actually end up in the Louvre.\" Can you imagine?"
             },
             {
                 "name": "Helen",
-                "text": "Having done Banff and Montreal, maybe PEI?"
+                "text": "It's such a Banksy move. Taking a playful jest and turning it into a powerful statement about art and its institutions."
             },
             {
                 "name": "Mika",
-                "text": "I went there when visiting Maine."
+                "text": "Yes! It wasn't just about proving his sister wrong, but questioning the entire establishment. Who decides what's worthy of being in a museum?"
             },
             {
                 "name": "Helen",
-                "text": "Great, I'll follow up!"
+                "text": "It's not just about the art, but the statement. Banksy really knows how to leave an impression, both on the canvas and in our minds."
+            },
+            {
+                "name": "Mika",
+                "text": "Know of any other clever stunts pulled by famous artists?"
             }
         ],
         "currentLineIndex": 0
@@ -96,27 +100,43 @@
         "people": [
             {
                 "name": "Sivan",
-                "icon": "icons8-head-profile-50.png",
-                "currentLine": "1: Hello from Sivan!"
+                "icon": "icons8-older-person-medium-dark-skin-tone-48.png",
+                "currentLine": "-"
             },
             {
                 "name": "Violet",
-                "icon": "icons8-head-profile-50.png",
-                "currentLine": "Greetings from Violet!"
+                "icon": "icons8-girl-medium-skin-tone-48.png",
+                "currentLine": "-"
             }
         ],
         "lines": [
             {
                 "name": "Sivan",
-                "text": "2. How are you, Violet?"
+                "text": "Hey Violet, did you know the Earth's magnetic poles flip, weakening the field?"
             },
             {
                 "name": "Violet",
-                "text": "I'm doing great, thanks, Sivan! How about you?"
+                "text": "Yes, over thousands of years! That means more cosmic and solar radiation gets closer to us."
             },
             {
                 "name": "Sivan",
-                "text": "Could be better, could be worse."
+                "text": "Sounds concerning. Would it harm us or our tech?"
+            },
+            {
+                "name": "Violet",
+                "text": "Our atmosphere protects us to an extent, but satellites could be affected. And we might see more auroras, even in places like New York!"
+            },
+            {
+                "name": "Sivan",
+                "text": "What about animals that rely on the magnetic field?"
+            },
+            {
+                "name": "Violet",
+                "text": "Migratory animals like birds could get confused. But remember, these changes happen slowly, giving time for adaptation."
+            },
+            {
+                "name": "Sivan",
+                "text": "Crazy, what other strange facts do you know about the Earth?"
             }
         ],
         "currentLineIndex": 0
