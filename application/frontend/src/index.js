@@ -192,8 +192,10 @@ class Village extends React.Component {
         <h1 className="display-4 text-center">A Village of Wonder</h1>
 
         {!this.state.isRetrieveCalled ? (
-        <p>Start by using Add Conversation. The more you choose, the higher the potential score. <br />
-          When you've selected your desired number, click Retrieve to begin.</p>
+          <p>
+              Start by using Add Conversation. The more conversations you choose to add, the higher the potential score.<br />
+              When you've finished selecting, click Begin.
+          </p>
         ) : null}
 
         {/* Conditional Rendering for "Add Conversation" Button */}
@@ -217,7 +219,7 @@ class Village extends React.Component {
               this.retrieveBtn = btn;
             }}
           >
-            Retrieve
+            Begin
           </button>
         ) : null}
         <div className="tall-div">
@@ -361,7 +363,7 @@ class Conversation extends React.Component {
   updateConversationFor(person, canUseAPI) {
     let newIndex = this.props.data.currentLineIndex + 1;
 
-    if (newIndex == this.props.data.lines.length - 1) {
+    if (newIndex == this.props.data.lines.length - 2) {
       if (canUseAPI) {
         this.retrieveAdditionalConversation(person);
       }
