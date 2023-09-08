@@ -243,8 +243,9 @@ class Village extends React.Component {
               Now your goal is to select the "I'm noticing AI generation" button <em>once 
               per conversation</em> when you think you notice that the 
               AI is creating further conversation between the villagers. <br />
-              The highest score is 105 if you select the max of 7 conversations.
-              You can guess once per conversation, and refresh to start over.</p>
+              The highest score is 15 per conversation. You can guess once per conversation, 
+              and refresh the page to start over.
+            </p>
           ) : null}
         </div>
         <div className="hud rounded-div">
