@@ -161,7 +161,7 @@ class Village extends React.Component {
         },
         {
           name: personA,
-          text: `I'm good.`,
+          text: `I'm good. I'm going blab on a bit because I need to test a rather long text where people will read what I say in my words for the birds and I really don't like curds.`,
         },
         {
           name: personB,
@@ -298,6 +298,7 @@ class Conversation extends React.Component {
     this.state = {
       people: people,
       apiPrefix: props.apiPrefix,
+      isFetching: false,
       currentLineIndex: -1, // The first line checked will be the first element in the array
     };
 
@@ -333,7 +334,15 @@ class Conversation extends React.Component {
   }
 
   retrieveAdditionalConversation(person) {
+    // If a fetch operation is already in progress, skip this fetch operation
+    if (this.state.isFetching) {
+      return;
+    }
+
+    this.setState({ isFetching: true }); // true indicates a fetch in progress
+
     const currentLines = this.props.data.lines;
+    console.log("fetching now for", currentLines);
     fetch(this.state.apiPrefix + "/api/addToConversation", {
       method: "POST",
       headers: {
@@ -348,16 +357,22 @@ class Conversation extends React.Component {
 
         // Check if moreLines is empty
         if (data.moreLines.length) {
+          console.log("adding more lines", data.moreLines);
           const addedLines = this.props.data.lines.concat(data.moreLines);
           this.props.updateConversationLines(this.props.data, addedLines);
         } else {
           console.log("No moreLines");
           this.updateConversationFor(person, false);
         }
+        // Reset the flag to false to allow future fetch operations
+        this.setState({ isFetching: false });
       })
       .catch((err) => {
         console.log("addToConvo api error", err);
         this.updateConversationFor(person, false);
+        
+        // Reset the flag to false to allow future fetch operations
+        this.setState({ isFetching: false });
       });
   }
   
@@ -429,18 +444,11 @@ class Person extends React.Component {
           alt="Icon"
           className="icon mr-2 spacing"
         />
-        <textarea
-          readOnly
+        <div
           className="form-control spacing"
-          value={this.props.data.currentLine}
-          style={{
-            overflow: "auto",
-            whiteSpace: "pre-wrap",
-            resize: "none",
-            border: "none",
-            outline: "none",
-          }}
-        />
+        >
+          {this.props.data.currentLine}
+        </div>
       </div>
     );
   }
