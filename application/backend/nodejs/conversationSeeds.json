@@ -16,7 +16,7 @@
         "lines": [
             {
                 "name": "Maria",
-                "text": "Leo, did you ever hear about those moths with a sneaky relationship with ants?"
+                "text": "Leo, did you ever hear about those moths that have a sneaky relationship with ants?"
             },
             {
                 "name": "Leo",
@@ -39,7 +39,7 @@
                 "text": "Nature's full of such fascinating dynamics. A mix of collaboration and cunning!"
             }
         ],
-        "currentLineIndex": 0
+        "currentLineIndex": -1
     },
     {
         "color": "#F4A261",
@@ -93,7 +93,7 @@
                 "text": "Know of any other clever stunts pulled by famous artists?"
             }
         ],
-        "currentLineIndex": 0
+        "currentLineIndex": -1
     },
     {
         "color": "#2A9D8F",
@@ -139,6 +139,110 @@
                 "text": "Crazy, what other strange facts do you know about the Earth?"
             }
         ],
-        "currentLineIndex": 0
+        "currentLineIndex": -1
+    },
+    {
+        "color": "#2A9D8F",
+        "people": [
+            {
+                "name": "Vanessa",
+                "icon": "icons8-woman-medium-skin-tone-48.png",
+                "currentLine": "-"
+            },
+            {
+                "name": "Diego",
+                "icon": "icons8-man-curly-hair-medium-skin-tone-48.png",
+                "currentLine": "-"
+            }
+        ],
+        "lines": [
+            {
+                "name": "Vanessa",
+                "text": "Diego, it's kinda mind-blowing to think that a Greenland shark swimming the ocean today might have been born when Leonardo da Vinci was painting the Mona Lisa, isn't it?"
+            },
+            {
+                "name": "Diego",
+                "text": "What?!? Do they stay old for a long time or grow slowly?"
+            },
+            {
+                "name": "Vanessa",
+                "text": "The latter, they only start reproducing when they're 150 years old!"
+            },
+            {
+                "name": "Diego",
+                "text": "Interesting, I wonder if it's the same for bristlecone pines. Some are alive today that are older than the Great Pyramids of Giza. One tree is more than 4,800 years old!"
+            },
+            {
+                "name": "Vanessa",
+                "text": "Crazy! While humans were laying stones for the pyramids, this tree was silently growing in the California mountains."
+            },
+            {
+                "name": "Diego",
+                "text": "It’s like these beings carry a secret history of Earth, witnessing events that we can only learn about in books."
+            },
+            {
+                "name": "Vanessa",
+                "text": "What would humans be like if they grew slowly and for a long time like one of these?"
+            }
+        ],
+        "currentLineIndex": -1
+    },
+    {
+        "color": "#2A9D8F",
+        "people": [
+            {
+                "name": "Preeta",
+                "icon": "icons8-woman-medium-skin-tone-48.png",
+                "currentLine": "-"
+            },
+            {
+                "name": "Adisu",
+                "icon": "icons8-man-curly-hair-medium-skin-tone-48.png",
+                "currentLine": "-"
+            }
+        ],
+        "lines": [
+            {
+                "name": "Preeta",
+                "text": "Can I tell you about an accidental discovery?"
+            },
+            {
+                "name": "Adisu",
+                "text": "Sure! Whatcha got?"
+            },
+            {
+                "name": "Preeta",
+                "text": "Back in 1928, there was this English scientist named Alexander Fleming. Upon returning from a two-week vacation, he found a messy lab with one of his bacteria experiments contaminated by mold."
+            },
+            {
+                "name": "Adisu",
+                "text": "Ugh, sounds like one of those evil science experiments I find out the back of my fridge sometimes!"
+            },
+            {
+                "name": "Preeta",
+                "text": "Ha! But instead of evil, it turned into something amazing! Fleming noticed that no bacteria grew around the mold, something was stopping them."
+            },
+            {
+                "name": "Adisu",
+                "text": "Wait, so the mold was fighting the bacteria?"
+            },
+            {
+                "name": "Preeta",
+                "text": "Exactly! He realized this could be big, so he grew more mold. After several experiments, he found out it was effective against a wide range of bacteria, more than he initially expected."
+            },
+            {
+                "name": "Adisu",
+                "text": "That’s really fascinating. So, what did he do next?"
+            },
+            {
+                "name": "Preeta",
+                "text": "He went on to isolate the substance in the mold, named it penicillin, and birthed antibiotics as we know them today, fundamentally changing medicine and saving countless lives."
+            },
+            {
+                "name": "Adisu",
+                "text": "It's amazing to think that returning to a messy lab could lead to such a groundbreaking discovery. It's like finding a diamond ring in a dumpster."
+            }
+        ],
+        "currentLineIndex": -1
     }
 ]
