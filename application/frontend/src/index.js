@@ -161,7 +161,7 @@ class Village extends React.Component {
         },
         {
           name: personA,
-          text: `I'm good.`,
+          text: `I'm good. I'm going blab on a bit because I need to test a rather long text where people will read what I say in my words for the birds and I really don't like curds.`,
         },
         {
           name: personB,
@@ -444,18 +444,11 @@ class Person extends React.Component {
           alt="Icon"
           className="icon mr-2 spacing"
         />
-        <textarea
-          readOnly
+        <div
           className="form-control spacing"
-          value={this.props.data.currentLine}
-          style={{
-            overflow: "auto",
-            whiteSpace: "pre-wrap",
-            resize: "none",
-            border: "none",
-            outline: "none",
-          }}
-        />
+        >
+          {this.props.data.currentLine}
+        </div>
       </div>
     );
   }
