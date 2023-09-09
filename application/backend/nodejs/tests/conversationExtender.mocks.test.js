@@ -49,13 +49,12 @@ describe("ConversationExtender", () => {
         ]
     };
 
-    const promptText = "should be in the string too.";
+    const promptText = "CURRENT_CONTEXT|CURRENT_USERS|NEXT_USER";
     const actualOutput = instance.adjustPrompt(promptText, context);
-    console.log("actualOutput: ", actualOutput);
     expect(actualOutput).toEqual(expect.stringContaining("Sivan and Violet"));
 
     // Expecting the output to contain the prompt text
-    expect(actualOutput).toEqual(expect.stringContaining(promptText));
+    expect(actualOutput).toEqual(expect.stringContaining(JSON.stringify(context).trim()));
   });
 
   // Test with more names
@@ -70,10 +69,10 @@ describe("ConversationExtender", () => {
           ]
       };
 
-      const promptText = "not relevant for this testing";
-      const expectedOutput = `${promptText} The villagers in the following lines are Sivan and Violet and An and Jerry, and the conversation should continue between them. === ${JSON.stringify(context)}`;
-      const actualOutput = instance.adjustPrompt(promptText, context);
-      expect(actualOutput).toEqual(expect.stringContaining("Sivan and Violet and An and Jerry"));
+      const userPromptText = "CURRENT_CONTEXT|CURRENT_USERS|NEXT_USER";
+      const expectedOutput = JSON.stringify(context).trim() + "|Sivan and Violet and An and Jerry|An";
+      const actualOutput = instance.adjustPrompt(userPromptText, context);
+      expect(actualOutput).toEqual(expectedOutput);
   });
 
 });

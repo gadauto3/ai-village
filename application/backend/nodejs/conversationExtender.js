@@ -5,7 +5,8 @@ const OpenAI = require("openai");
 
 const ssm = new AWS.SSM();
 // Read and clean up the prompt text
-const promptTextFromFile = fs.readFileSync(path.join(__dirname, 'prompt.txt'), 'utf8').trim().replace(/\s+/g, ' ');
+const systemPromptTextFromFile = fs.readFileSync(path.join(__dirname, 'system-prompt.txt'), 'utf8').trim().replace(/\s+/g, ' ');
+const userPromptTextFromFile = fs.readFileSync(path.join(__dirname, 'user-prompt.txt'), 'utf8').trim().replace(/\s+/g, ' ');
 // FOR TESTING: const contextFromFile = fs.readFileSync(path.join(__dirname, 'context.json'), 'utf8').trim().replace(/\s+/g, ' ');
 
 class ConversationExtender {
@@ -51,19 +52,20 @@ class ConversationExtender {
     }
   }
   
-  adjustPrompt(promptText, context) {
+  adjustPrompt(userText, context) {
 
     // API needs better input, so specifying names of villagers
     const allNames = context.lines.map(line => line.name);
     const uniqueNames = [...new Set(allNames)];
-    const villagerSentence = 
-      "The name fields in the lines that you will return are " +
-      uniqueNames.join(' and ') +
-      ", and the conversation should continue between them, starting with" +
-      uniqueNames[uniqueNames.length - 2] +
-      ".\n===\n";
+    const currentContext = JSON.stringify(context).trim();
+    const currentUsers = uniqueNames.join(' and ');
+    const nextUser = uniqueNames[uniqueNames.length - 2];
+    
+    userText = userText.replace('CURRENT_CONTEXT', currentContext);
+    userText = userText.replace('CURRENT_USERS', currentUsers);
+    userText = userText.replace('NEXT_USER', nextUser);
 
-    return `${promptText} ${villagerSentence} ${JSON.stringify(context).trim()}`;
+    return userText.trim();
   }
 
   async extendConversation(context, callback) {
@@ -73,13 +75,22 @@ class ConversationExtender {
       await new Promise(resolve => setTimeout(resolve, timeout)); // wait for 5s
     }
 
-    const fullContext = this.adjustPrompt(promptTextFromFile, context); // Use the cleaned-up prompt
+    const fullContext = this.adjustPrompt(userPromptTextFromFile, context); // Use the cleaned-up prompt
     console.log("Content: ", fullContext);
     this.openai.completions.create({
-      model: "text-davinci-003",
-      prompt: fullContext,
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          "role": "system",
+          "content": systemPromptTextFromFile
+        },
+        {
+          "role": "user",
+          "content": fullContext
+        }
+      ],
       temperature: 1,
-      max_tokens: 256,
+      max_tokens: 768,
       top_p: 1,
       frequency_penalty: 0,
       presence_penalty: 0,

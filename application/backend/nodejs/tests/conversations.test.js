@@ -15,7 +15,7 @@ describe('Conversations - Real File Tests', () => {
 
         // Ensure it's an array and has a length of 5
         expect(Array.isArray(jsonData)).toBe(true);
-        expect(jsonData.length).toEqual(3);
+        expect(jsonData.length).toEqual(5);
     });
 
     let jsonData;
@@ -49,6 +49,7 @@ describe('Conversations - Real File Tests', () => {
                 
                 expect(line).toHaveProperty('text');
                 const wordCount = line.text.split(' ').length;
+                if (wordCount == 3) console.log(line);
                 expect(wordCount).toBeGreaterThan(3);
             });
         });
