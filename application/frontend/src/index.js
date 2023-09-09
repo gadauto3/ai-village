@@ -379,6 +379,10 @@ class Conversation extends React.Component {
   updateConversationFor(person, canUseAPI) {
     let newIndex = this.props.data.currentLineIndex + 1;
 
+    if (this.state.isFetching) { // Bail if fetching
+      return;
+    }
+
     if (newIndex == this.props.data.lines.length - 2) {
       if (canUseAPI) {
         this.retrieveAdditionalConversation(person);
