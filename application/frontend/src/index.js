@@ -243,8 +243,8 @@ class Village extends React.Component {
               Now your goal is to select the "I'm noticing AI generation" button <em>once 
               per conversation</em> when you think you notice that the 
               AI is creating further conversation between the villagers. <br />
-              The highest score is 15 per conversation. You can guess once per conversation, 
-              and refresh the page to start over.
+              The highest score is 15 per conversation. You can guess once per conversation. 
+              Refresh the page to start over.
             </p>
           ) : null}
         </div>
@@ -334,10 +334,6 @@ class Conversation extends React.Component {
   }
 
   retrieveAdditionalConversation(person) {
-    // If a fetch operation is already in progress, skip this fetch operation
-    if (this.state.isFetching) {
-      return;
-    }
 
     this.setState({ isFetching: true }); // true indicates a fetch in progress
 
@@ -379,20 +375,23 @@ class Conversation extends React.Component {
   updateConversationFor(person, canUseAPI) {
     let newIndex = this.props.data.currentLineIndex + 1;
 
-    if (this.state.isFetching) { // Bail if fetching
-      return;
-    }
-
     if (newIndex == this.props.data.lines.length - 2) {
-      if (canUseAPI) {
+      if (canUseAPI && !this.state.isFetching) {
         this.retrieveAdditionalConversation(person);
       }
     }
 
     // If out of lines
     if (newIndex >= this.props.data.lines.length) {
+
+      // Don't give up just yet if fetching
+      if (this.state.isFetching) {
+        alert("Hi, this is Gabriel. Thanks for your patience with this prototype. Would you try again in 5 seconds?")
+      } else {
       person.currentLine = "Oops, I'm out of ideas";
       this.setState({ people: this.state.people });
+      }
+      
       return;
     }
 
