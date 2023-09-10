@@ -64,7 +64,21 @@ class ConversationExtender {
 
     return userText.trim();
   }
-
+  
+  removeMatchingElements(priorArray, newArray) {
+    const priorArrayMap = new Map();
+  
+    for (const item of priorArray) {
+      const key = `${item.name}-${item.text}`;
+      priorArrayMap.set(key, true);
+    }
+  
+    return newArray.filter(item => {
+      const key = `${item.name}-${item.text}`;
+      return !priorArrayMap.has(key);
+    });
+  }
+  
   async extendConversation(context, callback) {
 
     if (!this.isInitialized) {
@@ -93,7 +107,8 @@ class ConversationExtender {
         const message = response.choices[0].message;
         let responseJson = JSON.parse(message.content);
 
-        callback(null, responseJson.lines);
+        const responseLines = this.removeMatchingElements(context.lines, responseJson.lines);
+        callback(null, responseLines);
       } catch (e) {
         callback(e, null);
       }

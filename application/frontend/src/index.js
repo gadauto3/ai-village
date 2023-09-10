@@ -299,6 +299,7 @@ class Conversation extends React.Component {
       people: people,
       apiPrefix: props.apiPrefix,
       isFetching: false,
+      arePersonsMuted: false,
       currentLineIndex: -1, // The first line checked will be the first element in the array
     };
 
@@ -361,14 +362,14 @@ class Conversation extends React.Component {
           this.updateConversationFor(person, false);
         }
         // Reset the flag to false to allow future fetch operations
-        this.setState({ isFetching: false });
+        this.setState({ isFetching: false, arePersonsMuted: false });
       })
       .catch((err) => {
         console.log("addToConvo api error", err);
         this.updateConversationFor(person, false);
         
         // Reset the flag to false to allow future fetch operations
-        this.setState({ isFetching: false });
+        this.setState({ isFetching: false, arePersonsMuted: false });
       });
   }
   
@@ -386,7 +387,8 @@ class Conversation extends React.Component {
 
       // Don't give up just yet if fetching
       if (this.state.isFetching) {
-        alert("Hi, this is Gabriel. Thanks for your patience with this prototype. Would you try again in 5 seconds?")
+        alert("Hi, this is Gabriel. Thanks for your patience with this prototype. Would you try again in 5 seconds?");
+        this.setState({ arePersonsMuted: true }); // Re-enable buttons after showing alert
       } else {
       person.currentLine = "Oops, I'm out of ideas";
       this.setState({ people: this.state.people });
@@ -416,6 +418,7 @@ class Conversation extends React.Component {
             key={index}
             data={person}
             color={person.color}
+            isMuted={this.state.arePersonsMuted}
             isApiSuccess={this.props.isApiSuccess}
             updateLine={() => this.updateConversationFor(person, true)}
             isClickable={this.props.data.lines.length > 0}
@@ -438,7 +441,7 @@ class Person extends React.Component {
           className="mr-2 wide-btn spacing"
           type="button"
           onClick={this.props.updateLine}
-          disabled={!this.props.isClickable && !this.props.isApiSuccess}
+          disabled={(!this.props.isClickable && !this.props.isApiSuccess) || this.props.isMuted}
         >
           {this.props.data.name}
         </button>

@@ -84,4 +84,26 @@ describe("ConversationExtender", () => {
       expect(actualOutput).toEqual(expectedOutput);
   });
 
+  it('should correctly remove matching elements from the new array', () => {
+    const instance = new ConversationExtender();
+
+    const priorArray = [
+        { name: 'Sivan', text: '2. How are you, Violet?' },
+        { name: 'Violet', text: "I'm doing great, thanks, Sivan! How about you?" },
+    ];
+
+    const newArray = [
+        { name: 'Sivan', text: '2. How are you, Violet?' },
+        { name: 'Violet', text: "I'm doing great, thanks, Sivan! How about you?" },
+        { name: 'Sivan', text: 'Could be better, could be worse.' },
+    ];
+
+    const expectedResult = [
+        { name: 'Sivan', text: 'Could be better, could be worse.' },
+    ];
+
+    const result = instance.removeMatchingElements(priorArray, newArray);
+    expect(result).toEqual(expectedResult);
+  });
+
 });
