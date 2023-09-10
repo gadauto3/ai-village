@@ -115,7 +115,7 @@ class Village extends React.Component {
 
   makeStartingConversation(id) {
     // Generate HTML-friendly rainbow colors
-    const colors = [ "#FFCCCC", "#FFDFCC", "#FFFFCC", "#DFFFD8", "#CCDDFF", "#D1CCFF", "#E8CCFF" ];
+    const colors = [ "#F5F5F5", "#DCDCDC" ];
     const rainbowColor = colors[this.colorIndex];
     this.colorIndex = (this.colorIndex + 1) % colors.length;
 
