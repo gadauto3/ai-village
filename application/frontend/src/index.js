@@ -282,7 +282,7 @@ class Village extends React.Component {
             >
               I’m noticing AI generation
             </button>
-            <h5>Total Score: {this.state.totalScore}</h5>
+            <h5>Total Score: {this.state.totalScore} out of {this.state.conversations.length*15}</h5>
           </div>
         </div>
       </div>
