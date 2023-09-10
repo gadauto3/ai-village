@@ -5,10 +5,18 @@ const ConversationExtender = require('../conversationExtender');
 jest.mock("openai", () => {
   return jest.fn().mockImplementation(() => {
     return {
-      completions: {
-        create: jest.fn(() => Promise.resolve({
-          choices: [{ text: "[\"mocked response\"]" }]
-        }))
+      chat: {
+        completions: {
+          create: jest.fn(() => Promise.resolve({
+            choices: [
+              { 
+                message: {
+                  content: JSON.stringify({ lines: ["mocked response"] })
+                }
+              }
+            ]
+          }))
+        }
       }
     };
   });
@@ -49,9 +57,10 @@ describe("ConversationExtender", () => {
         ]
     };
 
-    const promptText = "CURRENT_CONTEXT|CURRENT_USERS|NEXT_USER";
+    const promptText = "CURRENT_CONTEXT|CURRENT_USERS|>NEXT_USER";
     const actualOutput = instance.adjustPrompt(promptText, context);
     expect(actualOutput).toEqual(expect.stringContaining("Sivan and Violet"));
+    expect(actualOutput).toEqual(expect.stringContaining("|>Violet"));
 
     // Expecting the output to contain the prompt text
     expect(actualOutput).toEqual(expect.stringContaining(JSON.stringify(context).trim()));
