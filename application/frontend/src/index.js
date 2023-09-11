@@ -423,7 +423,8 @@ class Conversation extends React.Component {
       this.props.updateLineIndex(newIndex);
     } else {
       // If the person is not the speaker of the next line
-      person.currentLine = `Would you check with ${nextLine.name}? Remember, I said, "${person.currentLine}"`;
+      const reminder = person.currentLine.length < 5 ? "" : `Remember, I said, "${person.currentLine}"`;
+      person.currentLine = `Would you check with ${nextLine.name}? ${reminder}`;
       this.setState({ people: this.state.people });
     }
   }
