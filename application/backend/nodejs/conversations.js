@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const seedrandom = require('seedrandom');
 const RainbowColors = require('./rainbowColors');
 
 class Conversations {
@@ -18,9 +19,20 @@ class Conversations {
         }
     }
 
-    getConversations(count) {
-        const convos = this.data.slice(0, count);
-        const colors = this.rainbowColors.getColors(count);
+    getConversations(count, randomSeed="Gdawgg") {
+        let convos = [...this.data];
+        let randGenerator = seedrandom(randomSeed);
+        const colors = this.rainbowColors.getColors(count, randGenerator);
+
+        randGenerator = seedrandom("Gdawgg");
+        // Shuffle the convos array using the Fisher-Yates (aka Knuth) shuffle algorithm
+        for (let i = convos.length - 1; i > 0; i--) {
+            const j = Math.floor(randGenerator() * (i + 1));
+            [convos[i], convos[j]] = [convos[j], convos[i]];
+        }
+        convos = convos.slice(0, count); // Now get the ones we need
+
+        // Add the rainbow colors
         const coloredConvos = convos.map((item, index) => {
             if (colors[index] !== undefined) {
               item.color = colors[index];

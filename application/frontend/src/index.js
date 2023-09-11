@@ -18,6 +18,7 @@ class Village extends React.Component {
       config: config,
       scores: [],
       totalScore: 0,
+      randSeed: new Date().toISOString(),
       isApiSuccess: false,
       isRetrieveCalled: false,
     };
@@ -29,6 +30,8 @@ class Village extends React.Component {
     this.updateConversationLines = this.updateConversationLines.bind(this);
     this.makeMockConversation = this.makeStartingConversation.bind(this);
     this.handleScoreNotice = this.handleScoreNotice.bind(this);
+
+    console.log("window.villageComponent.setRandSeed(\""+this.state.randSeed+"\")");
   }
 
   handleScoreNotice(index) {
@@ -66,7 +69,8 @@ class Village extends React.Component {
         isRetrieveCalled: true,
     });
 
-    const apiPath = "/api/getConversations?numConvos=" + this.state.conversations.length;
+    const seed = JSON.stringify(this.state.randSeed);
+    const apiPath = "/api/getConversations?numConvos=" + this.state.conversations.length + "&seed=" + seed;
     fetch(this.state.config.apiPrefix + apiPath, {
         method: "GET",
         headers: {
@@ -186,6 +190,20 @@ class Village extends React.Component {
       });
   }
   
+  // Allow overwriting for fun and debugging
+  getRandSeed = () => {
+    return this.state.randSeed;
+  }
+
+  setRandSeed = (newRandSeed) => {
+    this.setState({ randSeed: newRandSeed });
+  }
+
+  // Needed to access seed methods
+  componentDidMount() {
+    window.villageComponent = this;
+  }
+
   render() {
     return (
       <div className="container">

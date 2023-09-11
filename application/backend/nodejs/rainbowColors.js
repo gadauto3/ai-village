@@ -2,27 +2,18 @@ class RainbowColors {
   static MAX_COLORS = 7;
 
   constructor() {
-    this.colors = {
-      saturated: [ "#FF0000", "#FF7F00", "#FFFF00", "#7FFF00", "#0000FF", "#4B0082", "#9400D3", ],
-      muted: [ "#FFCCCC", "#FFDFCC", "#FFFFCC", "#DFFFD8", "#CCDDFF", "#D1CCFF", "#E8CCFF", ],
-    };
+    this.colors = [ "#FFCCCC", "#FFDFCC", "#FFFFCC", "#DFFFD8", "#CCDDFF", "#D1CCFF", "#E8CCFF" ];
   }
 
-  getColors(numColors, palette = "muted") {
-    if (numColors > RainbowColors.MAX_COLORS || numColors < 1) {
-      throw new Error(
-        "Requested number of colors exceeds available rainbow colors."
-      );
-    }
+  getColors(numColors, randGenerator = null) {
 
     const selectedColors = [];
+    const rand0to1 = randGenerator ? randGenerator() : Math.random();
     // Initialize to a random number between 0 and the number of colors
-    let index = Math.floor(
-      Math.random() * (this.colors[palette].length - numColors)
-    );
+    let index = Math.floor(rand0to1 * (this.colors.length - numColors));
 
     for (let i = 0; i < numColors; i++) {
-      selectedColors.push(this.colors[palette][index]);
+      selectedColors.push(this.colors[index % RainbowColors.MAX_COLORS]);
       index = index + 1;
     }
 

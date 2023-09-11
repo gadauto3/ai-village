@@ -1,7 +1,7 @@
 const fs = require('fs');
 const Conversations = require('../conversations');
 
-describe('Conversations - Real File Tests', () => {
+describe('Conversations - Tests using the seeds file', () => {
 
     it('ensures conversationSeeds.json is valid JSON and contains an array of five elements', () => {
         // The actual readFileSync call without mocking
@@ -18,9 +18,11 @@ describe('Conversations - Real File Tests', () => {
         expect(jsonData.length).toEqual(5);
     });
 
+    let conversations;
     let jsonData;
 
     beforeAll(() => {
+        conversations = new Conversations();
         // Read and parse the JSON file once for all tests in this block
         const rawData = fs.readFileSync('./conversationSeeds.json', 'utf-8');
         jsonData = JSON.parse(rawData);
@@ -55,4 +57,37 @@ describe('Conversations - Real File Tests', () => {
         });
     });
 
+    it('ensures that the colors in the conversations array are modified', () => {
+        const count = 2;
+        const coloredConvos = conversations.getConversations(count);
+
+        expect(coloredConvos[0].color).not.toEqual(jsonData[0].color);
+        expect(coloredConvos[1].color).not.toEqual(jsonData[1].color);
+    });
+
+    it('ensures the conversations array returned has a length equal to the count parameter', () => {
+        const count = 2;
+        const coloredConvos = conversations.getConversations(count);
+
+        expect(coloredConvos.length).toEqual(count);
+    });
+
+    it('ensures the conversations array returned has different order of elements with different seeds', () => {
+        const count = jsonData.length;
+        
+        const coloredConvos1 = conversations.getConversations(count, "seed1");
+        const coloredConvos2 = conversations.getConversations(count, "seed2");
+
+        expect(coloredConvos1[0]).not.toEqual(coloredConvos2[0]);
+        expect(coloredConvos1[1]).not.toEqual(coloredConvos2[1]);
+    });
+
+    it('ensures the conversations array returned is the same when using the same seed', () => {
+        const count = jsonData.length;
+        
+        const coloredConvos1 = conversations.getConversations(count, "sameSeed");
+        const coloredConvos2 = conversations.getConversations(count, "sameSeed");
+    
+        expect(coloredConvos1).toEqual(coloredConvos2);
+    });
 });
