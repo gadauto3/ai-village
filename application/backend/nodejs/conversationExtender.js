@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const AWS = require('aws-sdk');
 const OpenAI = require("openai");
+const { response } = require('express');
 
 const ssm = new AWS.SSM();
 // Read and clean up the prompt text
@@ -86,6 +87,7 @@ class ConversationExtender {
       await new Promise(resolve => setTimeout(resolve, timeout)); // wait for 5s
     }
 
+    let responseCapture = "uninitialized";
     const fullContext = this.adjustPrompt(userPromptTextFromFile, context); // Use the cleaned-up prompt
     this.openai.chat.completions.create({
       model: "gpt-3.5-turbo",
@@ -104,7 +106,9 @@ class ConversationExtender {
       // Check if the response is valid JSON
       try {
         // Safely extract the text part
+        responseCapture = "got a response"
         const message = response.choices[0].message;
+        responseCapture = message;
         let responseJson = JSON.parse(message.content);
 
         const responseLines = this.removeMatchingElements(context.lines, responseJson.lines);
@@ -114,6 +118,7 @@ class ConversationExtender {
       }
     })
     .catch(err => {
+      console.log("extendConversation response error in", responseCapture, "\n\nError:", err);
       callback(err, null);
     });
   }

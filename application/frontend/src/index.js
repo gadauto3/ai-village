@@ -257,7 +257,7 @@ class Village extends React.Component {
         <div>
 
           {this.state.isRetrieveCalled ? (
-            <p>
+            <p className="more-spacing">
               Now your goal is to select the "I'm noticing AI generation" button <em>once 
               per conversation</em> when you think you notice that the 
               AI is creating further conversation between the villagers. <br />
@@ -357,7 +357,6 @@ class Conversation extends React.Component {
     this.setState({ isFetching: true }); // true indicates a fetch in progress
 
     const currentLines = this.props.data.lines;
-    console.log("fetching now for", currentLines);
     fetch(this.state.apiPrefix + "/api/addToConversation", {
       method: "POST",
       headers: {
@@ -372,7 +371,6 @@ class Conversation extends React.Component {
 
         // Check if moreLines is empty
         if (data.moreLines.length) {
-          console.log("adding more lines", data.moreLines);
           const addedLines = this.props.data.lines.concat(data.moreLines);
           this.props.updateConversationLines(this.props.data, addedLines);
         } else {
@@ -394,7 +392,7 @@ class Conversation extends React.Component {
   updateConversationFor(person, canUseAPI) {
     let newIndex = this.props.data.currentLineIndex + 1;
 
-    if (newIndex == this.props.data.lines.length - 2) {
+    if (newIndex == this.props.data.lines.length - 4) {
       if (canUseAPI && !this.state.isFetching) {
         this.retrieveAdditionalConversation(person);
       }
@@ -405,7 +403,7 @@ class Conversation extends React.Component {
 
       // Don't give up just yet if fetching
       if (this.state.isFetching) {
-        alert("Hi, this is Gabriel. Thanks for your patience with this prototype. Would you try again in 5 seconds?");
+        alert("Hi, this is Gabriel. Thanks for your patience with this prototype.\nWould you try another conversation or this one again in 5 seconds?");
         this.setState({ arePersonsMuted: true }); // Re-enable buttons after showing alert
       } else {
       person.currentLine = "Oops, I'm out of ideas";
