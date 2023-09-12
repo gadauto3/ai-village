@@ -275,18 +275,6 @@ class Village extends React.Component {
                 className="conversation-div"
                 style={{ backgroundColor: conversation.color }}
               >
-                {conversation.currentLineIndex + 1}
-              </div>
-            ))}
-          </div>
-
-          <div className="conversation-row">
-            {this.state.conversations.map((conversation, index) => (
-              <div
-                key={index}
-                className="conversation-div"
-                style={{ backgroundColor: conversation.color }}
-              >
                 {this.state.scores[index] || 0}
               </div>
             ))}

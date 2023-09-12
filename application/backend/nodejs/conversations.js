@@ -21,10 +21,10 @@ class Conversations {
 
     getConversations(count, randomSeed="Gdawggggg") {
         let convos = [...this.data];
+        count = Math.max(count, 2); // Less than 2 is not fun and doesn't count as a game
         let randGenerator = seedrandom(randomSeed);
         const colors = this.rainbowColors.getColors(count, randGenerator);
 
-        randGenerator = seedrandom("Gdawggggg");
         // Shuffle the convos array using the Fisher-Yates (aka Knuth) shuffle algorithm
         for (let i = convos.length - 1; i > 0; i--) {
             const j = Math.floor(randGenerator() * (i + 1));
