@@ -33,11 +33,13 @@ describe('Conversations', () => {
         expect(result.length).toBe(3);
     });
 
-    it('should return an empty array if count is 0 or negative', () => {
-        const zeroResult = conversations.getConversations(0);
+    it('should return the minimum if count is 0 or negative', () => {
         const negativeResult = conversations.getConversations(-5);
+        const zeroResult = conversations.getConversations(0);
+        const oneResult = conversations.getConversations(0);
 
-        expect(zeroResult.length).toBe(0);
-        expect(negativeResult.length).toBe(0);
+        expect(negativeResult.length).toBe(2);
+        expect(zeroResult.length).toBe(2);
+        expect(oneResult.length).toBe(2);
     });
 });
