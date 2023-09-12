@@ -1,8 +1,8 @@
-# Simple React App Deployment to AWS Example
+# App Deployment to AWS
 
 ## Overview
 
-This example deploys to AWS a simple React app with React Frontend in `frontend` directory, and Nodejs backend (API) in `backend` directory.
+This example deploys a React app frontend and NodeJS backend to AWS, in their respective folders.
 
 The deployment consists of 2 steps:
 - Pre-requisites (compile frontend and backend)
@@ -11,6 +11,8 @@ The deployment consists of 2 steps:
 Both steps are detailed below.
 
 ## Pre-Requisites
+
+Read [this Medium article](https://medium.com/@kurianoff/deploy-serverless-react-app-with-node-js-express-backend-to-aws-with-terraform-in-under-15-minutes-2386bf0c58e9) to understand [the repository](https://github.com/terraformita/terraform-aws-serverless-app/tree/main/examples/simple) on which this project is based.
 
 ### Compile Frontend
 
@@ -22,29 +24,18 @@ cd frontend
 npm init -y
 ```
 
-- Install required packages
-```
-npm install --save-dev babel-cli
-npm install babel-preset-react-app@3
-```
-
 - Compile React App
 ```
 npx babel src --out-dir public/js --presets react-app/prod
 ```
 
 ### Compile Backend
+Note: the backend must be in a "nodejs" directory due to deployment to AWS Lambda.
 
 - Initialize backend
 ```
-cd backend
+cd backend/nodejs
 npm init -y
-```
-
-- Install required packages: `express` and `serverless-http`
-```
-npm install --save express
-npm install --save serverless-http
 ```
 
 ## Deployment
@@ -71,3 +62,38 @@ frontend_storage = {
 ## Enjoy the App
 
 Open "aws_url" in your web browser and see the app in action.
+
+## Development
+
+In order to speed up development, I have written a series of scripts and aliases:
+
+```
+cd application
+source scripts/bashrc
+```
+You can put these into your bashrc file, though I had trouble integrating into VSCode's terminals, so just sourced these when needed. Scripts expect to be run from the applications directory.
+
+```
+tfa
+```
+terraform apply - deploy the application
+
+```
+tfd
+```
+terraform destroy - destroy the application
+
+```
+deployFrontEnd.sh
+```
+This is a shortcut to run the npx command above to package the frontend then call terraform apply
+
+```
+startLocalFrontEnd.sh
+```
+Start the frontend locally, really useful for adjusting the UI.
+
+```
+testBackEnd.sh
+```
+Run unittests on the backend
