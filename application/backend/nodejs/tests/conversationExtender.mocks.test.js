@@ -5,10 +5,18 @@ const ConversationExtender = require('../conversationExtender');
 jest.mock("openai", () => {
   return jest.fn().mockImplementation(() => {
     return {
-      completions: {
-        create: jest.fn(() => Promise.resolve({
-          choices: [{ text: "[\"mocked response\"]" }]
-        }))
+      chat: {
+        completions: {
+          create: jest.fn(() => Promise.resolve({
+            choices: [
+              { 
+                message: {
+                  content: JSON.stringify({ lines: ["mocked response"] })
+                }
+              }
+            ]
+          }))
+        }
       }
     };
   });
@@ -49,13 +57,13 @@ describe("ConversationExtender", () => {
         ]
     };
 
-    const promptText = "should be in the string too.";
+    const promptText = "CURRENT_CONTEXT|CURRENT_USERS|>NEXT_USER";
     const actualOutput = instance.adjustPrompt(promptText, context);
-    console.log("actualOutput: ", actualOutput);
     expect(actualOutput).toEqual(expect.stringContaining("Sivan and Violet"));
+    expect(actualOutput).toEqual(expect.stringContaining("|>Violet"));
 
     // Expecting the output to contain the prompt text
-    expect(actualOutput).toEqual(expect.stringContaining(promptText));
+    expect(actualOutput).toEqual(expect.stringContaining(JSON.stringify(context).trim()));
   });
 
   // Test with more names
@@ -70,10 +78,32 @@ describe("ConversationExtender", () => {
           ]
       };
 
-      const promptText = "not relevant for this testing";
-      const expectedOutput = `${promptText} The villagers in the following lines are Sivan and Violet and An and Jerry, and the conversation should continue between them. === ${JSON.stringify(context)}`;
-      const actualOutput = instance.adjustPrompt(promptText, context);
-      expect(actualOutput).toEqual(expect.stringContaining("Sivan and Violet and An and Jerry"));
+      const userPromptText = "CURRENT_CONTEXT|CURRENT_USERS|NEXT_USER";
+      const expectedOutput = JSON.stringify(context).trim() + "|Sivan and Violet and An and Jerry|An";
+      const actualOutput = instance.adjustPrompt(userPromptText, context);
+      expect(actualOutput).toEqual(expectedOutput);
+  });
+
+  it('should correctly remove matching elements from the new array', () => {
+    const instance = new ConversationExtender();
+
+    const priorArray = [
+        { name: 'Sivan', text: '2. How are you, Violet?' },
+        { name: 'Violet', text: "I'm doing great, thanks, Sivan! How about you?" },
+    ];
+
+    const newArray = [
+        { name: 'Sivan', text: '2. How are you, Violet?' },
+        { name: 'Violet', text: "I'm doing great, thanks, Sivan! How about you?" },
+        { name: 'Sivan', text: 'Could be better, could be worse.' },
+    ];
+
+    const expectedResult = [
+        { name: 'Sivan', text: 'Could be better, could be worse.' },
+    ];
+
+    const result = instance.removeMatchingElements(priorArray, newArray);
+    expect(result).toEqual(expectedResult);
   });
 
 });

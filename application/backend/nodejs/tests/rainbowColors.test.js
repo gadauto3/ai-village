@@ -14,9 +14,17 @@ describe("RainbowColors", () => {
     console.log("colors: ", result);
     expect(result).toHaveLength(numColors);
   });
+  
+  it("should return the correct number of colors even when the request exceeds the available colors", () => {
+    const numColors = 10; // increased to a number greater than 7 to test exceeding available colors
+    const result = rainbow.getColors(numColors);
 
-  it("should throw an error if requested colors exceed available colors", () => {
-    expect(() => rainbow.getColors(8)).toThrow("Requested number of colors exceeds available rainbow colors.");
+    // Check that the correct number of colors is returned
+    expect(result).toHaveLength(numColors);
+
+    // Check that there are repeating colors in the result
+    const uniqueColors = new Set(result);
+    expect(uniqueColors.size).toBeLessThan(numColors);
   });
 
   it("should return unique sets of colors on multiple calls", () => {

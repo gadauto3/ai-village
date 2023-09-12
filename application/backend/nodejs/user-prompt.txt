@@ -1,0 +1,7 @@
+Below is the conversation so far. Make up additional dialogue to extend this conversation (in the same json format) between CURRENT_USERS. Return only new content starting with NEXT_USER.
+===
+ 
+CURRENT_CONTEXT
+
+===
+Do not return any lines that I provided you, just new lines.

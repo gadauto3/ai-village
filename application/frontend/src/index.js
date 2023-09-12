@@ -18,6 +18,7 @@ class Village extends React.Component {
       config: config,
       scores: [],
       totalScore: 0,
+      randSeed: new Date().toISOString(),
       isApiSuccess: false,
       isRetrieveCalled: false,
     };
@@ -29,6 +30,8 @@ class Village extends React.Component {
     this.updateConversationLines = this.updateConversationLines.bind(this);
     this.makeMockConversation = this.makeStartingConversation.bind(this);
     this.handleScoreNotice = this.handleScoreNotice.bind(this);
+
+    console.log("window.villageComponent.setRandSeed(\""+this.state.randSeed+"\")");
   }
 
   handleScoreNotice(index) {
@@ -66,7 +69,8 @@ class Village extends React.Component {
         isRetrieveCalled: true,
     });
 
-    const apiPath = "/api/getConversations?numConvos=" + this.state.conversations.length;
+    const seed = JSON.stringify(this.state.randSeed);
+    const apiPath = "/api/getConversations?numConvos=" + this.state.conversations.length + "&seed=" + seed;
     fetch(this.state.config.apiPrefix + apiPath, {
         method: "GET",
         headers: {
@@ -115,7 +119,7 @@ class Village extends React.Component {
 
   makeStartingConversation(id) {
     // Generate HTML-friendly rainbow colors
-    const colors = [ "#FFCCCC", "#FFDFCC", "#FFFFCC", "#DFFFD8", "#CCDDFF", "#D1CCFF", "#E8CCFF" ];
+    const colors = [ "#F5F5F5", "#DCDCDC" ];
     const rainbowColor = colors[this.colorIndex];
     this.colorIndex = (this.colorIndex + 1) % colors.length;
 
@@ -186,6 +190,20 @@ class Village extends React.Component {
       });
   }
   
+  // Allow overwriting for fun and debugging
+  getRandSeed = () => {
+    return this.state.randSeed;
+  }
+
+  setRandSeed = (newRandSeed) => {
+    this.setState({ randSeed: newRandSeed });
+  }
+
+  // Needed to access seed methods
+  componentDidMount() {
+    window.villageComponent = this;
+  }
+
   render() {
     return (
       <div className="container">
@@ -239,29 +257,17 @@ class Village extends React.Component {
         <div>
 
           {this.state.isRetrieveCalled ? (
-            <p>
+            <p className="more-spacing">
               Now your goal is to select the "I'm noticing AI generation" button <em>once 
               per conversation</em> when you think you notice that the 
               AI is creating further conversation between the villagers. <br />
-              The highest score is 15 per conversation. You can guess once per conversation, 
-              and refresh the page to start over.
+              The highest score is 15 per conversation. You can guess once per conversation. 
+              Refresh the page to start over.
             </p>
           ) : null}
         </div>
         <div className="hud rounded-div">
           <h5>Scoreboard</h5>
-          <div className="conversation-row">
-            {this.state.conversations.map((conversation, index) => (
-              <div
-                key={index}
-                className="conversation-div"
-                style={{ backgroundColor: conversation.color }}
-              >
-                {conversation.currentLineIndex + 1}
-              </div>
-            ))}
-          </div>
-
           <div className="conversation-row">
             {this.state.conversations.map((conversation, index) => (
               <div
@@ -282,7 +288,7 @@ class Village extends React.Component {
             >
               I’m noticing AI generation
             </button>
-            <h5>Total Score: {this.state.totalScore}</h5>
+            <h5>Total Score: {this.state.totalScore} out of {this.state.conversations.length*15}</h5>
           </div>
         </div>
       </div>
@@ -299,6 +305,7 @@ class Conversation extends React.Component {
       people: people,
       apiPrefix: props.apiPrefix,
       isFetching: false,
+      arePersonsMuted: false,
       currentLineIndex: -1, // The first line checked will be the first element in the array
     };
 
@@ -334,15 +341,10 @@ class Conversation extends React.Component {
   }
 
   retrieveAdditionalConversation(person) {
-    // If a fetch operation is already in progress, skip this fetch operation
-    if (this.state.isFetching) {
-      return;
-    }
 
     this.setState({ isFetching: true }); // true indicates a fetch in progress
 
     const currentLines = this.props.data.lines;
-    console.log("fetching now for", currentLines);
     fetch(this.state.apiPrefix + "/api/addToConversation", {
       method: "POST",
       headers: {
@@ -357,7 +359,6 @@ class Conversation extends React.Component {
 
         // Check if moreLines is empty
         if (data.moreLines.length) {
-          console.log("adding more lines", data.moreLines);
           const addedLines = this.props.data.lines.concat(data.moreLines);
           this.props.updateConversationLines(this.props.data, addedLines);
         } else {
@@ -365,30 +366,38 @@ class Conversation extends React.Component {
           this.updateConversationFor(person, false);
         }
         // Reset the flag to false to allow future fetch operations
-        this.setState({ isFetching: false });
+        this.setState({ isFetching: false, arePersonsMuted: false });
       })
       .catch((err) => {
         console.log("addToConvo api error", err);
         this.updateConversationFor(person, false);
         
         // Reset the flag to false to allow future fetch operations
-        this.setState({ isFetching: false });
+        this.setState({ isFetching: false, arePersonsMuted: false });
       });
   }
   
   updateConversationFor(person, canUseAPI) {
     let newIndex = this.props.data.currentLineIndex + 1;
 
-    if (newIndex == this.props.data.lines.length - 2) {
-      if (canUseAPI) {
+    if (newIndex == this.props.data.lines.length - 4) {
+      if (canUseAPI && !this.state.isFetching) {
         this.retrieveAdditionalConversation(person);
       }
     }
 
     // If out of lines
     if (newIndex >= this.props.data.lines.length) {
+
+      // Don't give up just yet if fetching
+      if (this.state.isFetching) {
+        alert("Hi, this is Gabriel. Thanks for your patience with this prototype.\nWould you try another conversation or this one again in 5 seconds?");
+        this.setState({ arePersonsMuted: true }); // Re-enable buttons after showing alert
+      } else {
       person.currentLine = "Oops, I'm out of ideas";
       this.setState({ people: this.state.people });
+      }
+      
       return;
     }
 
@@ -400,7 +409,8 @@ class Conversation extends React.Component {
       this.props.updateLineIndex(newIndex);
     } else {
       // If the person is not the speaker of the next line
-      person.currentLine = `Would you check with ${nextLine.name}? Remember, I said, "${person.currentLine}"`;
+      const reminder = person.currentLine.length < 5 ? "" : `Remember, I said, "${person.currentLine}"`;
+      person.currentLine = `Would you check with ${nextLine.name}? ${reminder}`;
       this.setState({ people: this.state.people });
     }
   }
@@ -413,6 +423,7 @@ class Conversation extends React.Component {
             key={index}
             data={person}
             color={person.color}
+            isMuted={this.state.arePersonsMuted}
             isApiSuccess={this.props.isApiSuccess}
             updateLine={() => this.updateConversationFor(person, true)}
             isClickable={this.props.data.lines.length > 0}
@@ -435,7 +446,7 @@ class Person extends React.Component {
           className="mr-2 wide-btn spacing"
           type="button"
           onClick={this.props.updateLine}
-          disabled={!this.props.isClickable && !this.props.isApiSuccess}
+          disabled={(!this.props.isClickable && !this.props.isApiSuccess) || this.props.isMuted}
         >
           {this.props.data.name}
         </button>

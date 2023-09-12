@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 const ConversationExtender = require('../conversationExtender');
 
 describe('ConversationExtender', () => {
@@ -17,8 +19,10 @@ describe('ConversationExtender', () => {
         return;
     }
 
+    const contextFromFile = fs.readFileSync(path.join(__dirname, 'test-context.json'), 'utf8').trim().replace(/\s+/g, ' ');
+    const context = JSON.parse(contextFromFile);
     console.log('before api call');
-    extender.extendConversation("How do you create a branching dialogue?", (err, response) => {
+    extender.extendConversation(context, (err, response) => {
       console.log('before api call', err, response);
       expect(err).toBe(null);
 

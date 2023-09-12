@@ -2,24 +2,23 @@ const fs = require('fs');
 const path = require('path');
 const AWS = require('aws-sdk');
 const OpenAI = require("openai");
+const { response } = require('express');
 
 const ssm = new AWS.SSM();
 // Read and clean up the prompt text
-const promptTextFromFile = fs.readFileSync(path.join(__dirname, 'prompt.txt'), 'utf8').trim().replace(/\s+/g, ' ');
-// FOR TESTING: const contextFromFile = fs.readFileSync(path.join(__dirname, 'context.json'), 'utf8').trim().replace(/\s+/g, ' ');
+const systemPromptTextFromFile = fs.readFileSync(path.join(__dirname, 'system-prompt.txt'), 'utf8').trim().replace(/\s+/g, ' ');
+const userPromptTextFromFile = fs.readFileSync(path.join(__dirname, 'user-prompt.txt'), 'utf8').trim().replace(/\s+/g, ' ');
 
 class ConversationExtender {
   constructor() {
+
+    this.isInitialized = false;
     if (process.env.OPENAI_API_KEY){
       this.openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-    }
-
+      this.isInitialized = true;
+    } else {
     // Start trying to get the api key
-    this.isInitialized = false;
-    try {
       this.retrieveApiKey();
-    } catch (error) {
-      console.log("Failed retrieveAPIKey.");
     }
   }
 
@@ -51,21 +50,36 @@ class ConversationExtender {
     }
   }
   
-  adjustPrompt(promptText, context) {
+  adjustPrompt(userText, context) {
 
     // API needs better input, so specifying names of villagers
     const allNames = context.lines.map(line => line.name);
     const uniqueNames = [...new Set(allNames)];
-    const villagerSentence = 
-      "The name fields in the lines that you will return are " +
-      uniqueNames.join(' and ') +
-      ", and the conversation should continue between them, starting with" +
-      uniqueNames[uniqueNames.length - 2] +
-      ".\n===\n";
+    const currentContext = JSON.stringify(context).trim();
+    const currentUsers = uniqueNames.join(' and ');
+    const nextUser = allNames[allNames.length - 2];
+    
+    userText = userText.replace('CURRENT_CONTEXT', currentContext);
+    userText = userText.replace('CURRENT_USERS', currentUsers);
+    userText = userText.replace('NEXT_USER', nextUser);
 
-    return `${promptText} ${villagerSentence} ${JSON.stringify(context).trim()}`;
+    return userText.trim();
   }
-
+  
+  removeMatchingElements(priorArray, newArray) {
+    const priorArrayMap = new Map();
+  
+    for (const item of priorArray) {
+      const key = `${item.name}-${item.text}`;
+      priorArrayMap.set(key, true);
+    }
+  
+    return newArray.filter(item => {
+      const key = `${item.name}-${item.text}`;
+      return !priorArrayMap.has(key);
+    });
+  }
+  
   async extendConversation(context, callback) {
 
     if (!this.isInitialized) {
@@ -73,13 +87,16 @@ class ConversationExtender {
       await new Promise(resolve => setTimeout(resolve, timeout)); // wait for 5s
     }
 
-    const fullContext = this.adjustPrompt(promptTextFromFile, context); // Use the cleaned-up prompt
-    console.log("Content: ", fullContext);
-    this.openai.completions.create({
-      model: "text-davinci-003",
-      prompt: fullContext,
+    let responseCapture = "uninitialized";
+    const fullContext = this.adjustPrompt(userPromptTextFromFile, context); // Use the cleaned-up prompt
+    this.openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [
+        { "role": "system", "content": systemPromptTextFromFile },
+        { "role": "user",   "content": fullContext }
+      ],
       temperature: 1,
-      max_tokens: 256,
+      max_tokens: 768,
       top_p: 1,
       frequency_penalty: 0,
       presence_penalty: 0,
@@ -89,27 +106,19 @@ class ConversationExtender {
       // Check if the response is valid JSON
       try {
         // Safely extract the text part
-        const textResponse = response.choices && response.choices[0] && response.choices[0].text ? response.choices[0].text.trim() : [];
-        console.log("Response: ", textResponse);
+        responseCapture = "got a response"
+        const message = response.choices[0].message;
+        responseCapture = message;
+        let responseJson = JSON.parse(message.content);
 
-        // This regular expression looks for the outermost square brackets [] and extracts the content inside
-        const match = textResponse.trim().match(/(\[.*\])/);
-
-        let responseJson = [];
-        if (match) {
-          const jsonResponse = match[0];
-          responseJson = JSON.parse(jsonResponse);
-          console.log("valid response: ", response);
-        } else {
-          console.log("No valid JSON array found in the response.");
-        }
-
-        callback(null, responseJson);
+        const responseLines = this.removeMatchingElements(context.lines, responseJson.lines);
+        callback(null, responseLines);
       } catch (e) {
         callback(e, null);
       }
     })
     .catch(err => {
+      console.log("extendConversation response error in", responseCapture, "\n\nError:", err);
       callback(err, null);
     });
   }

@@ -12,7 +12,7 @@ app.use(express.json());
 
 app.get('/api/getConversations', (req, res) => {
     const count = parseInt(req.query.numConvos); // Get convo count from query or return all
-    const data = conversations.getConversations(count);
+    const data = conversations.getConversations(count, req.query.seed);
     res.send({ conversations: data });
 });
 
