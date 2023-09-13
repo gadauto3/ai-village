@@ -244,5 +244,55 @@
             }
         ],
         "currentLineIndex": -1
+    },
+    {
+        "color": "#A8DADC",
+        "people": [
+            {
+                "name": "Lianna",
+                "icon": "icons8-woman-medium-skin-tone-48.png",
+                "currentLine": "-"
+            },
+            {
+                "name": "Kris",
+                "icon": "icons8-child-light-skin-tone-48.png",
+                "currentLine": "-"
+            }
+        ],
+        "lines": [
+            {
+                "name": "Lianna",
+                "text": "Kris, do you know the story of Ada Lovelace, daughter of poet Lord Byron? She's known for her visionary work during the same period the telegraph was invented."
+            },
+            {
+                "name": "Kris",
+                "text": "I've heard her name, but not much more. She worked with Charles Babbage, the guy who initially built a computer, right?"
+            },
+            {
+                "name": "Lianna",
+                "text": "Yes, exactly! In the 1800s, when the telegraph was just starting to be used, Lovelace saw potential in Babbage's analytical engine far beyond math. Drawing from the weaving industry's punch cards, she imagined it creating art and music."
+            },
+            {
+                "name": "Kris",
+                "text": "That's quite visionary, to see a machine not just as a calculator but as a tool for creativity."
+            },
+            {
+                "name": "Lianna",
+                "text": "Absolutely, and while translating an article on the analytical engine, she took it a step further, drafting the world's first computer program, envisioning operations akin to modern computing."
+            },
+            {
+                "name": "Kris",
+                "text": "It's amazing she foresaw the capabilities of computers while the world was just getting used to the telegraph, isn't it?"
+            },
+            {
+                "name": "Lianna",
+                "text": "Definitely. She bridged art and science, imagining a future where machines supported creativity, paving the way for our digital age, while others were tapping out morse code to communicate."
+            },
+            {
+                "name": "Kris",
+                "text": "So, she was kind of the bridge between the era of telegraphs and our digital age, envisioning the incredible potential of computers. It’s an inspiring story of an amazing thinker!"
+            }
+        ],
+        "currentLineIndex": -1
     }
 ]

@@ -14,6 +14,10 @@ Both steps are detailed below.
 
 Read [this Medium article](https://medium.com/@kurianoff/deploy-serverless-react-app-with-node-js-express-backend-to-aws-with-terraform-in-under-15-minutes-2386bf0c58e9) to understand [the repository](https://github.com/terraformita/terraform-aws-serverless-app/tree/main/examples/simple) on which this project is based.
 
+Make sure you sign up for [an OpenAI account](https://platform.openai.com/signup?launch) and get an API key by setting up a small budget. To give you a baseline, the entire process before this commit cost me 25¢.
+
+Make sure you have an AWS account. Terraform will spin up all the necessary services so make sure your user has full priveleges. You also need to add a Parameter Store value to hold the OpenAI key. To do that:
+
 ### Compile Frontend
 
 Run the following commands to initialize and compile frontend.
