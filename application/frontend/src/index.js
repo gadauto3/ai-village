@@ -18,13 +18,13 @@ class Village extends React.Component {
       config: config,
       scores: [],
       totalScore: 0,
+      lastSelectedConversation: -1,
       randSeed: new Date().toISOString(),
       isApiSuccess: false,
       isRetrieveCalled: false,
     };
 
     this.colorIndex = 0;
-    this.lastSelectedConversation = -1;
     this.addConversation = this.addConversation.bind(this);
     this.retrieveConversations = this.retrieveConversations.bind(this);
     this.updateConversationLines = this.updateConversationLines.bind(this);
@@ -113,8 +113,7 @@ class Village extends React.Component {
   updateLineIndexForConversation(index, newLineIndex) {
     const updatedConversations = [...this.state.conversations];
     updatedConversations[index].currentLineIndex = newLineIndex;
-    this.lastSelectedConversation = index;
-    this.setState({ conversations: updatedConversations });
+    this.setState({ conversations: updatedConversations, lastSelectedConversation: index });
   }
 
   makeStartingConversation(id) {
@@ -273,7 +272,11 @@ class Village extends React.Component {
               <div
                 key={index}
                 className="conversation-div"
-                style={{ backgroundColor: conversation.color }}
+                style={{ 
+                  borderRadius: '6px',
+                  backgroundColor: conversation.color,
+                  border: index === this.state.lastSelectedConversation ? '2px solid #000' : 'none' // conditionally apply border style 
+                }}
               >
                 {this.state.scores[index] || 0}
               </div>
@@ -283,7 +286,7 @@ class Village extends React.Component {
             <button
               className="btn btn-primary spacing"
               onClick={() =>
-                this.handleScoreNotice(this.lastSelectedConversation)
+                this.handleScoreNotice(this.state.lastSelectedConversation)
               }
             >
               I’m noticing AI generation

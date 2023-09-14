@@ -5,7 +5,7 @@
             {
                 "name": "Maria",
                 "icon": "icons8-old-woman-medium-light-skin-tone-48.png",
-                "currentLine": "-"
+                "currentLine": "Leo, did you ever hear about those moths that have a sneaky relationship with ants?"
             },
             {
                 "name": "Leo",
@@ -39,7 +39,7 @@
                 "text": "Nature's full of such fascinating dynamics. A mix of collaboration and cunning!"
             }
         ],
-        "currentLineIndex": -1
+        "currentLineIndex": 0
     },
     {
         "color": "#F4A261",
@@ -47,7 +47,7 @@
             {
                 "name": "Mika",
                 "icon": "icons8-woman-with-beard-light-skin-tone-48.png",
-                "currentLine": "-"
+                "currentLine": "You know, Helen, I was reading about that crazy stunt the artist Banksy pulled off a while ago, sneaking his own art into world-famous museums."
             },
             {
                 "name": "Helen",
@@ -93,7 +93,7 @@
                 "text": "Know of any other clever stunts pulled by famous artists?"
             }
         ],
-        "currentLineIndex": -1
+        "currentLineIndex": 0
     },
     {
         "color": "#2A9D8F",
@@ -101,7 +101,7 @@
             {
                 "name": "Sivan",
                 "icon": "icons8-older-person-medium-dark-skin-tone-48.png",
-                "currentLine": "-"
+                "currentLine": "Hey Violet, did you know the Earth's magnetic poles flip, weakening the field?"
             },
             {
                 "name": "Violet",
@@ -139,7 +139,7 @@
                 "text": "Crazy, what other strange facts do you know about the Earth?"
             }
         ],
-        "currentLineIndex": -1
+        "currentLineIndex": 0
     },
     {
         "color": "#2A9D8F",
@@ -147,7 +147,7 @@
             {
                 "name": "Vanessa",
                 "icon": "icons8-woman-medium-skin-tone-48.png",
-                "currentLine": "-"
+                "currentLine": "Diego, it's kinda mind-blowing to think that a Greenland shark swimming the ocean today might have been born when Leonardo da Vinci was painting the Mona Lisa, isn't it?"
             },
             {
                 "name": "Diego",
@@ -185,7 +185,7 @@
                 "text": "What would humans be like if they grew slowly and for a long time like one of these?"
             }
         ],
-        "currentLineIndex": -1
+        "currentLineIndex": 0
     },
     {
         "color": "#2A9D8F",
@@ -193,7 +193,7 @@
             {
                 "name": "Preeta",
                 "icon": "icons8-woman-medium-skin-tone-48.png",
-                "currentLine": "-"
+                "currentLine": "Can I tell you about an accidental discovery?"
             },
             {
                 "name": "Adisu",
@@ -232,7 +232,7 @@
             },
             {
                 "name": "Adisu",
-                "text": "That’s really fascinating. So, what did he do next?"
+                "text": "Some people come back from vacation with souvenirs, he comes back with a medical revolution o_O. What did he do next?"
             },
             {
                 "name": "Preeta",
@@ -243,6 +243,56 @@
                 "text": "It's amazing to think that returning to a messy lab could lead to such a groundbreaking discovery. It's like finding a diamond ring in a dumpster."
             }
         ],
-        "currentLineIndex": -1
+        "currentLineIndex": 0
+    },
+    {
+        "color": "#A8DADC",
+        "people": [
+            {
+                "name": "Lianna",
+                "icon": "icons8-woman-medium-skin-tone-48.png",
+                "currentLine": "Kris, do you know the story of Ada Lovelace, daughter of poet Lord Byron? She's known for her visionary work during the same period the telegraph was invented."
+            },
+            {
+                "name": "Kris",
+                "icon": "icons8-child-light-skin-tone-48.png",
+                "currentLine": "-"
+            }
+        ],
+        "lines": [
+            {
+                "name": "Lianna",
+                "text": "Kris, do you know the story of Ada Lovelace, daughter of poet Lord Byron? She's known for her visionary work during the same period the telegraph was invented."
+            },
+            {
+                "name": "Kris",
+                "text": "I've heard her name, but not much more. She worked with Charles Babbage, the guy who initially built a computer, right?"
+            },
+            {
+                "name": "Lianna",
+                "text": "Yes, exactly! In the 1800s, when the telegraph was just starting to be used, Lovelace saw potential in Babbage's analytical engine far beyond math. Drawing from the weaving industry's punch cards, she imagined it creating art and music."
+            },
+            {
+                "name": "Kris",
+                "text": "That's quite visionary, to see a machine not just as a calculator but as a tool for creativity."
+            },
+            {
+                "name": "Lianna",
+                "text": "Absolutely, and while translating an article on the analytical engine, she took it a step further, drafting the world's first computer program, envisioning operations akin to modern computing."
+            },
+            {
+                "name": "Kris",
+                "text": "It's amazing she foresaw the capabilities of computers while the world was just getting used to the telegraph, isn't it?"
+            },
+            {
+                "name": "Lianna",
+                "text": "Definitely. She bridged art and science, imagining a future where machines supported creativity, paving the way for our digital age, while others were tapping out morse code to communicate."
+            },
+            {
+                "name": "Kris",
+                "text": "So, she was kind of the bridge between the era of telegraphs and our digital age, envisioning the incredible potential of computers. It’s an inspiring story of an amazing thinker!"
+            }
+        ],
+        "currentLineIndex": 0
     }
 ]
