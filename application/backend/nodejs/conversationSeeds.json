@@ -5,7 +5,7 @@
             {
                 "name": "Maria",
                 "icon": "icons8-old-woman-medium-light-skin-tone-48.png",
-                "currentLine": "-"
+                "currentLine": "Leo, did you ever hear about those moths that have a sneaky relationship with ants?"
             },
             {
                 "name": "Leo",
@@ -39,7 +39,7 @@
                 "text": "Nature's full of such fascinating dynamics. A mix of collaboration and cunning!"
             }
         ],
-        "currentLineIndex": -1
+        "currentLineIndex": 0
     },
     {
         "color": "#F4A261",
@@ -47,7 +47,7 @@
             {
                 "name": "Mika",
                 "icon": "icons8-woman-with-beard-light-skin-tone-48.png",
-                "currentLine": "-"
+                "currentLine": "You know, Helen, I was reading about that crazy stunt the artist Banksy pulled off a while ago, sneaking his own art into world-famous museums."
             },
             {
                 "name": "Helen",
@@ -93,7 +93,7 @@
                 "text": "Know of any other clever stunts pulled by famous artists?"
             }
         ],
-        "currentLineIndex": -1
+        "currentLineIndex": 0
     },
     {
         "color": "#2A9D8F",
@@ -101,7 +101,7 @@
             {
                 "name": "Sivan",
                 "icon": "icons8-older-person-medium-dark-skin-tone-48.png",
-                "currentLine": "-"
+                "currentLine": "Hey Violet, did you know the Earth's magnetic poles flip, weakening the field?"
             },
             {
                 "name": "Violet",
@@ -139,7 +139,7 @@
                 "text": "Crazy, what other strange facts do you know about the Earth?"
             }
         ],
-        "currentLineIndex": -1
+        "currentLineIndex": 0
     },
     {
         "color": "#2A9D8F",
@@ -147,7 +147,7 @@
             {
                 "name": "Vanessa",
                 "icon": "icons8-woman-medium-skin-tone-48.png",
-                "currentLine": "-"
+                "currentLine": "Diego, it's kinda mind-blowing to think that a Greenland shark swimming the ocean today might have been born when Leonardo da Vinci was painting the Mona Lisa, isn't it?"
             },
             {
                 "name": "Diego",
@@ -185,7 +185,7 @@
                 "text": "What would humans be like if they grew slowly and for a long time like one of these?"
             }
         ],
-        "currentLineIndex": -1
+        "currentLineIndex": 0
     },
     {
         "color": "#2A9D8F",
@@ -193,7 +193,7 @@
             {
                 "name": "Preeta",
                 "icon": "icons8-woman-medium-skin-tone-48.png",
-                "currentLine": "-"
+                "currentLine": "Can I tell you about an accidental discovery?"
             },
             {
                 "name": "Adisu",
@@ -232,7 +232,7 @@
             },
             {
                 "name": "Adisu",
-                "text": "That’s really fascinating. So, what did he do next?"
+                "text": "Some people come back from vacation with souvenirs, he comes back with a medical revolution o_O. What did he do next?"
             },
             {
                 "name": "Preeta",
@@ -243,7 +243,7 @@
                 "text": "It's amazing to think that returning to a messy lab could lead to such a groundbreaking discovery. It's like finding a diamond ring in a dumpster."
             }
         ],
-        "currentLineIndex": -1
+        "currentLineIndex": 0
     },
     {
         "color": "#A8DADC",
@@ -251,7 +251,7 @@
             {
                 "name": "Lianna",
                 "icon": "icons8-woman-medium-skin-tone-48.png",
-                "currentLine": "-"
+                "currentLine": "Kris, do you know the story of Ada Lovelace, daughter of poet Lord Byron? She's known for her visionary work during the same period the telegraph was invented."
             },
             {
                 "name": "Kris",
@@ -293,6 +293,6 @@
                 "text": "So, she was kind of the bridge between the era of telegraphs and our digital age, envisioning the incredible potential of computers. It’s an inspiring story of an amazing thinker!"
             }
         ],
-        "currentLineIndex": -1
+        "currentLineIndex": 0
     }
 ]
