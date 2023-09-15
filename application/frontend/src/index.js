@@ -334,6 +334,7 @@ class Conversation extends React.Component {
           name: person.name,
           currentLine: person.currentLine,
           icon: iconsPath + person.icon,
+          opacity: 1,
           color: color || "#FFF", // Default to white if no color is provided
         };
       } else {
@@ -384,7 +385,7 @@ class Conversation extends React.Component {
     let newIndex = this.props.data.currentLineIndex + 1;
 
     if (newIndex == this.props.data.lines.length - 4) {
-      if (canUseAPI && !this.state.isFetching) {
+      if (canUseAPI && !this.state.isFetching && !isLocalHost()) {
         this.retrieveAdditionalConversation(person);
       }
     }
@@ -397,8 +398,9 @@ class Conversation extends React.Component {
         alert("Hi, this is Gabriel. Thanks for your patience with this prototype.\nWould you try another conversation or this one again in 5 seconds?");
         this.setState({ arePersonsMuted: true }); // Re-enable buttons after showing alert
       } else {
-      person.currentLine = "Oops, I'm out of ideas";
-      this.setState({ people: this.state.people });
+        person.currentLine = "Oops, I'm out of ideas";
+        person.opacity = 1;
+        this.setState({ people: this.state.people });
       }
       
       return;
@@ -410,6 +412,15 @@ class Conversation extends React.Component {
     if (nextLine.name === person.name) {
       person.currentLine = nextLine.text;
       this.props.updateLineIndex(newIndex);
+      
+      this.state.people.forEach((p) => {
+        if (p.name === nextLine.name) {
+          p.opacity = 1;
+        } else {
+          p.opacity = 0.65;
+        }
+      });
+      this.setState({ people: this.state.people });
     } else {
       // If the person is not the speaker of the next line
       const reminder = person.currentLine.length < 5 ? "" : `Remember, I said, "${person.currentLine}"`;
@@ -459,7 +470,8 @@ class Person extends React.Component {
           className="icon mr-2 spacing"
         />
         <div
-          className="form-control spacing"
+          className="form-control spacing text-to-fade"
+          style={{ opacity: this.props.data.opacity, transition: this.props.data.opacity == 1 ? "none" : "opacity 5s ease-in-out" }}
         >
           {this.props.data.currentLine}
         </div>
