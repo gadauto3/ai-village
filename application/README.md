@@ -16,7 +16,7 @@ Read [this Medium article](https://medium.com/@kurianoff/deploy-serverless-react
 
 Make sure you sign up for [an OpenAI account](https://platform.openai.com/signup?launch) and get an API key by setting up a small budget. To give you a baseline, the entire process before this commit cost me 25¢.
 
-Make sure you have an AWS account. Terraform will spin up all the necessary services so make sure your user has full priveleges. You also need to add a Parameter Store value to hold the OpenAI key. To do that:
+Make sure you have an AWS account. Terraform will spin up all the necessary services so make sure your user has full privileges. The one manual resource is a Parameter Store key-value pair for your OpenAI API key with the path: "/aivillage/apikeys/openai". [See this pic](./paramStore.png) for configuration details.
 
 ### Compile Frontend
 
