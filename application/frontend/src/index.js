@@ -22,6 +22,7 @@ class Village extends React.Component {
       randSeed: new Date().toISOString(),
       isApiSuccess: false,
       isRetrieveCalled: false,
+      scoreNoticeButtonTitle: "I'm noticing AI generation",
     };
 
     this.colorIndex = 0;
@@ -47,8 +48,24 @@ class Village extends React.Component {
     );
 
     const totalScore = this.scoreCalculator.getTotalScore();
-    this.setState({ scores: [...updatedScores], totalScore: totalScore });
-    console.log("scores", updatedScores);
+    const hasZero = updatedScores.some(num => num === 0);
+    // When all zeroes are gone, the player has guessed every conversation and can play again.
+    if (hasZero) {
+      this.setState({ scores: [...updatedScores], totalScore: totalScore });
+    } else {
+      const didGuessEarly = updatedScores.some(num => Math.abs(num % 2) == 1);
+      const recommendation = didGuessEarly ? 
+          "I see you guessed too early on at least one\nconversation which is worse than guessing late." : 
+          "You're on the right track honestly. You'll have\nan advantage when you get conversations that you've already seen."
+      this.setState({ 
+        scores: [...updatedScores], 
+        totalScore: totalScore,
+        scoreNoticeButtonTitle: "Try again" 
+      });
+      setTimeout(() => {
+        alert("Thank you so much for playing!\nTo play again, click \"Try again\".\nTip for next time:"+recommendation);
+      }, 1000);
+    }
   }
 
   // Add conversation to the list
@@ -259,7 +276,8 @@ class Village extends React.Component {
             <p className="more-spacing">
               Now your goal is to select the "I'm noticing AI generation" button <em>once 
               per conversation</em> when you think you notice that the 
-              AI is creating further conversation between the villagers. <br />
+              AI is creating further conversation between the villagers. The AI thinks that
+              it is a playwright continuing the conversations between villagers.<br />
               The highest score is 15 per conversation. You can guess once per conversation. 
               Refresh the page to start over.
             </p>
@@ -285,12 +303,17 @@ class Village extends React.Component {
           <div>
             <button
               className="btn btn-primary spacing"
-              onClick={() =>
-                this.handleScoreNotice(this.state.lastSelectedConversation)
-              }
+              onClick={() => {
+                if (this.state.scoreNoticeButtonTitle === "Try again") {
+                  window.location.reload();
+                } else {
+                  this.handleScoreNotice(this.state.lastSelectedConversation);
+                }
+              }}
             >
-              I’m noticing AI generation
+              {this.state.scoreNoticeButtonTitle}
             </button>
+
             <h5>Total Score: {this.state.totalScore} out of {this.state.conversations.length*15}</h5>
           </div>
         </div>
@@ -510,7 +533,7 @@ class ScoreCalculator {
     this.scores = new Array(linesLengths.length).fill(0);
     this.PERFECT_SCORE = 15;
     this.OVERESTIMATE_MULTIPLIER = 2;
-    this.UNDERESTIMATE_MULTIPLIER = 3;
+    this.UNDERESTIMATE_MULTIPLIER = 4;
   }
 
   // Setter method to update scores directly if needed
@@ -521,16 +544,18 @@ class ScoreCalculator {
     this.scores = scores;
   }
 
-  // This method will use the logic from the provided Node class
+  // This method returns an even score for over- and odd for under-estimates.
   updateScoresForIndex(index, selection) {
     if (index < 0 || index >= this.scores.length) {
       throw new Error("Index out of range");
     }
     
     const delta = this.linesLengths[index] - selection;
-
     const deltaMul = delta * ((delta < 0) ? this.OVERESTIMATE_MULTIPLIER : this.UNDERESTIMATE_MULTIPLIER);
-    const score = this.PERFECT_SCORE - Math.abs(deltaMul);
+    let score = this.PERFECT_SCORE - Math.abs(deltaMul);
+    if (delta < 0) {
+      score = score + 1;
+    }
     this.scores[index] = score;
 
     return this.scores;
