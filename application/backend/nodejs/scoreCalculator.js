@@ -17,7 +17,7 @@ class ScoreCalculator {
       this.scores = scores;
     }
   
-    // This method returns a positive score for over- and negative for under-estimates.
+    // This method returns a even score for over- and odd for under-estimates.
     updateScoresForIndex(index, selection) {
       if (index < 0 || index >= this.scores.length) {
         throw new Error("Index out of range");
