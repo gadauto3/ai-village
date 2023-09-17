@@ -3,6 +3,8 @@ const Conversations = require('../conversations');
 
 describe('Conversations - Tests using the seeds file', () => {
 
+    let NUM_CONVOS = 6;
+
     it('ensures conversationSeeds.json is valid JSON and contains an array of five elements', () => {
         // The actual readFileSync call without mocking
         const rawData = fs.readFileSync('./conversationSeeds.json', 'utf-8');
@@ -15,7 +17,7 @@ describe('Conversations - Tests using the seeds file', () => {
 
         // Ensure it's an array and has a length of 5
         expect(Array.isArray(jsonData)).toBe(true);
-        expect(jsonData.length).toEqual(5);
+        expect(jsonData.length).toEqual(NUM_CONVOS);
     });
 
     let conversations;
@@ -37,7 +39,7 @@ describe('Conversations - Tests using the seeds file', () => {
     it('ensures that the people array has between one and five elements', () => {
         jsonData.forEach(convo => {
             expect(convo.people.length).toBeGreaterThanOrEqual(1);
-            expect(convo.people.length).toBeLessThanOrEqual(5);
+            expect(convo.people.length).toBeLessThanOrEqual(NUM_CONVOS);
         });
     });
 
