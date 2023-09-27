@@ -24,8 +24,8 @@ Run the following commands to initialize and compile frontend.
 
 - Initialize frontend
 ```
-cd frontend
-npm init -y
+cd application/frontend
+npm install
 ```
 
 - Compile React App
@@ -38,8 +38,14 @@ Note: the backend must be in a "nodejs" directory due to deployment to AWS Lambd
 
 - Initialize backend
 ```
-cd backend/nodejs
-npm init -y
+cd ../backend/nodejs
+npm install
+```
+
+- Prepare for deployment
+```
+cd ../..    # Go back to the application directory
+terraform init
 ```
 
 ## Deployment
