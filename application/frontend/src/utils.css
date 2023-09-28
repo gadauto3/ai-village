@@ -1,0 +1,20 @@
+
+.wide-btn {
+  min-width: 120px;
+}
+
+.spacing {
+  margin: 5px;
+}
+
+.form-control {
+  display: table;
+  resize: none;
+  border: none;
+  outline: none;
+  overflow: visible;
+  padding: 10px;
+  border-radius: 4px;
+  background: #f9f9f9;
+  min-height: 32px;
+}
