@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { isLocalHost, deepCopy, config } from './utils';
 import Conversation from './Conversation';
 import ScoreCalculator from './ScoreCalculator';
-import "./Village.css";
-import "./utils.css";
+import "../css/Village.css";
+import "../css/utils.css";
 
 const MAX_CONVOS = 7;
 
@@ -218,7 +218,7 @@ const Village = () => {
   // Render
   return (
     <div className="container">
-      <h1 className="display-4 text-center">A Village of Wonder</h1>
+      <h1 className="display-4 text-center">VillAIge of Wonder</h1>
 
       {!isRetrieveCalled ? (
         <p>

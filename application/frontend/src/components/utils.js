@@ -14,8 +14,7 @@ export const config = {
   apiPrefix: "/dev",
 };
 
-export const iconsPath =
-  (isLocalHost() ? process.env.PUBLIC_URL : config.apiPrefix) + "/icons/";
+export const iconsPath = (isLocalHost() ? ".." : config.apiPrefix) + "/images/";
 
 // TODO: fix deployment system so I can just use lodash
 export function deepCopy(obj) {

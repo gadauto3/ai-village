@@ -1,5 +1,5 @@
 import React from 'react';
-import "./utils.css";
+import "../css/utils.css";
 
 function Scoreboard({ conversations }) {
     return (

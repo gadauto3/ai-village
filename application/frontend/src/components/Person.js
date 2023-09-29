@@ -1,6 +1,6 @@
 import React from 'react';
-import "./Person.css";
-import "./utils.css";
+import "../css/Person.css";
+import "../css/utils.css";
 
 function Person({ color, updateLine, isClickable, isApiSuccess, isMuted, data }) {
     return (
