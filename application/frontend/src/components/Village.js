@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { isLocalHost, deepCopy, config } from './utils';
 import Conversation from './Conversation';
 import ScoreCalculator from './ScoreCalculator';
+import TargetVisualizer from './TargetVisualizer';
 import "../css/Village.css";
 import "../css/utils.css";
 
@@ -32,7 +33,7 @@ const Village = () => {
   const handleScoreNotice = (index) => {
     let updatedScores = [...scores];
 
-    if (updatedScores[index] > 0) {
+    if (index < 0 || updatedScores[index] > 0) {
       return; // Score already calculated
     }
     const convoIndex = conversations[index].currentLineIndex;
@@ -70,11 +71,10 @@ const Village = () => {
 
   useEffect(() => {
     // This effect will run whenever `conversations` changes.
-    if (isApiSuccess && scoreCalculator === null) { // Only run if API call was a success
+    if (isApiSuccess && scoreCalculator === null) {
+      // Only run if API call was a success
       setScoreCalculator(
-        new ScoreCalculator(
-          conversations.map((conv) => conv.lines.length)
-        )
+        new ScoreCalculator(conversations.map((conv) => conv.lines.length))
       );
     }
   }, [conversations, isApiSuccess, scoreCalculator]);
@@ -104,10 +104,7 @@ const Village = () => {
         if (isLocalHost()) {
           makeMockLines();
         } else {
-          alert(
-            "Sorry, failed to retrieve conversations due to an error, try refreshing.\n" +
-              err
-          );
+          alert("Sorry, failed to retrieve conversations due to an error, try refreshing.\n" + err);
         }
       });
   };
@@ -158,7 +155,7 @@ const Village = () => {
 
   const makeMockLines = () => {
     const mockConversations = deepCopy(conversations);
-    const names = [ "George", "Carlos", "Jimena", "Vanessa", "Chris", "Cri-Cri", "Leo", "Rosa", "Liliana", "Lianna", "Camden" ];
+    const names = [ "George", "Carlos", "Jimena", "Vanessa", "Chris", "Cri-Cri", "Leo", "Rosa", "Liliana", "Lianna", "Camden", ];
     let nameIndex = 0;
     mockConversations.forEach((conversation) => {
       const personA = names[nameIndex++];
@@ -218,7 +215,7 @@ const Village = () => {
   // Render
   return (
     <div className="container">
-      <h1 className="display-4 text-center">VillAIge of Wonder</h1>
+      <h1 className="display-4 text-center title-noto-sans">VillAIge of Wonder</h1>
 
       {!isRetrieveCalled ? (
         <p>
@@ -230,8 +227,7 @@ const Village = () => {
       ) : null}
 
       {/* Conditional Rendering for "Add Conversation" Button */}
-      {conversations.length < MAX_CONVOS - 1 &&
-      !isRetrieveCalled ? (
+      {conversations.length < MAX_CONVOS - 1 && !isRetrieveCalled ? (
         <button
           className="btn btn-secondary ml-2"
           type="button"
@@ -267,8 +263,10 @@ const Village = () => {
         ))}
       </div>
       <div>
-        {isRetrieveCalled ? (
-          <p className="more-spacing">
+        {/* This double isRetrieveCalled allows the text to fade in while not taking up a lot of space before it shows up */}
+        <p className={`more-spacing fade-in ${isRetrieveCalled ? "visible" : ""}`}>
+          {isRetrieveCalled &&
+            <>
             Now your goal is to select the "I'm noticing AI generation" button{" "}
             <em>once per conversation</em> when you think you notice that the AI
             is creating further conversation between the villagers. The AI
@@ -277,47 +275,57 @@ const Village = () => {
             <br />
             The highest score is 15 per conversation. You can guess once per
             conversation. Refresh the page to start over.
-          </p>
-        ) : null}
+            </>
+          }
+        </p>
       </div>
-      <div className="scoreboard rounded-div">
-        <h5>Scoreboard</h5>
-        <div className="conversation-row">
-          {conversations.map((conversation, index) => (
-            <div
-              key={index}
-              className="conversation-div"
-              style={{
-                borderRadius: "6px",
-                backgroundColor: conversation.color,
-                border:
-                  index === lastSelectedConversation
-                    ? "2px solid #000"
-                    : "none", // conditionally apply border style
-              }}
-            >
-              {scores[index] || 0}
-            </div>
-          ))}
-        </div>
-        <div>
-          <button
-            className="btn btn-primary spacing"
-            onClick={() => {
-              if (scoreNoticeButtonTitle === "Try again") {
-                window.location.reload();
-              } else {
-                handleScoreNotice(lastSelectedConversation);
-              }
-            }}
-          >
-            {scoreNoticeButtonTitle}
-          </button>
 
-          <h5>
-            Total Score: {totalScore} out of{" "}
-            {conversations.length * 15}
-          </h5>
+      <div className="scoreboard rounded-div">
+        <div className="scoreboard-content">
+          <div className="scoreboard-left">
+            <h5>Scoreboard</h5>
+            <div className="conversation-row">
+              {conversations.map((conversation, index) => (
+                <div
+                  key={index}
+                  className="conversation-div"
+                  style={{
+                    borderRadius: "6px",
+                    backgroundColor: conversation.color,
+                    border:
+                      index === lastSelectedConversation
+                        ? "2px solid #000"
+                        : "none", // conditionally apply border style
+                  }}
+                >
+                  {scores[index] || 0}
+                </div>
+              ))}
+            </div>
+            <div>
+              <button
+                className="btn btn-primary spacing"
+                disabled={lastSelectedConversation < 0}
+                onClick={() => {
+                  if (scoreNoticeButtonTitle === "Try again") {
+                    window.location.reload();
+                  } else {
+                    handleScoreNotice(lastSelectedConversation);
+                  }
+                }}
+              >
+                {scoreNoticeButtonTitle}
+              </button>
+              <h5>
+                Total Score: {totalScore} out of {conversations.length * 15}
+              </h5>
+            </div>
+          </div>
+          <div className={`scoreboard-right fade-in ${isApiSuccess ? "visible" : ""}`}>
+            {isApiSuccess && (
+              <TargetVisualizer numberOfRings={5} fillAmount={totalScore / (conversations.length * 15)} />
+            )}
+          </div>
         </div>
       </div>
     </div>

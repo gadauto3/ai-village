@@ -50,9 +50,9 @@ function Conversation({
       body: JSON.stringify({ lines: currentLines }),
     })
       .then((response) => response.json())
-      .then((data) => {
-        if (data.moreLines.length) {
-          const addedLines = data.lines.concat(data.moreLines);
+      .then((responseData) => {
+        if (responseData.moreLines.length) {
+          const addedLines = data.lines.concat(responseData.moreLines);
           updateConversationLines(data, addedLines);
         } else {
           updateConversationFor(person, false);

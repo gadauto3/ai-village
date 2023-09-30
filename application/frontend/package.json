@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack serve",
-    "build": "webpack",
+    "build": "webpack --no-cache",
     "start": "react-scripts start",
     "test": "jest"
   },

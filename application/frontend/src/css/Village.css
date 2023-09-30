@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap');
+
 .more-spacing {
   margin-top: 10px;
   margin-left: 4px;
@@ -5,15 +7,6 @@
 
 .tall-div {
   min-height: 300px;
-}
-
-.scoreboard {
-  border: 2px solid rgb(235, 228, 222);
-  margin-top: 10px;
-}
-
-.scoreboard h5 {
-  margin: 4px;
 }
 
 .icon {
@@ -29,7 +22,74 @@
   text-align: center;
 }
 
+/* Fade in */
+.fade-in {
+  opacity: 0;
+  transition: opacity 5s ease-in-out;
+}
+
+.fade-in.visible {
+  opacity: 1;
+}
+
+/* Using Noto Sans */
+.title-noto-sans {
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 700; /* Using the bold version */
+}
+
+/* Using Roboto Slab */
+.title-roboto-slab {
+  font-family: 'Roboto Slab', serif;
+  font-weight: 700; /* Using the bold version */
+}
+
 /* Force a new line between sets of divs */
 .conversation-row {
   display: block;
+}
+
+/* Scoreboard */
+.scoreboard {
+  border: 2px solid rgb(235, 228, 222);
+  margin-top: 10px;
+  display: inline-flex; /* Add this line */
+  padding: 10px; /* Add this line for spacing */
+  clear: both; /* Ensure the scoreboard takes a new line */
+}
+
+.scoreboard h5 {
+  margin: 4px 0; /* Control vertical margin, remove horizontal margin */
+  flex-shrink: 0; /* Prevent the title from shrinking */
+}
+
+.scoreboard-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.scoreboard .btn {
+  white-space: nowrap; /* Prevent wrapping inside the button */
+  min-width: 215px;
+}
+
+.scoreboard-left {
+  flex: 1;
+  flex-shrink: 0; /* Prevent these containers from shrinking */
+}
+
+.scoreboard-right {
+  flex-basis: 30%; /* Adjust this value as needed */
+  flex: 2;
+  flex-shrink: 0; /* Prevent these containers from shrinking */
+  align-items: left;
+  justify-content: left;
+}
+
+.scoreboard svg {
+  width: 140px; 
+  display: block;
+  margin: 10px;
+  margin-left: 30px;
 }
