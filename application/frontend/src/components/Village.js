@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { isLocalHost, deepCopy, config } from './utils';
 import Conversation from './Conversation';
+import Scoreboard from './Scoreboard';
 import ScoreCalculator from './ScoreCalculator';
-import TargetVisualizer from './TargetVisualizer';
 import "../css/Village.css";
 import "../css/utils.css";
 
@@ -280,54 +280,15 @@ const Village = () => {
         </p>
       </div>
 
-      <div className="scoreboard rounded-div">
-        <div className="scoreboard-content">
-          <div className="scoreboard-left">
-            <h5>Scoreboard</h5>
-            <div className="conversation-row">
-              {conversations.map((conversation, index) => (
-                <div
-                  key={index}
-                  className="conversation-div"
-                  style={{
-                    borderRadius: "6px",
-                    backgroundColor: conversation.color,
-                    border:
-                      index === lastSelectedConversation
-                        ? "2px solid #000"
-                        : "none", // conditionally apply border style
-                  }}
-                >
-                  {scores[index] || 0}
-                </div>
-              ))}
-            </div>
-            <div>
-              <button
-                className="btn btn-primary spacing"
-                disabled={lastSelectedConversation < 0}
-                onClick={() => {
-                  if (scoreNoticeButtonTitle === "Try again") {
-                    window.location.reload();
-                  } else {
-                    handleScoreNotice(lastSelectedConversation);
-                  }
-                }}
-              >
-                {scoreNoticeButtonTitle}
-              </button>
-              <h5>
-                Total Score: {totalScore} out of {conversations.length * 15}
-              </h5>
-            </div>
-          </div>
-          <div className={`scoreboard-right fade-in ${isApiSuccess ? "visible" : ""}`}>
-            {isApiSuccess && (
-              <TargetVisualizer numberOfRings={5} fillAmount={totalScore / (conversations.length * 15)} />
-            )}
-          </div>
-        </div>
-      </div>
+      <Scoreboard 
+            conversations={conversations} 
+            scores={scores} 
+            lastSelectedConversation={lastSelectedConversation} 
+            totalScore={totalScore} 
+            handleScoreNotice={handleScoreNotice} 
+            scoreNoticeButtonTitle={scoreNoticeButtonTitle} 
+            isApiSuccess={isApiSuccess} 
+        />
     </div>
   );
 };
