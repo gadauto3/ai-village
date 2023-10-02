@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { isLocalHost, deepCopy, config } from './utils';
+import { InstructionsNoticeAI, InstructionsStageTwo, InstructionsStart, peopleNames, ramblingSentence, tipForEarlyGuess, tipForGoodGame } from "./longStrings";
 import Conversation from './Conversation';
 import Scoreboard from './Scoreboard';
 import ScoreCalculator from './ScoreCalculator';
@@ -59,9 +60,7 @@ const Village = () => {
       setTotalScore(newTotalScore);
     } else {
       const didGuessEarly = newScores.some((num) => Math.abs(num % 2) === 1);
-      const recommendation = didGuessEarly
-        ? "I see you guessed too early on at least one conversation.\nGuessing early is worse than guessing late."
-        : "You're on the right track honestly. You'll have\nan advantage when you get conversations that you've already seen.";
+      const recommendation = didGuessEarly ? tipForEarlyGuess : tipForGoodGame;
       setScores([...newScores]);
       setTotalScore(newTotalScore);
       setScoreNoticeButtonTitle("Continue");
@@ -170,7 +169,7 @@ const Village = () => {
 
   const makeMockLines = () => {
     const mockConversations = deepCopy(conversations);
-    const names = [ "George", "Carlos", "Jimena", "Vanessa", "Chris", "Cri-Cri", "Leo", "Rosa", "Liliana", "Lianna", "Camden", ];
+    const names = peopleNames;
     let nameIndex = 0;
     mockConversations.forEach((conversation) => {
       const personA = names[nameIndex++];
@@ -190,7 +189,7 @@ const Village = () => {
         },
         {
           name: personA,
-          text: `I'm good. I'm going blab on a bit because I need to test a rather long text where people will read what I say in my words for the birds and I really don't like curds.`,
+          text: ramblingSentence,
         },
         {
           name: personB,
@@ -234,14 +233,7 @@ const Village = () => {
         VillAIge of Wonder
       </h1>
 
-      {!isRetrieveCalled ? (
-        <p>
-          Start by using Add Conversation. The more conversations you choose to
-          add, the higher the potential score.
-          <br />
-          When you've finished selecting, click Begin.
-        </p>
-      ) : null}
+      {!isRetrieveCalled ? <InstructionsStart /> : null}
 
       {/* Conditional Rendering for "Add Conversation" Button */}
       {conversations.length < MAX_CONVOS - 1 && !isRetrieveCalled ? (
@@ -291,18 +283,8 @@ const Village = () => {
             isRetrieveCalled ? "visible" : ""
           }`}
         >
-          {isRetrieveCalled && (
-            <React.Fragment>
-              Now your goal is to select the "I'm noticing AI generation" button{" "}
-              <em>once per conversation</em> when you think you notice that the
-              AI is creating further conversation between the villagers. The AI
-              thinks that it is a playwright continuing the conversations
-              between villagers.
-              <br />
-              The highest score is 15 per conversation. You can guess once per
-              conversation. Refresh the page to start over.
-            </React.Fragment>
-          )}
+          {isRetrieveCalled && !isStageTwo && <InstructionsNoticeAI />}
+          {isStageTwo && <InstructionsStageTwo />}
         </p>
       </div>
 

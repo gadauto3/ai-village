@@ -22,7 +22,7 @@ function Person({ color, updateLine, isClickable, isApiSuccess, isMuted, data })
                 className="icon mr-2 spacing"
             />
             <div
-                className="form-control spacing"
+                className="form-control spacing no-shadow"
                 style={{ opacity: data.opacity, transition: data.opacity === 1 ? "none" : "opacity 5s ease-in-out" }}
             >
                 {data.currentLine}
