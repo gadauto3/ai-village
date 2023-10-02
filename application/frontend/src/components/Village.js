@@ -15,6 +15,7 @@ const Village = () => {
   const [lastSelectedConversation, setLastSelectedConversation] = useState(-1);
   const [randSeed, setRandSeed] = useState(new Date().toISOString());
   const [isApiSuccess, setIsApiSuccess] = useState(false);
+  const [isStageTwo, setIsStageTwo] = useState(false);
   const [isRetrieveCalled, setIsRetrieveCalled] = useState(false);
   const [scoreCalculator, setScoreCalculator] = useState(null);
   const [scoreNoticeButtonTitle, setScoreNoticeButtonTitle] = useState(
@@ -51,6 +52,7 @@ const Village = () => {
         ? "I see you guessed too early on at least one\nconversation which is worse than guessing late."
         : "You're on the right track honestly. You'll have\nan advantage when you get conversations that you've already seen.";
       setScores([...newScores]);
+      setIsStageTwo(true);
       setTotalScore(newTotalScore);
       setScoreNoticeButtonTitle("Try again");
       setTimeout(() => {
@@ -215,7 +217,9 @@ const Village = () => {
   // Render
   return (
     <div className="container">
-      <h1 className="display-4 text-center title-noto-sans">VillAIge of Wonder</h1>
+      <h1 className="display-4 text-center title-noto-sans">
+        VillAIge of Wonder
+      </h1>
 
       {!isRetrieveCalled ? (
         <p>
@@ -250,45 +254,52 @@ const Village = () => {
       ) : null}
       <div className="tall-div">
         {conversations.map((conversation, index) => (
-          <Conversation
-            key={index}
-            data={conversation}
-            isApiSuccess={isApiSuccess}
-            apiPrefix={config.apiPrefix}
-            updateConversationLines={updateConversationLines}
-            updateLineIndex={(newLineIndex) =>
-              updateLineIndexForConversation(index, newLineIndex)
-            }
-          />
+            <div className="conversation-row"> {/* You might need to style this row to ensure proper alignment */}
+                <Conversation
+                    key={index}
+                    data={conversation}
+                    isApiSuccess={isApiSuccess}
+                    hasBorder={isStageTwo}
+                    apiPrefix={config.apiPrefix}
+                    updateConversationLines={updateConversationLines}
+                    updateLineIndex={(newLineIndex) => updateLineIndexForConversation(index, newLineIndex) }
+                />
+            </div>
         ))}
       </div>
       <div>
         {/* This double isRetrieveCalled allows the text to fade in while not taking up a lot of space before it shows up */}
-        <p className={`more-spacing fade-in ${isRetrieveCalled ? "visible" : ""}`}>
-          {isRetrieveCalled &&
+        <p
+          className={`more-spacing fade-in ${
+            isRetrieveCalled ? "visible" : ""
+          }`}
+        >
+          {isRetrieveCalled && (
             <>
-            Now your goal is to select the "I'm noticing AI generation" button{" "}
-            <em>once per conversation</em> when you think you notice that the AI
-            is creating further conversation between the villagers. The AI
-            thinks that it is a playwright continuing the conversations between
-            villagers.
-            <br />
-            The highest score is 15 per conversation. You can guess once per
-            conversation. Refresh the page to start over.
+              Now your goal is to select the "I'm noticing AI generation" button{" "}
+              <em>once per conversation</em> when you think you notice that the
+              AI is creating further conversation between the villagers. The AI
+              thinks that it is a playwright continuing the conversations
+              between villagers.
+              <br />
+              The highest score is 15 per conversation. You can guess once per
+              conversation. Refresh the page to start over.
             </>
-          }
+          )}
         </p>
       </div>
 
-      <Scoreboard 
-            conversations={conversations} 
-            scores={scores} 
-            lastSelectedConversation={lastSelectedConversation} 
-            totalScore={totalScore} 
-            handleScoreNotice={handleScoreNotice} 
-            scoreNoticeButtonTitle={scoreNoticeButtonTitle} 
-            isApiSuccess={isApiSuccess} 
+      {!isStageTwo && (
+        <Scoreboard
+          conversations={conversations}
+          scores={scores}
+          lastSelectedConversation={lastSelectedConversation}
+          totalScore={totalScore}
+          handleScoreNotice={handleScoreNotice}
+          scoreNoticeButtonTitle={scoreNoticeButtonTitle}
+          isApiSuccess={isApiSuccess}
         />
+      )}
     </div>
   );
 };

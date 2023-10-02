@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Person from "./Person";
+import TargetVisualizer from './TargetVisualizer';
 import { iconsPath, isLocalHost } from "./utils";
+import "../css/Conversation.css";
 
 function Conversation({
   data,
@@ -8,10 +10,12 @@ function Conversation({
   updateConversationLines,
   updateLineIndex,
   isApiSuccess,
+  hasBorder
 }) {
   const [people, setPeople] = useState(createPeople(data.people, data.color));
-  const [isFetching, setIsFetching] = useState(false);
+  const [numAddedLines, setNumAddedLines] = useState(7);
   const [arePersonsMuted, setArePersonsMuted] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
     const newPeople = createPeople(data.people, data.color);
@@ -139,18 +143,31 @@ function Conversation({
   }
 
   return (
-    <div>
-      {people.map((person, index) => (
-        <Person
-          key={index}
-          data={person}
-          color={person.color}
-          isMuted={arePersonsMuted}
-          isApiSuccess={isApiSuccess}
-          updateLine={() => updateConversationFor(person, true)}
-          isClickable={data.lines.length > 0}
+    <div
+      className={`conversation-container more-spacing rounded-div 
+        ${hasBorder ? "bordered-conversation" : ""}`}
+    >
+      <div className="persons-container">
+        {people.map((person, index) => (
+          <Person
+            key={index}
+            data={person}
+            color={person.color}
+            isMuted={arePersonsMuted}
+            isApiSuccess={isApiSuccess}
+            updateLine={() => updateConversationFor(person, true)}
+            isClickable={data.lines.length > 0}
+          />
+        ))}
+      </div>
+      {hasBorder && (
+        <TargetVisualizer
+          numberOfRings={numAddedLines}
+          fillAmount={
+            (numAddedLines - (data.lines.length - data.currentLineIndex)) / numAddedLines
+          }
         />
-      ))}
+      )}
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 
 function TargetVisualizer({ numberOfRings, fillAmount }) {
-    const colors = ['#FFFAE1', '#FFD3A5', '#FFA47F', '#FF5733', '#FF0000'];
+    const colors = ['#FFFAE1', '#FFE0A5', '#FFC49E', '#FFA87D', '#FF8D5B', '#FF5A38', '#FF0000'];
 
     // Ensure we don't exceed the number of colors available or the provided number of rings.
     const ringsToDisplay = Math.min(colors.length, numberOfRings);

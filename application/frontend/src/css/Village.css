@@ -49,6 +49,11 @@
   display: block;
 }
 
+.bordered-conversation {
+  border: 1px solid #000; /* or whatever border style you want */
+  padding: 10px; /* Optional: If you want some space inside the border */
+}
+
 /* Scoreboard */
 .scoreboard {
   border: 2px solid rgb(235, 228, 222);

@@ -1,0 +1,16 @@
+
+.conversation-row svg {
+  width: 120px; 
+  display: block;
+  margin: 10px;
+  margin-left: 30px;
+}
+
+.conversation-container {
+  display: flex;
+  align-items: center; /* if you want to vertically center the TargetVisualizer with the Person components */
+}
+
+.persons-container {
+  flex: 1; /* takes up the remaining space after TargetVisualizer */
+}
