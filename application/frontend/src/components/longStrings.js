@@ -23,9 +23,9 @@ export const InstructionsNoticeAI = () => (
 
 export const InstructionsStageTwo = () => (
   <React.Fragment>
-    Now it's Time to discover how AI reacts to human input. The targets will 
+    Now it's Time to discover how the AI behaves and reacts to human input. The targets 
     show you the countdown until the game requests more lines from the AI.
-    You may choose to see how the conversation evolves, or you may use the 
+    You may choose to observe as the conversation evolves, or you may use the 
     tokens below to influence the conversation with your own input.
   </React.Fragment>
 );

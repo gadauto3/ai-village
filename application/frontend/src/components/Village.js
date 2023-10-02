@@ -69,7 +69,7 @@ const Village = () => {
           'Thank you so much for playing!\nTip for next time:' +
             recommendation
         );
-      }, 1000);
+      }, 200);
     }
   };
 
