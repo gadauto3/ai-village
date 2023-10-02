@@ -21,7 +21,7 @@ const Village = () => {
   const [scoreNoticeButtonTitle, setScoreNoticeButtonTitle] = useState(
     "I'm noticing AI generation"
   );
-
+  
   const retrieveBtn = useRef(null);
   const defaultHeadIcon = "icons8-head-profile-50.png";
   let colorIndex = 0;
@@ -31,10 +31,21 @@ const Village = () => {
     console.log(`window.villageComponent.setRandSeed("${randSeed}")`);
   }, []);
 
+  useEffect(() => {
+    if (isStageTwo) {
+      document.body.style.backgroundColor = "black";
+    } else {
+      document.body.style.backgroundColor = ""; // Reset to default
+    }
+  }, [isStageTwo]);
+
   const handleScoreNotice = (index) => {
     let updatedScores = [...scores];
 
-    if (index < 0 || updatedScores[index] > 0) {
+    if (scoreNoticeButtonTitle == "Continue") {
+      setIsStageTwo(true);
+      return;
+    } else if (index < 0 || updatedScores[index] > 0) {
       return; // Score already calculated
     }
     const convoIndex = conversations[index].currentLineIndex;
@@ -49,15 +60,14 @@ const Village = () => {
     } else {
       const didGuessEarly = newScores.some((num) => Math.abs(num % 2) === 1);
       const recommendation = didGuessEarly
-        ? "I see you guessed too early on at least one\nconversation which is worse than guessing late."
+        ? "I see you guessed too early on at least one conversation.\nGuessing early is worse than guessing late."
         : "You're on the right track honestly. You'll have\nan advantage when you get conversations that you've already seen.";
       setScores([...newScores]);
-      setIsStageTwo(true);
       setTotalScore(newTotalScore);
-      setScoreNoticeButtonTitle("Try again");
+      setScoreNoticeButtonTitle("Continue");
       setTimeout(() => {
         alert(
-          'Thank you so much for playing!\nTo play again, click "Try again".\nTip for next time:' +
+          'Thank you so much for playing!\nTip for next time:' +
             recommendation
         );
       }, 1000);
@@ -106,7 +116,10 @@ const Village = () => {
         if (isLocalHost()) {
           makeMockLines();
         } else {
-          alert("Sorry, failed to retrieve conversations due to an error, try refreshing.\n" + err);
+          alert(
+            "Sorry, failed to retrieve conversations due to an error, try refreshing.\n" +
+              err
+          );
         }
       });
   };
@@ -216,7 +229,7 @@ const Village = () => {
 
   // Render
   return (
-    <div className="container">
+    <div className={`container ${isStageTwo ? "stage-two" : ""}`}>
       <h1 className="display-4 text-center title-noto-sans">
         VillAIge of Wonder
       </h1>
@@ -254,17 +267,21 @@ const Village = () => {
       ) : null}
       <div className="tall-div">
         {conversations.map((conversation, index) => (
-            <div className="conversation-row"> {/* You might need to style this row to ensure proper alignment */}
-                <Conversation
-                    key={index}
-                    data={conversation}
-                    isApiSuccess={isApiSuccess}
-                    hasBorder={isStageTwo}
-                    apiPrefix={config.apiPrefix}
-                    updateConversationLines={updateConversationLines}
-                    updateLineIndex={(newLineIndex) => updateLineIndexForConversation(index, newLineIndex) }
-                />
-            </div>
+          <div className="conversation-row">
+            {" "}
+            {/* You might need to style this row to ensure proper alignment */}
+            <Conversation
+              key={index}
+              data={conversation}
+              isApiSuccess={isApiSuccess}
+              hasBorder={isStageTwo}
+              apiPrefix={config.apiPrefix}
+              updateConversationLines={updateConversationLines}
+              updateLineIndex={(newLineIndex) =>
+                updateLineIndexForConversation(index, newLineIndex)
+              }
+            />
+          </div>
         ))}
       </div>
       <div>
@@ -275,7 +292,7 @@ const Village = () => {
           }`}
         >
           {isRetrieveCalled && (
-            <>
+            <React.Fragment>
               Now your goal is to select the "I'm noticing AI generation" button{" "}
               <em>once per conversation</em> when you think you notice that the
               AI is creating further conversation between the villagers. The AI
@@ -284,7 +301,7 @@ const Village = () => {
               <br />
               The highest score is 15 per conversation. You can guess once per
               conversation. Refresh the page to start over.
-            </>
+            </React.Fragment>
           )}
         </p>
       </div>

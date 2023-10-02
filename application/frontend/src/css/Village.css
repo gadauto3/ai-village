@@ -49,9 +49,14 @@
   display: block;
 }
 
-.bordered-conversation {
-  border: 1px solid #000; /* or whatever border style you want */
-  padding: 10px; /* Optional: If you want some space inside the border */
+/* Styles for Stage Two */
+.container.stage-two {
+  background-color: black;
+}
+
+.container.stage-two {
+  color: #00D9FF;
+  text-shadow: 0 0 10px #00D9FF;  /* Middle shadow */
 }
 
 /* Scoreboard */

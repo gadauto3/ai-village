@@ -14,3 +14,9 @@
 .persons-container {
   flex: 1; /* takes up the remaining space after TargetVisualizer */
 }
+
+.bordered-conversation {
+  border: 1px solid #00D9FF; /* or whatever border style you want */
+  box-shadow: 0 0 7px #00D9FF;  /* Middle shadow */
+  padding: 10px; /* Optional: If you want some space inside the border */
+}
