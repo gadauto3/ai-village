@@ -165,6 +165,7 @@ function Conversation({
       {hasBorder && (
         <TargetVisualizer
           numberOfRings={numAddedLines}
+          useRed={false}
           fillAmount={
             (numAddedLines - (data.lines.length - data.currentLineIndex)) / numAddedLines
           }

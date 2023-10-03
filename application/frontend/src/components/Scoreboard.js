@@ -50,7 +50,7 @@ function Scoreboard({
                 </div>
                 <div className={`scoreboard-right fade-in ${isApiSuccess ? "visible" : ""}`}>
                     {isApiSuccess && (
-                        <TargetVisualizer numberOfRings={5} fillAmount={totalScore / (conversations.length * 15)} />
+                        <TargetVisualizer numberOfRings={5} useRed={true} fillAmount={totalScore / (conversations.length * 15)} />
                     )}
                 </div>
             </div>
