@@ -1,5 +1,6 @@
 import React from 'react';
 import TargetVisualizer from './TargetVisualizer';
+import "../css/Scoreboard.css";
 import "../css/utils.css";
 
 function Scoreboard({ 

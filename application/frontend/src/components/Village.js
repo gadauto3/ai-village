@@ -4,6 +4,7 @@ import { InstructionsNoticeAI, InstructionsStageTwo, InstructionsStart, peopleNa
 import Conversation from './Conversation';
 import Scoreboard from './Scoreboard';
 import ScoreCalculator from './ScoreCalculator';
+import UserTokens from './UserTokens';
 import "../css/Village.css";
 import "../css/utils.css";
 
@@ -232,9 +233,8 @@ const Village = () => {
       <h1 className="display-4 text-center title-noto-sans">
         VillAIge of Wonder
       </h1>
-
       {!isRetrieveCalled ? <InstructionsStart /> : null}
-
+      
       {/* Conditional Rendering for "Add Conversation" Button */}
       {conversations.length < MAX_CONVOS - 1 && !isRetrieveCalled ? (
         <button
@@ -285,6 +285,14 @@ const Village = () => {
         >
           {isRetrieveCalled && !isStageTwo && <InstructionsNoticeAI />}
           {isStageTwo && <InstructionsStageTwo />}
+          {isStageTwo && (
+            <UserTokens
+              isEnabled={true}
+              buttonPressed={(index) =>
+                console.log(`Token button ${index + 1} pressed`)
+              }
+            />
+          )}
         </p>
       </div>
 

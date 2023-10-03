@@ -23,10 +23,10 @@ export const InstructionsNoticeAI = () => (
 
 export const InstructionsStageTwo = () => (
   <React.Fragment>
-    Now it's Time to discover how the AI behaves and reacts to human input. The targets 
-    show you the countdown until the game requests more lines from the AI.
-    You may choose to observe as the conversation evolves, or you may use the 
-    tokens below to influence the conversation with your own input.
+    Now it's time to discover how the AI behaves and reacts to your input.<br />
+    Select your favorite conversation and use a token below to influence the
+    villagers. The targets show you the countdown until the change. You may 
+    choose to observe as the conversation evolves, or use tokens to change it.
   </React.Fragment>
 );
 
@@ -49,8 +49,6 @@ export const peopleNames = [
   "Chris",
   "Cri-Cri",
   "Leo",
-  "Rosa",
-  "Liliana",
   "Lianna",
   "Camden",
 ];

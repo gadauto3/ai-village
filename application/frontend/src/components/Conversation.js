@@ -3,6 +3,7 @@ import Person from "./Person";
 import TargetVisualizer from './TargetVisualizer';
 import { iconsPath, isLocalHost } from "./utils";
 import "../css/Conversation.css";
+import "../css/utils.css";
 
 function Conversation({
   data,
@@ -56,6 +57,7 @@ function Conversation({
       .then((response) => response.json())
       .then((responseData) => {
         if (responseData.moreLines.length) {
+          setNumAddedLines(responseData.moreLines.length);
           const addedLines = data.lines.concat(responseData.moreLines);
           updateConversationLines(data, addedLines);
         } else {
@@ -145,7 +147,7 @@ function Conversation({
   return (
     <div
       className={`conversation-container more-spacing rounded-div 
-        ${hasBorder ? "bordered-conversation" : ""}`}
+        ${hasBorder ? "glowing-border" : ""}`}
     >
       <div className="persons-container">
         {people.map((person, index) => (
