@@ -1,0 +1,39 @@
+/* Modal.css */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  width: 80%; 
+  height: 30%;
+  display: flex;
+  flex-direction: column;  /* stack children vertically */
+  justify-content: center; /* vertically center */
+  align-items: center;     /* horizontally center */
+  max-width: 500px; /* or another value */
+  position: fixed;  /* Fixed positioning */
+  top: 40%;         /* Move the top edge to the vertical middle of the viewport */
+  left: 50%;        /* Move the left edge to the horizontal middle of the viewport */
+  transform: translate(-50%, -50%); /* Adjusts for the modal's own dimensions */
+  z-index: 1000;    /* Make sure it sits on top of other content */
+  box-shadow: 0px 4px 6px rgba(0, 217, 255, 0.9); /* optional shadow for a bit of depth */
+}
+
+.error {
+  color: red;
+}
+
+.modal button {
+  margin-top: 10px;
+}

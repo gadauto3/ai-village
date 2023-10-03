@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { isLocalHost, deepCopy, config } from './utils';
 import { InstructionsNoticeAI, InstructionsStageTwo, InstructionsStart, peopleNames, ramblingSentence, tipForEarlyGuess, tipForGoodGame } from "./longStrings";
 import Conversation from './Conversation';
+import ModalPopup from "./ModalPopup";
 import Scoreboard from './Scoreboard';
 import ScoreCalculator from './ScoreCalculator';
 import UserTokens from './UserTokens';
@@ -14,6 +15,7 @@ const Village = () => {
   const [conversations, setConversations] = useState([]);
   const [scores, setScores] = useState([]);
   const [totalScore, setTotalScore] = useState(0);
+  const [showModal, setShowModal] = useState(false);
   const [lastSelectedConversation, setLastSelectedConversation] = useState(-1);
   const [randSeed, setRandSeed] = useState(new Date().toISOString());
   const [isApiSuccess, setIsApiSuccess] = useState(false);
