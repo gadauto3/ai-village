@@ -219,6 +219,11 @@ const Village = () => {
     setIsApiSuccess(true);
   };
 
+  // Function to handle purchase
+  const purchaseMade = () => {
+    setIsPurchasing(false);
+  }
+
   // Function to handle the checkbox change
   const handleCheckboxChange = (event) => {
     setAreStatsShown(event.target.checked); 
@@ -283,6 +288,7 @@ const Village = () => {
               isPurchasing={isPurchasing}
               apiPrefix={config.apiPrefix}
               updateConversationLines={updateConversationLines}
+              purchaseMade={purchaseMade}
               areStatsShowing={areStatsShown}
               updateLineIndex={(newLineIndex) =>
                 updateLineIndexForConversation(index, newLineIndex)

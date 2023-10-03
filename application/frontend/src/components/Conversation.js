@@ -15,7 +15,8 @@ function Conversation({
   isApiSuccess,
   isPhaseTwo,
   isPurchasing,
-  areStatsShowing
+  areStatsShowing,
+  purchaseMade
 }) {
   const [people, setPeople] = useState(createPeople(data.people, data.color));
   const [numAddedLines, setNumAddedLines] = useState(0);
@@ -205,10 +206,7 @@ function Conversation({
 
       {isPhaseTwo && isPurchasing && (
         <button
-          onClick={() => {
-            console.log("onClick");
-            isPurchasing = false;
-          }}
+          onClick={() => purchaseMade()}
           className={`conv-token-button`}
           style={{ backgroundImage: `url(${tokenImage})` }}
         />
