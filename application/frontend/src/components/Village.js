@@ -15,7 +15,12 @@ const Village = () => {
   const [conversations, setConversations] = useState([]);
   const [scores, setScores] = useState([]);
   const [totalScore, setTotalScore] = useState(0);
+  const [areStatsShown, setAreStatsShown] = useState(false);
+  const [isPurchasing, setIsPurchasing] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [modalText, setModalText] = useState("");
+  const [modalEntryLength, setModalEntryLength] = useState(-1);
+  const [modalButtonText, setModalButtonText] = useState("");
   const [lastSelectedConversation, setLastSelectedConversation] = useState(-1);
   const [randSeed, setRandSeed] = useState(new Date().toISOString());
   const [isApiSuccess, setIsApiSuccess] = useState(false);
@@ -67,11 +72,12 @@ const Village = () => {
       setScores([...newScores]);
       setTotalScore(newTotalScore);
       setScoreNoticeButtonTitle("Continue");
+
+      // Display the end-of-stage modal dialog
+      setModalText('Thank you so much for playing! Tip for next time:' + recommendation);
+      setModalButtonText('Ok');
       setTimeout(() => {
-        alert(
-          'Thank you so much for playing!\nTip for next time:' +
-            recommendation
-        );
+        setShowModal(true);
       }, 200);
     }
   };
@@ -188,7 +194,7 @@ const Village = () => {
         },
         {
           name: personB,
-          text: `I'm doing great, thanks, ${personA}! How about you?`,
+          text: `I'm doing great, thanks ${personA}! How about you?`,
         },
         {
           name: personA,
@@ -211,6 +217,11 @@ const Village = () => {
     });
     setConversations(mockConversations);
     setIsApiSuccess(true);
+  };
+
+  // Function to handle the checkbox change
+  const handleCheckboxChange = (event) => {
+    setAreStatsShown(event.target.checked); 
   };
 
   // Allow overwriting for fun and debugging
@@ -236,7 +247,7 @@ const Village = () => {
         VillAIge of Wonder
       </h1>
       {!isRetrieveCalled ? <InstructionsStart /> : null}
-      
+
       {/* Conditional Rendering for "Add Conversation" Button */}
       {conversations.length < MAX_CONVOS - 1 && !isRetrieveCalled ? (
         <button
@@ -268,9 +279,11 @@ const Village = () => {
               key={index}
               data={conversation}
               isApiSuccess={isApiSuccess}
-              hasBorder={isStageTwo}
+              isPhaseTwo={isStageTwo}
+              isPurchasing={isPurchasing}
               apiPrefix={config.apiPrefix}
               updateConversationLines={updateConversationLines}
+              areStatsShowing={areStatsShown}
               updateLineIndex={(newLineIndex) =>
                 updateLineIndexForConversation(index, newLineIndex)
               }
@@ -287,15 +300,15 @@ const Village = () => {
         >
           {isRetrieveCalled && !isStageTwo && <InstructionsNoticeAI />}
           {isStageTwo && <InstructionsStageTwo />}
-          {isStageTwo && (
-            <UserTokens
-              isEnabled={true}
-              buttonPressed={(index) =>
-                console.log(`Token button ${index + 1} pressed`)
-              }
-            />
-          )}
         </p>
+        {isStageTwo && (
+          <UserTokens
+            isEnabled={!isPurchasing}
+            buttonPressed={(index) =>
+              setIsPurchasing(true)
+            }
+          />
+        )}
       </div>
 
       {!isStageTwo && (
@@ -309,6 +322,32 @@ const Village = () => {
           isApiSuccess={isApiSuccess}
         />
       )}
+
+      {isStageTwo && (
+        <div>
+          <input
+            type="checkbox"
+            id="statsCheckbox"
+            className="spacing"
+            checked={areStatsShown}
+            onChange={handleCheckboxChange}
+          />
+          <label htmlFor="statsCheckbox">See stats</label>
+        </div>
+      )}
+
+      <div>
+        <ModalPopup
+          isVisible={showModal}
+          textToDisplay={modalText}
+          buttonText={modalButtonText}
+          entryLength={modalEntryLength}
+          onClose={(value) => {
+            console.log("Entered value:", value);
+            setShowModal(false);
+          }}
+        />
+      </div>
     </div>
   );
 };

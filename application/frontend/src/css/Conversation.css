@@ -14,3 +14,26 @@
 .persons-container {
   flex: 1; /* takes up the remaining space after TargetVisualizer */
 }
+
+.spacing-top {
+  margin-top: 10px;
+}
+
+.conv-token-button {
+  background-size: cover;
+  transition: transform 0.3s ease;
+  transform: scale(1);
+  width: 100px;
+  height: 100px;
+  border: none;
+  outline: none;
+  margin: 10px;
+}
+
+.conv-token-button:hover {
+  transform: scale(1.1);
+}
+
+.conv-token-button:active {
+  transform: scale(0.9);
+}

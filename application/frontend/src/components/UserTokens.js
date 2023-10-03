@@ -20,7 +20,7 @@ const UserTokens = ({ isEnabled, buttonPressed }) => {
             {pressedTokens.map((wasPressed, index) => (
                 <button 
                   key={index}
-                  disabled={wasPressed}
+                  disabled={wasPressed || !isEnabled}
                   onClick={() => handleButtonClick(index)}
                   className={`token-button ${wasPressed ? 'pressed' : ''}`}
                   style={{ backgroundImage: `url(${tokenImage})` }}

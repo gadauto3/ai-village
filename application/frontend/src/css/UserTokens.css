@@ -1,6 +1,8 @@
 .user-tokens {
   margin-top: 10px;
   border-radius: 8px;
+  display: flex;
+  justify-content: center; /* vertically center */
 }
 
 .user-tokens button {
@@ -29,11 +31,9 @@
 }
 
 .token-button:hover {
-  /* Scale the button by 5% on hover */
   transform: scale(1.1);
 }
 
 .token-button:active {
-  /* Scale the button by 5% on hover */
   transform: scale(0.9);
 }

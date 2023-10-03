@@ -5,7 +5,7 @@ export const InstructionsStart = () => (
     Start by using Add Conversation. The more conversations you choose to add,
     the higher the potential score.
     <br />
-    When you've finished selecting, click Begin.
+    When you've finished adding, click Begin.
   </p>
 );
 

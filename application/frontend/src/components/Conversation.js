@@ -5,18 +5,24 @@ import { iconsPath, isLocalHost } from "./utils";
 import "../css/Conversation.css";
 import "../css/utils.css";
 
+import tokenImage from '../assets/images/token.png';
+
 function Conversation({
   data,
   apiPrefix,
   updateConversationLines,
   updateLineIndex,
   isApiSuccess,
-  hasBorder
+  isPhaseTwo,
+  isPurchasing,
+  areStatsShowing
 }) {
   const [people, setPeople] = useState(createPeople(data.people, data.color));
-  const [numAddedLines, setNumAddedLines] = useState(7);
+  const [numAddedLines, setNumAddedLines] = useState(0);
   const [arePersonsMuted, setArePersonsMuted] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
+  const [hasFetched, setHasFetched] = useState(false);
+  const [initialLines, setInitialLines] = useState(0);
 
   useEffect(() => {
     const newPeople = createPeople(data.people, data.color);
@@ -64,6 +70,7 @@ function Conversation({
           updateConversationFor(person, false);
         }
         setIsFetching(false);
+        setHasFetched(true);
         setArePersonsMuted(false);
       })
       .catch((err) => {
@@ -76,8 +83,15 @@ function Conversation({
   function updateConversationFor(person, canUseAPI) {
     let newIndex = data.currentLineIndex + 1;
 
-    if (newIndex === data.lines.length - 4) {
+    console.log("newIndex", newIndex, "lines", data.lines.length, "isPhaseTwo", isPhaseTwo, "initialLines", initialLines);
+    if (isPhaseTwo) {
+      if (newIndex === data.lines.length && newIndex > initialLines &&
+          canUseAPI && !isFetching && !isLocalHost()) {
+        retrieveAdditionalConversation(person);
+      }
+    } else if (newIndex === data.lines.length - 4) {
       if (canUseAPI && !isFetching && !isLocalHost()) {
+        setInitialLines(data.initialLines.length);
         retrieveAdditionalConversation(person);
       }
     }
@@ -144,10 +158,21 @@ function Conversation({
     }
   }
 
+
+  function calculateFill() {
+    if (numAddedLines === 0) {
+      const numLines = Math.min(4, data.lines.length - data.currentLineIndex);
+      setNumAddedLines(numLines);
+    }
+
+    const indexDelta = data.lines.length - data.currentLineIndex - 1;
+    return (numAddedLines - indexDelta) / numAddedLines;
+  }
+
   return (
     <div
       className={`conversation-container more-spacing rounded-div 
-        ${hasBorder ? "glowing-border" : ""}`}
+        ${isPhaseTwo ? "glowing-border" : ""}`}
     >
       <div className="persons-container">
         {people.map((person, index) => (
@@ -161,14 +186,31 @@ function Conversation({
             isClickable={data.lines.length > 0}
           />
         ))}
+
+        {areStatsShowing && (
+          <div className="spacing-top">
+            Conversation stats: Total lines: {data.lines.length} on:{" "}
+            {data.currentLineIndex + 1} Just added by AI:{" "}
+            {hasFetched ? numAddedLines : 0}
+          </div>
+        )}
       </div>
-      {hasBorder && (
+      {isPhaseTwo && !isPurchasing && (
         <TargetVisualizer
           numberOfRings={numAddedLines}
           useRed={false}
-          fillAmount={
-            (numAddedLines - (data.lines.length - data.currentLineIndex)) / numAddedLines
-          }
+          fillAmount={calculateFill()}
+        />
+      )}
+
+      {isPhaseTwo && isPurchasing && (
+        <button
+          onClick={() => {
+            console.log("onClick");
+            isPurchasing = false;
+          }}
+          className={`conv-token-button`}
+          style={{ backgroundImage: `url(${tokenImage})` }}
         />
       )}
     </div>
