@@ -17,6 +17,7 @@ const Village = () => {
   const [totalScore, setTotalScore] = useState(0);
   const [areStatsShown, setAreStatsShown] = useState(false);
   const [isPurchasing, setIsPurchasing] = useState(false);
+  const [isPurchaseProcessing, setIsPurchaseProcessing] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalText, setModalText] = useState("");
   const [modalEntryLength, setModalEntryLength] = useState(-1);
@@ -222,6 +223,11 @@ const Village = () => {
   // Function to handle purchase
   const purchaseMade = () => {
     setIsPurchasing(false);
+    setIsPurchaseProcessing(true);
+  }
+
+  const purchaseCompleted = () => {
+    setIsPurchaseProcessing(false);
   }
 
   // Function to handle the checkbox change
@@ -277,11 +283,10 @@ const Village = () => {
       ) : null}
       <div className="tall-div">
         {conversations.map((conversation, index) => (
-          <div className="conversation-row">
+          <div className="conversation-row" key={index}>
             {" "}
             {/* You might need to style this row to ensure proper alignment */}
             <Conversation
-              key={index}
               data={conversation}
               isApiSuccess={isApiSuccess}
               isPhaseTwo={isStageTwo}
@@ -289,6 +294,7 @@ const Village = () => {
               apiPrefix={config.apiPrefix}
               updateConversationLines={updateConversationLines}
               purchaseMade={purchaseMade}
+              purchaseCompleted={purchaseCompleted}
               areStatsShowing={areStatsShown}
               updateLineIndex={(newLineIndex) =>
                 updateLineIndexForConversation(index, newLineIndex)
@@ -309,10 +315,8 @@ const Village = () => {
         </p>
         {isStageTwo && (
           <UserTokens
-            isEnabled={!isPurchasing}
-            buttonPressed={(index) =>
-              setIsPurchasing(true)
-            }
+            isEnabled={!(isPurchasing || isPurchaseProcessing)}
+            buttonPressed={(index) => setIsPurchasing(true)}
           />
         )}
       </div>

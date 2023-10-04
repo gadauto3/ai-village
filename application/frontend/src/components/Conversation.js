@@ -18,7 +18,8 @@ function Conversation({
   isPhaseTwo,
   isPurchasing,
   areStatsShowing,
-  purchaseMade
+  purchaseMade,
+  purchaseCompleted
 }) {
   const [people, setPeople] = useState(createPeople(data.people, data.color));
   const [numAddedLines, setNumAddedLines] = useState(0);
@@ -27,6 +28,7 @@ function Conversation({
   const [isInputUnlocked, setIsInputUnlocked] = useState(false);
   const [isReadyForInput, setIsReadyForInput] = useState(false);
   const [hasFetched, setHasFetched] = useState(false);
+  const [userInput, setUserInput] = useState('');
 
   useEffect(() => {
     const newPeople = createPeople(data.people, data.color);
@@ -50,6 +52,42 @@ function Conversation({
       }
     });
     return Object.values(personMap);
+  }
+
+  // TODO: implement properly
+  function retrieveAdditionalConversationWithUserInput(person) {
+    if (isFetching || isLocalHost()) {
+      return;
+    }
+    setIsFetching(true);
+
+    const currentLines = data.lines;
+    fetch(apiPrefix + "/api/addToConversation", {
+      method: "POST",
+      headers: {
+        accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ lines: currentLines }),
+    })
+      .then((response) => response.json())
+      .then((responseData) => {
+        if (responseData.moreLines.length) {
+          setNumAddedLines(responseData.moreLines.length);
+          const addedLines = data.lines.concat(responseData.moreLines);
+          updateConversationLines(data, addedLines);
+        } else {
+          updateConversationFor(person, false);
+        }
+        setIsFetching(false);
+        setHasFetched(true);
+        setArePersonsMuted(false);
+      })
+      .catch((err) => {
+        updateConversationFor(person, false);
+        setIsFetching(false);
+        setArePersonsMuted(false);
+      });
   }
 
   function retrieveAdditionalConversation(person) {
@@ -99,8 +137,11 @@ function Conversation({
     let newIndex = data.currentLineIndex + 1;
     
     if (newIndex === data.lines.length - 1 && canUseAPI) {
+      setIsReadyForInput(true);
       retrieveAdditionalConversation(person);
     }
+
+    updatePeopleInConversation(newIndex, person);
   }
 
   function updateConversationForPhaseOne(person, canUseAPI) {
@@ -173,6 +214,42 @@ function Conversation({
     }
   }
 
+  function setError(message) {
+    console.log("Error:", message);
+  }
+
+  function enterName() {
+    setModalText("Please provide your name for Mika and Helen.\nNote: the name will be used only for this game.");
+    setModalButtonText();
+    setModalEntryLength(12);
+    setShowModal(true);
+  }
+
+  function verifyTextAndSubmit(text) {
+    const maxChars = 120;
+    const entry = text.trim();
+    if (entry.length < 20) {
+      setError(`Please provide a longer sentence with more details, up to ${maxChars} characters.`);
+      return;
+    }
+
+    if (entry.length > maxChars) {
+      setError(`Sorry, please use less than ${maxChars} characters in your message. It is currently ${entry.length}.`);
+      return;
+    }
+
+    const regex = /^[a-zA-Z0-9-. ,()!?]+$/;
+    if (!regex.test(entry)) {
+      setError(`Please use only letters, numbers, .-,()!? and space characters.`);
+      return;
+    }
+
+    purchaseCompleted();
+    setIsInputUnlocked(false);
+    setArePersonsMuted(false);
+    setUserInput("");
+  }
+
   function spendToken() {
     setIsInputUnlocked(true);
     purchaseMade();
@@ -199,7 +276,7 @@ function Conversation({
             key={index}
             data={person}
             color={person.color}
-            isMuted={arePersonsMuted || isPurchasing}
+            isMuted={arePersonsMuted || isPurchasing || isReadyForInput}
             isApiSuccess={isApiSuccess}
             updateLine={() => updateConversationFor(person, true)}
             isClickable={data.lines.length > 0}
@@ -207,11 +284,14 @@ function Conversation({
         ))}
 
         {isInputUnlocked && (
-          <div className="d-flex align-items-center mt-2 rounded-div you-container">
+          <div
+            className="d-flex align-items-center mt-2 rounded-div you-container"
+            style={{ opacity: isReadyForInput ? 1 : 0.15 }}
+          >
             <button
               className="mr-2 wide-btn spacing rounded-btn"
               type="button" /*disabled*/
-              onClick={() => setIsReadyForInput(true)}
+              onClick={() => enterName()}
             >
               You
             </button>
@@ -219,13 +299,15 @@ function Conversation({
               className="conv-token-icon icon mr-2 spacing"
               style={{ backgroundImage: `url(${token48Image})` }}
               disabled={!isReadyForInput}
+              onClick={() => verifyTextAndSubmit(userInput)}
             ></button>
             {isReadyForInput && (
               <textarea
                 rows="2"
                 className="form-control spacing no-shadow"
-                placeholder="Enter your message for the conversation here..."
-                // disabled
+                value={userInput}
+                onChange={(e) => setUserInput(e.target.value)}
+                placeholder="Enter your message for the conversation here then click the token to submit..."
               ></textarea>
             )}
             {!isReadyForInput && (
