@@ -7,6 +7,7 @@ import "../css/Conversation.css";
 import "../css/utils.css";
 
 import tokenImage from '../assets/images/token.png';
+import token48Image from '../assets/images/token48.png';
 
 function Conversation({
   data,
@@ -23,6 +24,8 @@ function Conversation({
   const [numAddedLines, setNumAddedLines] = useState(0);
   const [arePersonsMuted, setArePersonsMuted] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
+  const [isInputUnlocked, setIsInputUnlocked] = useState(false);
+  const [isReadyForInput, setIsReadyForInput] = useState(false);
   const [hasFetched, setHasFetched] = useState(false);
 
   useEffect(() => {
@@ -170,6 +173,11 @@ function Conversation({
     }
   }
 
+  function spendToken() {
+    setIsInputUnlocked(true);
+    purchaseMade();
+  }
+
   function calculateFill() {
     if (numAddedLines === 0) {
       const numLines = Math.min(4, data.lines.length - data.currentLineIndex);
@@ -191,12 +199,44 @@ function Conversation({
             key={index}
             data={person}
             color={person.color}
-            isMuted={arePersonsMuted}
+            isMuted={arePersonsMuted || isPurchasing}
             isApiSuccess={isApiSuccess}
             updateLine={() => updateConversationFor(person, true)}
             isClickable={data.lines.length > 0}
           />
         ))}
+
+        {isInputUnlocked && (
+          <div className="d-flex align-items-center mt-2 rounded-div you-container">
+            <button
+              className="mr-2 wide-btn spacing rounded-btn"
+              type="button" /*disabled*/
+              onClick={() => setIsReadyForInput(true)}
+            >
+              You
+            </button>
+            <button
+              className="conv-token-icon icon mr-2 spacing"
+              style={{ backgroundImage: `url(${token48Image})` }}
+              disabled={!isReadyForInput}
+            ></button>
+            {isReadyForInput && (
+              <textarea
+                rows="2"
+                className="form-control spacing no-shadow"
+                placeholder="Enter your message for the conversation here..."
+                // disabled
+              ></textarea>
+            )}
+            {!isReadyForInput && (
+              <input
+                type="text"
+                className="form-control spacing no-shadow"
+                disabled
+              />
+            )}
+          </div>
+        )}
 
         {areStatsShowing && (
           <div className="spacing-top">
@@ -216,7 +256,7 @@ function Conversation({
 
       {isPhaseTwo && isPurchasing && (
         <button
-          onClick={() => purchaseMade()}
+          onClick={() => spendToken()}
           className={`conv-token-button`}
           style={{ backgroundImage: `url(${tokenImage})` }}
         />

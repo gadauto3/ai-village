@@ -19,6 +19,27 @@
   margin-top: 10px;
 }
 
+.conv-token-icon {
+  transition: transform 0.3s ease;
+  transform: scale(1);
+  width: 60px !important;
+  border: none;
+  background-color: transparent;
+}
+
+.conv-token-icon:hover {
+  transform: scale(1.1);
+}
+
+.conv-token-icon:active {
+  transform: scale(0.9);
+}
+
+.conv-token-icon:disabled {
+  transform: scale(0.8);
+  opacity: 0.5;
+}
+
 .conv-token-button {
   background-size: cover;
   transition: transform 0.3s ease;
@@ -36,4 +57,49 @@
 
 .conv-token-button:active {
   transform: scale(0.9);
+}
+
+.you-container {
+  background-color: rgba(0,217,255,0.95);
+}
+
+.you-button {
+  display: inline-block;
+  background-color: #444;
+  color: #FFF;  /* Text color */
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  margin-right: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.you-button:hover {
+  background-color: #555;  /* Darker shade on hover */
+}
+
+.you-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.user-input-field {
+  display: inline-block;
+  background-color: #FFF;
+  border: 1px solid #DDD;
+  padding: 5px 10px;
+  width: 200px;  /* Adjust based on desired width */
+  font-size: 16px;
+  margin-right: 10px;
+  transition: border-color 0.3s ease;
+}
+
+.user-input-field:focus {
+  border-color: #AAA;
+}
+
+.user-input-field:disabled {
+  background-color: #F5F5F5;
+  cursor: not-allowed;
 }
