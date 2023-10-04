@@ -37,6 +37,10 @@ export const tipForGoodGame =
   "You're on the right track honestly. You'll have\n\
   an advantage when you get conversations that you've already seen.";
 
+export const patienceRequest = 
+  "Hi, this is Gabriel. Thanks for your patience with this prototype.\
+  \nWould you try another conversation or this one again in 5 seconds?";
+
 export const ramblingSentence = `I'm good. I'm going blab on a bit because\
   I need to test a rather long text where people will read what I say in my\
   words for the birds and I really don't like curds.`;

@@ -2,7 +2,7 @@ import React from 'react';
 
 function TargetVisualizer({ numberOfRings, fillAmount, useRed }) {
     const redColors = ['#FFFAE1', '#FFE0A5', '#FFC49E', '#FFA87D', '#FF8D5B', '#FF5A38', '#FF0000'];
-    const greenColors = ['#f78e8e', '#ff9b61', '#fcc82e', '#fbfc21', '#d1fd18', '#aafe0f', '#66FF00'];
+    const greenColors = ['#0000FF', '#4B0082', '#9400D3', '#FF0000', '#FF7F00', '#FFFF00', '#00FF00'];
     const colors = useRed ? redColors : greenColors;
 
     // Ensure we don't exceed the number of colors available or the provided number of rings.

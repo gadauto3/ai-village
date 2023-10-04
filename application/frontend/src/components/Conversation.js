@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Person from "./Person";
 import TargetVisualizer from './TargetVisualizer';
 import { iconsPath, isLocalHost } from "./utils";
+import { patienceRequest } from "./longStrings";
 import "../css/Conversation.css";
 import "../css/utils.css";
 
@@ -23,7 +24,6 @@ function Conversation({
   const [arePersonsMuted, setArePersonsMuted] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const [hasFetched, setHasFetched] = useState(false);
-  const [initialLines, setInitialLines] = useState(0);
 
   useEffect(() => {
     const newPeople = createPeople(data.people, data.color);
@@ -50,6 +50,9 @@ function Conversation({
   }
 
   function retrieveAdditionalConversation(person) {
+    if (isFetching || isLocalHost()) {
+      return;
+    }
     setIsFetching(true);
 
     const currentLines = data.lines;
@@ -82,27 +85,32 @@ function Conversation({
   }
 
   function updateConversationFor(person, canUseAPI) {
+    if (isPhaseTwo) {
+      updateConversationForPhaseTwo(person, canUseAPI);
+    } else {
+      updateConversationForPhaseOne(person, canUseAPI);
+    }
+  }
+
+  function updateConversationForPhaseTwo(person, canUseAPI) {
+    let newIndex = data.currentLineIndex + 1;
+    
+    if (newIndex === data.lines.length - 1 && canUseAPI) {
+      retrieveAdditionalConversation(person);
+    }
+  }
+
+  function updateConversationForPhaseOne(person, canUseAPI) {
     let newIndex = data.currentLineIndex + 1;
 
-    console.log("newIndex", newIndex, "lines", data.lines.length, "isPhaseTwo", isPhaseTwo, "initialLines", initialLines);
-    if (isPhaseTwo) {
-      if (newIndex === data.lines.length && newIndex > initialLines &&
-          canUseAPI && !isFetching && !isLocalHost()) {
-        retrieveAdditionalConversation(person);
-      }
-    } else if (newIndex === data.lines.length - 4) {
-      if (canUseAPI && !isFetching && !isLocalHost()) {
-        setInitialLines(data.initialLines.length);
-        retrieveAdditionalConversation(person);
-      }
+    if (newIndex === data.lines.length - 4 && canUseAPI) {
+      retrieveAdditionalConversation(person);
     }
 
     // If out of lines
     if (newIndex >= data.lines.length) {
       if (isFetching) {
-        alert(
-          "Hi, this is Gabriel. Thanks for your patience with this prototype.\nWould you try another conversation or this one again in 5 seconds?"
-        );
+        alert(patienceRequest);
         setArePersonsMuted(true); // Re-enable buttons after showing alert
       } else {
         const updatedPeople = people.map((p) => {
@@ -120,6 +128,10 @@ function Conversation({
       return;
     }
 
+    updatePeopleInConversation(newIndex, person);
+  }
+
+  function updatePeopleInConversation(newIndex, person) {
     const nextLine = data.lines[newIndex];
 
     // If the person is the speaker of the next line
@@ -128,8 +140,8 @@ function Conversation({
         if (p.name === nextLine.name) {
           return {
             ...p,
-            currentLine: nextLine.text,
             opacity: 1,
+            currentLine: nextLine.text,
           };
         } else {
           return {
@@ -143,8 +155,7 @@ function Conversation({
     } else {
       // If the person is not the speaker of the next line
       const reminder =
-        person.currentLine.length < 5
-          ? ""
+        person.currentLine.length < 5 ? ""
           : `Remember, I said, "${person.currentLine}"`;
       const updatedPeople = people.map((p) => {
         if (p.name === person.name) {
@@ -158,7 +169,6 @@ function Conversation({
       setPeople(updatedPeople);
     }
   }
-
 
   function calculateFill() {
     if (numAddedLines === 0) {

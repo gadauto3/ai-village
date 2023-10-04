@@ -3,6 +3,10 @@
   border-radius: 8px;
 }
 
+.rounded-btn {
+  border-radius: 5px;
+}
+
 .no-shadow {
   text-shadow: none;
 }

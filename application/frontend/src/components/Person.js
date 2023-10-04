@@ -9,7 +9,7 @@ function Person({ color, updateLine, isClickable, isApiSuccess, isMuted, data })
             style={{ backgroundColor: color }}
         >
             <button
-                className="mr-2 wide-btn spacing"
+                className="mr-2 wide-btn spacing rounded-btn"
                 type="button"
                 onClick={updateLine}
                 disabled={(!isClickable && !isApiSuccess) || isMuted}
