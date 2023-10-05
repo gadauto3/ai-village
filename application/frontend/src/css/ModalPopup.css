@@ -12,11 +12,12 @@
 }
 
 .modal {
-  background: #fff;
+  background: #000;
   padding: 20px;
   border-radius: 5px;
   width: 80%; 
   height: 30%;
+  color: #00D9FF;
   display: flex;
   flex-direction: column;  /* stack children vertically */
   justify-content: center; /* vertically center */
@@ -27,7 +28,7 @@
   left: 50%;        /* Move the left edge to the horizontal middle of the viewport */
   transform: translate(-50%, -50%); /* Adjusts for the modal's own dimensions */
   z-index: 1000;    /* Make sure it sits on top of other content */
-  box-shadow: 0px 4px 6px rgba(0, 217, 255, 0.9); /* optional shadow for a bit of depth */
+  box-shadow: 1px 6px 9px rgba(0, 217, 255, 0.9); /* optional shadow for a bit of depth */
 }
 
 .error {

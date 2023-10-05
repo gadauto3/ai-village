@@ -14,14 +14,17 @@ const MAX_CONVOS = 7;
 const Village = () => {
   const [conversations, setConversations] = useState([]);
   const [scores, setScores] = useState([]);
+  const [playerName, setPlayerName] = useState(null);
   const [totalScore, setTotalScore] = useState(0);
   const [areStatsShown, setAreStatsShown] = useState(false);
   const [isPurchasing, setIsPurchasing] = useState(false);
   const [isPurchaseProcessing, setIsPurchaseProcessing] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [modalText, setModalText] = useState("");
-  const [modalEntryLength, setModalEntryLength] = useState(-1);
-  const [modalButtonText, setModalButtonText] = useState("");
+  const [modalConfig, setModalConfig] = useState({
+    textToDisplay: "Default message",
+    buttonText: "Ok",
+    onClose: () => {}
+  });
   const [lastSelectedConversation, setLastSelectedConversation] = useState(-1);
   const [randSeed, setRandSeed] = useState(new Date().toISOString());
   const [isApiSuccess, setIsApiSuccess] = useState(false);
@@ -75,8 +78,11 @@ const Village = () => {
       setScoreNoticeButtonTitle("Continue");
 
       // Display the end-of-stage modal dialog
-      setModalText('Thank you so much for playing! Tip for next time:' + recommendation);
-      setModalButtonText('Ok');
+      setModalConfig({
+        textToDisplay: "Thank you so much for playing! Tip for next time: " + recommendation,
+        buttonText: "Ok",
+        onClose:() => {}
+      });
       setTimeout(() => {
         setShowModal(true);
       }, 200);
@@ -220,6 +226,11 @@ const Village = () => {
     setIsApiSuccess(true);
   };
 
+  // Close the modal dialog
+  const closeModal = () => {
+    setShowModal(false);
+  }
+
   // Function to handle purchase
   const purchaseMade = () => {
     setIsPurchasing(false);
@@ -291,11 +302,17 @@ const Village = () => {
               isApiSuccess={isApiSuccess}
               isPhaseTwo={isStageTwo}
               isPurchasing={isPurchasing}
+              playerName={playerName}
+              setPlayerName={setPlayerName}
               apiPrefix={config.apiPrefix}
               updateConversationLines={updateConversationLines}
               purchaseMade={purchaseMade}
               purchaseCompleted={purchaseCompleted}
               areStatsShowing={areStatsShown}
+              showModal={(config) => {
+                setModalConfig(config);
+                setShowModal(true);
+              }}
               updateLineIndex={(newLineIndex) =>
                 updateLineIndexForConversation(index, newLineIndex)
               }
@@ -349,13 +366,8 @@ const Village = () => {
       <div>
         <ModalPopup
           isVisible={showModal}
-          textToDisplay={modalText}
-          buttonText={modalButtonText}
-          entryLength={modalEntryLength}
-          onClose={(value) => {
-            console.log("Entered value:", value);
-            setShowModal(false);
-          }}
+          closeModal={closeModal}
+          config={modalConfig}
         />
       </div>
     </div>

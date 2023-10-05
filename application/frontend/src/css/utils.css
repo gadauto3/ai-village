@@ -7,6 +7,10 @@
   margin: 5px;
 }
 
+.no-shadow {
+  text-shadow: none;
+}
+
 .form-control {
   display: table;
   resize: none;

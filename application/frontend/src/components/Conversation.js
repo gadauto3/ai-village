@@ -14,12 +14,15 @@ function Conversation({
   apiPrefix,
   updateConversationLines,
   updateLineIndex,
+  playerName,
+  setPlayerName,
   isApiSuccess,
   isPhaseTwo,
   isPurchasing,
   areStatsShowing,
   purchaseMade,
-  purchaseCompleted
+  purchaseCompleted,
+  showModal
 }) {
   const [people, setPeople] = useState(createPeople(data.people, data.color));
   const [numAddedLines, setNumAddedLines] = useState(0);
@@ -219,10 +222,15 @@ function Conversation({
   }
 
   function enterName() {
-    setModalText("Please provide your name for Mika and Helen.\nNote: the name will be used only for this game.");
-    setModalButtonText();
-    setModalEntryLength(12);
-    setShowModal(true);
+    showModal({
+      textToDisplay: `Please provide your name for ${people[0].name} and ${people[1].name}. Note: your name will be used only for this round of the game.`,
+      buttonText: "Done",
+      entryLengthMin: 3,
+      entryLengthMax: 20,
+      onClose: (entry) => {
+        setPlayerName(entry);
+      }
+    });
   }
 
   function verifyTextAndSubmit(text) {
@@ -241,6 +249,11 @@ function Conversation({
     const regex = /^[a-zA-Z0-9-. ,()!?]+$/;
     if (!regex.test(entry)) {
       setError(`Please use only letters, numbers, .-,()!? and space characters.`);
+      return;
+    }
+
+    if (!playerName) {
+      setError(`Your message looks good. Would you give your name to the villagers? 👈🏽 Click the "You" button.`);
       return;
     }
 
@@ -293,7 +306,7 @@ function Conversation({
               type="button" /*disabled*/
               onClick={() => enterName()}
             >
-              You
+              {playerName ? playerName : "You"}
             </button>
             <button
               className="conv-token-icon icon mr-2 spacing"
