@@ -80,6 +80,12 @@ class ConversationExtender {
     });
   }
   
+  async extendConversationWithUser(context, callback) {
+    const playerName = context.playerName;
+    const playerLine = context.playerMessage;
+    console.log("playerName", playerName, "playerLine", playerLine);
+  }
+
   async extendConversation(context, callback) {
 
     if (!this.isInitialized) {

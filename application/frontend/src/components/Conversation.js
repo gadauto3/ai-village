@@ -32,6 +32,7 @@ function Conversation({
   const [isReadyForInput, setIsReadyForInput] = useState(false);
   const [hasFetched, setHasFetched] = useState(false);
   const [userInput, setUserInput] = useState('');
+  let lastPerson = null;
 
   useEffect(() => {
     const newPeople = createPeople(data.people, data.color);
@@ -65,13 +66,13 @@ function Conversation({
     setIsFetching(true);
 
     const currentLines = data.lines;
-    fetch(apiPrefix + "/api/addToConversation", {
+    fetch(apiPrefix + "/api/addPlayerToConversation", {
       method: "POST",
       headers: {
         accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ lines: currentLines }),
+      body: JSON.stringify({ lines: currentLines, playerName: playerName, playerMessage: userInput }),
     })
       .then((response) => response.json())
       .then((responseData) => {
@@ -82,14 +83,10 @@ function Conversation({
         } else {
           updateConversationFor(person, false);
         }
-        setIsFetching(false);
-        setHasFetched(true);
-        setArePersonsMuted(false);
+        cleanupAfterAPICall(true);
       })
       .catch((err) => {
-        updateConversationFor(person, false);
-        setIsFetching(false);
-        setArePersonsMuted(false);
+        cleanupAfterAPICall(true);
       });
   }
 
@@ -117,15 +114,24 @@ function Conversation({
         } else {
           updateConversationFor(person, false);
         }
-        setIsFetching(false);
-        setHasFetched(true);
-        setArePersonsMuted(false);
+        cleanupAfterAPICall(false);
       })
       .catch((err) => {
-        updateConversationFor(person, false);
-        setIsFetching(false);
-        setArePersonsMuted(false);
+        
+        cleanupAfterAPICall(false);
       });
+  }
+
+  function cleanupAfterAPICall(didPlayerSpeak) {
+    updateConversationFor(person, false);
+    setIsFetching(false);
+    setArePersonsMuted(false);
+
+    if (didPlayerSpeak) {
+      purchaseCompleted();
+      setIsInputUnlocked(false);
+      setUserInput("");
+    }
   }
 
   function updateConversationFor(person, canUseAPI) {
@@ -141,7 +147,7 @@ function Conversation({
     
     if (newIndex === data.lines.length - 1 && canUseAPI) {
       setIsReadyForInput(true);
-      retrieveAdditionalConversation(person);
+      lastPerson = person;
     }
 
     updatePeopleInConversation(newIndex, person);
@@ -257,10 +263,7 @@ function Conversation({
       return;
     }
 
-    purchaseCompleted();
-    setIsInputUnlocked(false);
-    setArePersonsMuted(false);
-    setUserInput("");
+    retrieveAdditionalConversationWithUserInput(lastPerson);
   }
 
   function spendToken() {
@@ -304,6 +307,7 @@ function Conversation({
             <button
               className="mr-2 wide-btn spacing rounded-btn"
               type="button" /*disabled*/
+              disabled={playerName}
               onClick={() => enterName()}
             >
               {playerName ? playerName : "You"}

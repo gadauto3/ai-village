@@ -13,7 +13,6 @@ const ModalPopup = ({ isVisible, closeModal, config }) => {
     if (entryLengthMin > 0) {
       const entry = inputValue.trim();
       const entryLength = entry.length;
-      console.log("entry", entry, "entryLength", entryLength);
       if (entryLength <= entryLengthMin) {
         setError(`Please use more than ${entryLengthMin} characters.`);
         return;
@@ -28,7 +27,7 @@ const ModalPopup = ({ isVisible, closeModal, config }) => {
         return;
       }
     }
-    
+
     setError("");
     onClose(inputValue.trim());
     closeModal();
