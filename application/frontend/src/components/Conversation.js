@@ -31,7 +31,8 @@ function Conversation({
   const [isInputUnlocked, setIsInputUnlocked] = useState(false);
   const [isReadyForInput, setIsReadyForInput] = useState(false);
   const [hasFetched, setHasFetched] = useState(false);
-  const [userInput, setUserInput] = useState('');
+  const [inputError, setInputError] = useState(null);
+  const [userInput, setUserInput] = useState(null);
   const [lastPerson, setLastPerson] = useState(null);
 
   useEffect(() => {
@@ -226,10 +227,6 @@ function Conversation({
     }
   }
 
-  function setError(message) {
-    console.log("Error:", message);
-  }
-
   function enterName() {
     showModal({
       textToDisplay: `Please provide your name for ${people[0].name} and ${people[1].name}. Note: your name will be used only for this round of the game.`,
@@ -244,26 +241,21 @@ function Conversation({
 
   function verifyTextAndSubmit(text) {
     console.log("lastPerson", lastPerson);
+    setInputError(null);
     const maxChars = 140;
     const entry = text.trim();
-    if (entry.length < 20) {
-      setError(`Please provide a longer sentence with more details, up to ${maxChars} characters.`);
-      return;
-    }
-
-    if (entry.length > maxChars) {
-      setError(`Sorry, please use less than ${maxChars} characters in your message. It is currently ${entry.length}.`);
-      return;
-    }
-
     const regex = /^[a-zA-Z0-9-. ,()'!?]+$/;
-    if (!regex.test(entry)) {
-      setError(`Please use only letters, numbers, .-,()'!? and space characters.`);
-      return;
+    if (entry.length < 20) {
+      setInputError(`Please provide a longer sentence with more details, up to ${maxChars} characters.`);
+    } else if (entry.length > maxChars) {
+      setInputError(`Sorry, please use less than ${maxChars} characters in your message. It is currently ${entry.length}.`);
+    } else if (!regex.test(entry)) {
+      setInputError(`Please use only letters, numbers, .-,()'!? and space characters.`);
+    } else if (!playerName) {
+      setInputError(`One thing ☝🏽. Would you provide a name to the villagers by clicking the "You" button?`);
     }
 
-    if (!playerName) {
-      setError(`Your message looks good. Would you give your name to the villagers? 👈🏽 Click the "You" button.`);
+    if (inputError) {
       return;
     }
 
@@ -338,6 +330,12 @@ function Conversation({
                 disabled
               />
             )}
+          </div>
+        )}
+
+        {inputError && (
+          <div className="spacing-top">
+            {inputError}<br />
           </div>
         )}
 

@@ -98,7 +98,6 @@
 
 .you-button:disabled {
   cursor: not-allowed;
-  opacity: 0.6;
 }
 
 .user-input-field {
