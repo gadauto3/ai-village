@@ -38,7 +38,7 @@
   width: 60px !important;
   border: none;
   background-color: transparent;
-  animation: pulse 4s infinite;
+  animation: pulse 3s infinite;
 }
 
 .conv-token-icon:hover {
@@ -49,6 +49,12 @@
 .conv-token-icon:active {
   transform: scale(0.9);
   animation: none;
+}
+
+.conv-token-icon:disabled {
+  transform: scale(0.9);
+  animation: none;
+  opacity: 0.4;
 }
 
 .conv-token-button {

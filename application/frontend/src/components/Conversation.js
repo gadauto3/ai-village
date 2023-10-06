@@ -32,7 +32,7 @@ function Conversation({
   const [isReadyForInput, setIsReadyForInput] = useState(false);
   const [hasFetched, setHasFetched] = useState(false);
   const [userInput, setUserInput] = useState('');
-  let lastPerson = null;
+  const [lastPerson, setLastPerson] = useState(null);
 
   useEffect(() => {
     const newPeople = createPeople(data.people, data.color);
@@ -58,12 +58,12 @@ function Conversation({
     return Object.values(personMap);
   }
 
-  // TODO: implement properly
   function retrieveAdditionalConversationWithUserInput(person) {
     if (isFetching || isLocalHost()) {
       return;
     }
     setIsFetching(true);
+    console.log("retrieveAdditionalConversationWithUserInput", person);
 
     const currentLines = data.lines;
     fetch(apiPrefix + "/api/addPlayerToConversation", {
@@ -76,21 +76,23 @@ function Conversation({
     })
       .then((response) => response.json())
       .then((responseData) => {
+        console.log("responseData", responseData);
         if (responseData.moreLines.length) {
           setNumAddedLines(responseData.moreLines.length);
           const addedLines = data.lines.concat(responseData.moreLines);
           updateConversationLines(data, addedLines);
         } else {
-          updateConversationFor(person, false);
+          updateConversationForPhaseOne(person, false);
         }
-        cleanupAfterAPICall(true);
+        cleanupAfterAPICall(person, true);
       })
       .catch((err) => {
-        cleanupAfterAPICall(true);
+        cleanupAfterAPICall(person, true);
       });
   }
 
   function retrieveAdditionalConversation(person) {
+    console.log("retrieveAdditionalConversation");
     if (isFetching || isLocalHost()) {
       return;
     }
@@ -114,23 +116,24 @@ function Conversation({
         } else {
           updateConversationFor(person, false);
         }
-        cleanupAfterAPICall(false);
+        cleanupAfterAPICall(person, false);
       })
       .catch((err) => {
-        
-        cleanupAfterAPICall(false);
+        // TODO: Maybe put an error modal here
+        cleanupAfterAPICall(person, false);
       });
   }
 
-  function cleanupAfterAPICall(didPlayerSpeak) {
-    updateConversationFor(person, false);
+  function cleanupAfterAPICall(person, didPlayerSpeak) {
     setIsFetching(false);
     setArePersonsMuted(false);
+    setIsReadyForInput(false);
 
     if (didPlayerSpeak) {
       purchaseCompleted();
       setIsInputUnlocked(false);
       setUserInput("");
+      setLastPerson(null);
     }
   }
 
@@ -147,7 +150,7 @@ function Conversation({
     
     if (newIndex === data.lines.length - 1 && canUseAPI) {
       setIsReadyForInput(true);
-      lastPerson = person;
+      setLastPerson(person);
     }
 
     updatePeopleInConversation(newIndex, person);
@@ -240,7 +243,8 @@ function Conversation({
   }
 
   function verifyTextAndSubmit(text) {
-    const maxChars = 120;
+    console.log("lastPerson", lastPerson);
+    const maxChars = 140;
     const entry = text.trim();
     if (entry.length < 20) {
       setError(`Please provide a longer sentence with more details, up to ${maxChars} characters.`);
@@ -252,9 +256,9 @@ function Conversation({
       return;
     }
 
-    const regex = /^[a-zA-Z0-9-. ,()!?]+$/;
+    const regex = /^[a-zA-Z0-9-. ,()'!?]+$/;
     if (!regex.test(entry)) {
-      setError(`Please use only letters, numbers, .-,()!? and space characters.`);
+      setError(`Please use only letters, numbers, .-,()'!? and space characters.`);
       return;
     }
 
@@ -315,7 +319,7 @@ function Conversation({
             <button
               className="conv-token-icon icon mr-2 spacing"
               style={{ backgroundImage: `url(${token48Image})` }}
-              disabled={!isReadyForInput}
+              disabled={!isReadyForInput || isFetching}
               onClick={() => verifyTextAndSubmit(userInput)}
             ></button>
             {isReadyForInput && (
