@@ -19,6 +19,7 @@ function Conversation({
   isApiSuccess,
   isPhaseTwo,
   isPurchasing,
+  isGameTransitioning,
   areStatsShowing,
   purchaseMade,
   purchaseCompleted,
@@ -32,13 +33,17 @@ function Conversation({
   const [isReadyForInput, setIsReadyForInput] = useState(false);
   const [hasFetched, setHasFetched] = useState(false);
   const [inputError, setInputError] = useState(null);
-  const [userInput, setUserInput] = useState(null);
+  const [userInput, setUserInput] = useState("");
   const [lastPerson, setLastPerson] = useState(null);
 
   useEffect(() => {
     const newPeople = createPeople(data.people, data.color);
     setPeople(newPeople);
   }, [data.people, data.color]);
+
+  useEffect(() => {
+    console.log("isPhaseTwo", isPhaseTwo);
+  }, [isPhaseTwo]);
 
   function createPeople(people, color) {
     const personMap = {};
@@ -60,24 +65,37 @@ function Conversation({
   }
 
   function retrieveAdditionalConversationWithUserInput(person) {
+    callAPI(true, person, "/api/addPlayerToConversation", {
+      lines: data.lines,
+      playerName: playerName,
+      playerMessage: userInput,
+    });
+  }
+
+  function retrieveAdditionalConversation(person) {
+    callAPI(false, person, "/api/addToConversation", { lines: data.lines });
+  }
+
+  function callAPI(didPlayerSpeak, person, endPoint, payload) {
     if (isFetching || isLocalHost()) {
       return;
     }
     setIsFetching(true);
-    console.log("retrieveAdditionalConversationWithUserInput", person);
+    const startTime = new Date();
+    console.log("call api endpoint", endPoint, "for", person);
 
-    const currentLines = data.lines;
-    fetch(apiPrefix + "/api/addPlayerToConversation", {
+    fetch(apiPrefix + endPoint, {
       method: "POST",
       headers: {
         accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ lines: currentLines, playerName: playerName, playerMessage: userInput }),
+      body: JSON.stringify(payload),
     })
       .then((response) => response.json())
       .then((responseData) => {
-        console.log("responseData", responseData);
+        const durationInSeconds = (new Date() - startTime) / 1000;
+        console.log("responseData in", durationInSeconds, "seconds:", responseData);
         if (responseData.moreLines.length) {
           setNumAddedLines(responseData.moreLines.length);
           const addedLines = data.lines.concat(responseData.moreLines);
@@ -85,47 +103,15 @@ function Conversation({
         } else {
           updateConversationForPhaseOne(person, false);
         }
-        cleanupAfterAPICall(person, true);
+        cleanupAfterAPICall(didPlayerSpeak);
+        setHasFetched(true);
       })
       .catch((err) => {
-        cleanupAfterAPICall(person, true);
+        cleanupAfterAPICall(didPlayerSpeak);
       });
   }
 
-  function retrieveAdditionalConversation(person) {
-    console.log("retrieveAdditionalConversation");
-    if (isFetching || isLocalHost()) {
-      return;
-    }
-    setIsFetching(true);
-
-    const currentLines = data.lines;
-    fetch(apiPrefix + "/api/addToConversation", {
-      method: "POST",
-      headers: {
-        accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ lines: currentLines }),
-    })
-      .then((response) => response.json())
-      .then((responseData) => {
-        if (responseData.moreLines.length) {
-          setNumAddedLines(responseData.moreLines.length);
-          const addedLines = data.lines.concat(responseData.moreLines);
-          updateConversationLines(data, addedLines);
-        } else {
-          updateConversationFor(person, false);
-        }
-        cleanupAfterAPICall(person, false);
-      })
-      .catch((err) => {
-        // TODO: Maybe put an error modal here
-        cleanupAfterAPICall(person, false);
-      });
-  }
-
-  function cleanupAfterAPICall(person, didPlayerSpeak) {
+  function cleanupAfterAPICall(didPlayerSpeak) {
     setIsFetching(false);
     setArePersonsMuted(false);
     setIsReadyForInput(false);
@@ -150,8 +136,12 @@ function Conversation({
     let newIndex = data.currentLineIndex + 1;
     
     if (newIndex === data.lines.length - 1 && canUseAPI) {
-      setIsReadyForInput(true);
-      setLastPerson(person);
+      if (isInputUnlocked){
+        setIsReadyForInput(true);
+        setLastPerson(person);
+      } else {
+        retrieveAdditionalConversation(person);
+      }
     }
 
     updatePeopleInConversation(newIndex, person);
@@ -240,23 +230,26 @@ function Conversation({
   }
 
   function verifyTextAndSubmit(text) {
-    console.log("lastPerson", lastPerson);
-    setInputError(null);
+    console.log("playerName", playerName, "lastPerson", lastPerson);
     const maxChars = 140;
     const entry = text.trim();
     const regex = /^[a-zA-Z0-9-. ,()'!?]+$/;
+    let errorMessage = null;
     if (entry.length < 20) {
-      setInputError(`Please provide a longer sentence with more details, up to ${maxChars} characters.`);
+      errorMessage = `Please provide a longer sentence with more details, up to ${maxChars} characters.`;
     } else if (entry.length > maxChars) {
-      setInputError(`Sorry, please use less than ${maxChars} characters in your message. It is currently ${entry.length}.`);
+      errorMessage = `Sorry, please use less than ${maxChars} characters in your message. It is currently ${entry.length}.`;
     } else if (!regex.test(entry)) {
-      setInputError(`Please use only letters, numbers, .-,()'!? and space characters.`);
+      errorMessage = `Please use only letters, numbers, .-,()'!? and space characters.`;
     } else if (!playerName) {
-      setInputError(`One thing ☝🏽. Would you provide a name to the villagers by clicking the "You" button?`);
+      errorMessage = `One thing ☝🏽. Would you provide a name to the villagers by clicking the "You" button?`;
     }
 
-    if (inputError) {
+    if (errorMessage) {
+      setInputError(errorMessage);
       return;
+    } else if (inputError) {
+      setInputError(null);
     }
 
     retrieveAdditionalConversationWithUserInput(lastPerson);
@@ -288,7 +281,7 @@ function Conversation({
             key={index}
             data={person}
             color={person.color}
-            isMuted={arePersonsMuted || isPurchasing || isReadyForInput}
+            isMuted={arePersonsMuted || isGameTransitioning || isPurchasing || isReadyForInput}
             isApiSuccess={isApiSuccess}
             updateLine={() => updateConversationFor(person, true)}
             isClickable={data.lines.length > 0}

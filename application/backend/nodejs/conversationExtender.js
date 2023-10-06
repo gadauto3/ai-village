@@ -76,6 +76,10 @@ class ConversationExtender {
     return prompt + newPrompt;
   }
   
+  removePlayerFromLines(newArray, playerName) {
+    
+  }
+
   removeMatchingElements(priorArray, newArray) {
     const priorArrayMap = new Map();
   
@@ -99,10 +103,9 @@ class ConversationExtender {
       callback(err, null);
     }
     
-    let prompt = this.adjustPrompt(userPromptTextFromFile, context);
+    let prompt = this.adjustPrompt(userPromptTextFromFile, {lines: context.lines});
     prompt = this.adjustPromptWithPlayerInfo(prompt, playerName, playerLine);
 
-    console.log("fullContext", prompt);
     this.callOpenAI(prompt, context.lines, callback);
   }
 
@@ -146,11 +149,13 @@ class ConversationExtender {
         const responseLines = this.removeMatchingElements(originalLines, responseJson.lines);
         callback(null, responseLines);
       } catch (e) {
+        console.log("Error context:", fullContext);
+        console.error("Problematic message: ", responseCapture);
         callback(e, null);
       }
     })
     .catch(err => {
-      console.log("extendConversation response error in", responseCapture, "\n\nError:", err);
+      console.log("extendConversation response error in", responseCapture.content, "\n\nError:", err);
       callback(err, null);
     });
   }

@@ -37,7 +37,7 @@ app.post('/api/addPlayerToConversation', (req, res) => {
 
     conversationExtender.extendConversationWithUser(data, (err, response) => {
         if (err) {
-            console.error("Conversation extension failed: ", err);
+            console.error("Conversation with user extension failed: ", err);
             res.send({ moreLines: [] });
             return;
         } else {

@@ -28,6 +28,7 @@ const Village = () => {
   const [lastSelectedConversation, setLastSelectedConversation] = useState(-1);
   const [randSeed, setRandSeed] = useState(new Date().toISOString());
   const [isApiSuccess, setIsApiSuccess] = useState(false);
+  const [isGameTransitioning, setIsGameTransitioning] = useState(false);
   const [isStageTwo, setIsStageTwo] = useState(false);
   const [isRetrieveCalled, setIsRetrieveCalled] = useState(false);
   const [scoreCalculator, setScoreCalculator] = useState(null);
@@ -57,6 +58,7 @@ const Village = () => {
 
     if (scoreNoticeButtonTitle == "Continue") {
       setIsStageTwo(true);
+      setIsGameTransitioning(false);
       return;
     } else if (index < 0 || updatedScores[index] > 0) {
       return; // Score already calculated
@@ -81,7 +83,7 @@ const Village = () => {
       setModalConfig({
         textToDisplay: "Thank you so much for playing! Tip for next time: " + recommendation,
         buttonText: "Ok",
-        onClose:() => {}
+        onClose:() => {setIsGameTransitioning(true)}
       });
       setTimeout(() => {
         setShowModal(true);
@@ -302,6 +304,7 @@ const Village = () => {
               isApiSuccess={isApiSuccess}
               isPhaseTwo={isStageTwo}
               isPurchasing={isPurchasing}
+              isGameTransitioning={isGameTransitioning}
               playerName={playerName}
               setPlayerName={setPlayerName}
               apiPrefix={config.apiPrefix}

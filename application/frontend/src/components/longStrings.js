@@ -24,8 +24,8 @@ export const InstructionsNoticeAI = () => (
 export const InstructionsStageTwo = () => (
   <React.Fragment>
     Now it's time to discover how the AI behaves and reacts to your input.<br />
-    Select your favorite conversation and use a token below to influence the
-    villagers. The targets show you the countdown until the change. You may 
+    Use a token below to influence the villagers in your favorite conversation above. 
+    The targets show you the countdown until the change. You may 
     choose to observe as the conversation evolves, or use tokens to change it.
   </React.Fragment>
 );
