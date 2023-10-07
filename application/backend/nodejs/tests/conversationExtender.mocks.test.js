@@ -106,4 +106,23 @@ describe("ConversationExtender", () => {
     expect(result).toEqual(expectedResult);
   });
 
+  it("should correctly remove lines for a given player", () => {
+    const instance = new ConversationExtender();
+
+    const lines = [
+      { name: "Preeta", text: "Can I tell you about an accidental discovery?" },
+      { name: "Adisu", text: "Sure! Whatcha got Preeta?" },
+      { name: "Preeta", text: "Back in 1928, there was this English" },
+      { name: "Adisu", text: "Ugh, sounds like one of those" },
+      { name: "Preeta", text: "Ha! But instead of " },
+    ];
+
+    const expectedLines = [
+      { name: "Adisu", text: "Sure! Whatcha got Preeta?" },
+      { name: "Adisu", text: "Ugh, sounds like one of those" },
+    ];
+
+    const result = instance.removePlayerFromLines(lines, "Preeta");
+    expect(result).toEqual(expectedLines);
+  });
 });

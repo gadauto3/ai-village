@@ -144,6 +144,17 @@ function Conversation({
       }
     }
 
+    // If out of lines
+    if (newIndex >= data.lines.length) {
+      if (isFetching) {
+        setArePersonsMuted(true); // Re-enable buttons after showing alert
+      } else {
+        const updatedPeople = setOtherPeopleToOops(person);
+        setPeople(updatedPeople);
+      }
+      return;
+    }
+
     updatePeopleInConversation(newIndex, person);
   }
 
@@ -160,22 +171,26 @@ function Conversation({
         alert(patienceRequest);
         setArePersonsMuted(true); // Re-enable buttons after showing alert
       } else {
-        const updatedPeople = people.map((p) => {
-          if (p.name === person.name) {
-            return {
-              ...p,
-              currentLine: "Oops, I'm out of ideas",
-              opacity: 1,
-            };
-          }
-          return p;
-        });
+        const updatedPeople = setOtherPeopleToOops(person);
         setPeople(updatedPeople);
       }
       return;
     }
 
     updatePeopleInConversation(newIndex, person);
+  }
+
+  function setOtherPeopleToOops(person) {
+    return people.map((p) => {
+      if (p.name === person.name) {
+        return {
+          ...p,
+          currentLine: "Oops, I'm out of ideas",
+          opacity: 1,
+        };
+      }
+      return p;
+    });
   }
 
   function updatePeopleInConversation(newIndex, person) {
@@ -225,6 +240,7 @@ function Conversation({
       entryLengthMax: 20,
       onClose: (entry) => {
         setPlayerName(entry);
+        verifyTextAndSubmit(userInput);
       }
     });
   }
@@ -262,7 +278,7 @@ function Conversation({
 
   function calculateFill() {
     if (numAddedLines === 0) {
-      const numLines = Math.min(4, data.lines.length - data.currentLineIndex);
+      const numLines = Math.max(4, data.lines.length - data.currentLineIndex);
       setNumAddedLines(numLines);
     }
 

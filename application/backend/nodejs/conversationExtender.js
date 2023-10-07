@@ -76,8 +76,8 @@ class ConversationExtender {
     return prompt + newPrompt;
   }
   
-  removePlayerFromLines(newArray, playerName) {
-    
+  removePlayerFromLines(lines, playerName) {
+    return lines.filter(line => line.name !== playerName);
   }
 
   removeMatchingElements(priorArray, newArray) {
@@ -116,7 +116,7 @@ class ConversationExtender {
     this.callOpenAI(fullContext, context.lines, callback);
   }
 
-  async callOpenAI(fullContext, originalLines, callback) {
+  async callOpenAI(fullContext, originalLines, callback, playerName = null) {
 
     let responseCapture = "uninitialized";
     if (!this.isInitialized) {
@@ -146,11 +146,15 @@ class ConversationExtender {
         responseCapture = message;
         let responseJson = JSON.parse(message.content);
 
-        const responseLines = this.removeMatchingElements(originalLines, responseJson.lines);
+        let responseLines = this.removeMatchingElements(originalLines, responseJson.lines);
+        if (playerName) {
+          console.log("Player name caught in lines");
+          responseLines = this.removePlayerFromLines(responseLines, playerName);
+        }
         callback(null, responseLines);
       } catch (e) {
         console.log("Error context:", fullContext);
-        console.error("Problematic message: ", responseCapture);
+        console.error("Problematic message: ", responseCapture.content);
         callback(e, null);
       }
     })
