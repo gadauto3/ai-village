@@ -345,8 +345,7 @@ function Conversation({
 
         {inputError && (
           <div className="spacing-top">
-            {inputError}
-            <br />
+            {inputError}<br />
           </div>
         )}
 
