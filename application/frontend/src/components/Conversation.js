@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Person from "./Person";
+import LoadingCircle from "./LoadingCircle";
 import TargetVisualizer from './TargetVisualizer';
 import { iconsPath, isLocalHost } from "./utils";
 import { patienceRequest } from "./longStrings";
@@ -344,7 +345,8 @@ function Conversation({
 
         {inputError && (
           <div className="spacing-top">
-            {inputError}<br />
+            {inputError}
+            <br />
           </div>
         )}
 
@@ -356,7 +358,7 @@ function Conversation({
           </div>
         )}
       </div>
-      {isPhaseTwo && !isPurchasing && (
+      {isPhaseTwo && !isPurchasing && !isFetching && (
         <TargetVisualizer
           numberOfRings={numAddedLines}
           useRed={false}
@@ -370,6 +372,10 @@ function Conversation({
           className={`conv-token-button`}
           style={{ backgroundImage: `url(${tokenImage})` }}
         />
+      )}
+      
+      {isPhaseTwo && isFetching && (
+        <LoadingCircle isLoading={isFetching} />
       )}
     </div>
   );
