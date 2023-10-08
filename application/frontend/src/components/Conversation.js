@@ -351,9 +351,9 @@ function Conversation({
 
         {areStatsShowing && (
           <div className="spacing-top">
-            Conversation stats: Total lines: {data.lines.length} on:{" "}
-            {data.currentLineIndex + 1} Just added by AI:{" "}
-            {hasFetched ? numAddedLines : 0}
+            Conversation stats: Total lines: {data.lines.length} Until AI:{" "}
+            {data.lines.length - data.currentLineIndex - 1} {" "}
+            {hasFetched ? "Just added by AI:" + numAddedLines : ""}
           </div>
         )}
       </div>

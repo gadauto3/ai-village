@@ -2,31 +2,16 @@ import React from 'react';
 
 function TargetVisualizer({ numberOfRings, fillAmount, useRed }) {
     const redColors = ['#FFFAE1', '#FFE0A5', '#FFC49E', '#FFA87D', '#FF8D5B', '#FF5A38', '#FF0000'];
-    const greenColors = ['#0000FF', '#4B0082', '#9400D3', '#FF0000', '#FF7F00', '#FFFF00', '#00FF00'];
-    const colors = useRed ? redColors : greenColors;
+    const rainbowColors = ['#5CC93B', '#00000', '#5CC93B', '#00000', '#5CC93B', '#00000', '#87DD76', '#00000', '#D4F5CE', '#00000', '#F6CECC', '#00000', '#ED706A', '#00000', '#E93323'];
+    const colors = useRed ? redColors : rainbowColors;
 
-    // Ensure we don't exceed the number of colors available or the provided number of rings.
     const ringsToDisplay = Math.min(colors.length, numberOfRings);
-    
-    // Calculate how many rings to fill based on the fillAmount and
-    // Ensure that we always have at least one ring filled
     const filledRings = fillAmount < 0 ? 1 : Math.round(fillAmount * ringsToDisplay);
 
     function getSelectedColors(colors, ringsToDisplay) {
-        if (ringsToDisplay >= colors.length) {
-            return colors;
-        }
-    
-        const step = (colors.length - 1) / (ringsToDisplay - 1);
-        let selectedColors = [];
-    
-        for (let i = 0; i < ringsToDisplay; i++) {
-            selectedColors.push(colors[Math.round(i * step)]);
-        }
-    
-        return selectedColors;
+        return colors.slice(-ringsToDisplay);
     }
-    
+
     const selectedColors = getSelectedColors(colors, ringsToDisplay);
 
     return (
@@ -34,13 +19,13 @@ function TargetVisualizer({ numberOfRings, fillAmount, useRed }) {
             <circle
                 cx="50"
                 cy="50"
-                r="49"  // just inside the edge of the viewBox
+                r="49"
                 stroke="black"
                 strokeWidth="2"
                 fill="none"
             />
             {selectedColors.map((color, i) => {
-                const radius = 50 - (i * (100 / (2 * ringsToDisplay)));  // Adjusts spacing based on number of rings
+                const radius = 50 - (i * (100 / (2 * ringsToDisplay)));
                 if (i < filledRings) {
                     return (
                         <circle
@@ -57,16 +42,16 @@ function TargetVisualizer({ numberOfRings, fillAmount, useRed }) {
                             key={i}
                             cx="50"
                             cy="50"
-                            r={radius}
-                            fill="white"
-                            stroke={color}
-                            strokeWidth="2"
+                            r={radius-1}
+                            fill={useRed?"white":"black"}
+                            stroke="red"
+                            strokeWidth={useRed?"2":"1"}
                         />
                     );
                 }
             })}
         </svg>
-    );    
+    );
 }
 
 export default TargetVisualizer;
