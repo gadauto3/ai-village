@@ -194,6 +194,7 @@ const Village = () => {
       const personB = names[nameIndex++];
       conversation.people[0].name = personA;
       conversation.people[1].name = personB;
+      conversation.currentLineIndex = -1;
 
       // TODO: move down
       const lines = [
