@@ -30,7 +30,7 @@ function TargetVisualizer({ numberOfRings, fillAmount, useRed }) {
     const selectedColors = getSelectedColors(colors, ringsToDisplay);
 
     return (
-        <svg viewBox="0 0 100 100" width="100%" height="100%">
+        <svg viewBox="0 0 100 100" width="100px" height="100px">
             <circle
                 cx="50"
                 cy="50"
