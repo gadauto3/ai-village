@@ -34,7 +34,8 @@
 .conv-token-icon {
   transition: transform 0.3s ease;
   transform: scale(1);
-  width: 60px !important;
+  width: 56px !important;
+  min-width: 48px;
   border: none;
   background-color: transparent;
   animation: pulse 3s infinite;
@@ -76,7 +77,8 @@
 }
 
 .you-container {
-  background-color: rgba(0,217,255,0.95);
+  background-color: "black";
+  border: 2px solid #00D9FF;
 }
 
 .you-button {

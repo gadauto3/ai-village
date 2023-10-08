@@ -300,6 +300,7 @@ function Conversation({
             color={person.color}
             isMuted={arePersonsMuted || isGameTransitioning || isPurchasing || isReadyForInput}
             isApiSuccess={isApiSuccess}
+            isColorFlipped={isPhaseTwo}
             updateLine={() => updateConversationFor(person, true)}
             isClickable={data.lines.length > 0}
           />

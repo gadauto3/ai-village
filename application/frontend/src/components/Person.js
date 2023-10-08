@@ -2,11 +2,15 @@ import React from 'react';
 import "../css/Person.css";
 import "../css/utils.css";
 
-function Person({ color, updateLine, isClickable, isApiSuccess, isMuted, data }) {
+function Person({ color, updateLine, isClickable, isApiSuccess, isMuted, isColorFlipped, data }) {
     return (
         <div
             className="d-flex align-items-center mt-2 rounded-div"
-            style={{ backgroundColor: color }}
+            style={{ 
+                backgroundColor: isColorFlipped ? "black" : color,
+                border: isColorFlipped ? `1px solid ${color}` : "none",
+                boxShadow: isColorFlipped ? `0 0 5px #00D9FF` : "none"
+            }}
         >
             <button
                 className="mr-2 wide-btn spacing rounded-btn"
