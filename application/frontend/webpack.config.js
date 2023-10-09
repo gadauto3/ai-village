@@ -13,6 +13,7 @@ module.exports = {
     rules: [
       {
         test: /\.(png|jp(e*)g|svg|gif)$/i,
+        exclude: /token32\.png$/i,
         use: 
         {
           loader: 'file-loader',
@@ -43,7 +44,8 @@ module.exports = {
     }),
     new CopyPlugin({
       patterns: [
-        { from: 'src/assets/images/icons', to: 'images' }  // copies all files from src/assets to outputDir/assets
+        { from: 'src/assets/images/icons', to: 'images' },  // copies all files from src/assets to outputDir/assets
+        { from: 'src/assets/images/token32.png', to: 'token32.png' }
       ],
     }),
   ],
