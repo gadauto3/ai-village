@@ -42,10 +42,6 @@ function Conversation({
     setPeople(newPeople);
   }, [data.people, data.color]);
 
-  useEffect(() => {
-    console.log("isPhaseTwo", isPhaseTwo);
-  }, [isPhaseTwo]);
-
   function createPeople(people, color) {
     const personMap = {};
 
