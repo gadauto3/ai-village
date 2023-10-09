@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap');
+
 .no-wrap {
     white-space: nowrap;
     overflow: hidden;
@@ -13,10 +15,11 @@
         display: block;
         margin: 20px;
         background-color: black;
+        font-family: 'Noto Sans', sans-serif;
         color: #00D9FF;
         text-shadow: 0 0 10px #00D9FF;  /* Middle shadow */
     }
-    
+
     body {
         background-color: black;
         margin: 0; /* This removes any default margin */
