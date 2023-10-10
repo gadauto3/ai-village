@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { isLocalHost, deepCopy, config } from './utils';
 import { InstructionsNoticeAI, InstructionsStageTwo, InstructionsStart, peopleNames, ramblingSentence, tipForEarlyGuess, tipForGoodGame } from "./longStrings";
 import Conversation from './Conversation';
+import Credits from "./Credits";
 import ModalPopup from "./ModalPopup";
 import Scoreboard from './Scoreboard';
 import ScoreCalculator from './ScoreCalculator';
@@ -17,6 +18,7 @@ const Village = () => {
   const [playerName, setPlayerName] = useState(null);
   const [totalScore, setTotalScore] = useState(0);
   const [areStatsShown, setAreStatsShown] = useState(false);
+  const [areCreditsShown, setAreCreditsShown] = useState(false);
   const [isPurchasing, setIsPurchasing] = useState(false);
   const [isPurchaseProcessing, setIsPurchaseProcessing] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -365,6 +367,25 @@ const Village = () => {
           />
           <label htmlFor="statsCheckbox">See stats</label>
         </div>
+      )}
+
+      <input
+        type="checkbox"
+        id="creditsCheckbox"
+        className="spacing"
+        style={{ marginRight: "auto" }}
+        onChange={() => setAreCreditsShown(!areCreditsShown)}
+        checked={areCreditsShown}
+      />
+      <label htmlFor="creditsCheckbox" className="spacing">
+        Credits
+      </label>
+
+      {areCreditsShown && (
+        <Credits
+          isVisible={areCreditsShown}
+          closeModal={() => setAreCreditsShown(false)}
+        />
       )}
 
       <div>

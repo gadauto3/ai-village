@@ -1,0 +1,30 @@
+
+.modal-overrides {
+  height: 50%;
+}
+
+/* Additional styles specific to the Credits modal */
+.credits-columns {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+  margin: 20px auto;
+}
+
+.credits-columns > div {
+  width: 48%; /* Splitting the width approximately in half, accounting for a little space in between */
+  text-align: center;
+}
+
+/* Adjust title styling for the Credits modal */
+.modal h2 {
+  margin-bottom: 10px;
+}
+
+.modal h5 {
+  margin-top: 10px;
+}
+
+.margin-override {
+  margin-bottom: 1px;
+}
