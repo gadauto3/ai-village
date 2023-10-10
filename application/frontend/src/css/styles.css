@@ -26,6 +26,11 @@
         height: 100vh; /* This ensures the body takes up the full viewport height */
         overflow: hidden; /* This prevents any unwanted scrolling */
     }
+
+    img {
+        width: 100%;
+        margin-top: 20px;
+    }
 }
 
 /* Desktop devices */
