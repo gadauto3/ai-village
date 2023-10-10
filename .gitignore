@@ -190,5 +190,5 @@ sketch
 
 #Generated files
 application/*.zip
-application/frontend/public/js/index.js
+application/frontend/public/*
 *.code-workspace
