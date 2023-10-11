@@ -55,6 +55,8 @@ const Village = () => {
 
   const handleScoreNotice = (index) => {
     let updatedScores = [...scores];
+    let updatedConversations = [...conversations];
+    let currentConversation = updatedConversations[index];
 
     if (scoreNoticeButtonTitle == "Continue") {
       setIsStageTwo(true);
@@ -63,8 +65,14 @@ const Village = () => {
     } else if (index < 0 || updatedScores[index] > 0) {
       return; // Score already calculated
     }
-    const convoIndex = conversations[index].currentLineIndex;
+    const convoIndex = currentConversation.currentLineIndex;
     const newScores = scoreCalculator.updateScoresForIndex(index, convoIndex);
+
+    // Update feedback on the specific conversation
+    currentConversation.feedback = scoreCalculator.feedbackForScore(newScores[index]);
+    updatedConversations[index] = currentConversation;
+    setConversations(updatedConversations);
+    console.log("currentConversation", currentConversation, "convo", updatedConversations[index]);
 
     const newTotalScore = scoreCalculator.getTotalScore();
     const hasZero = newScores.some((num) => num === 0);
@@ -73,15 +81,14 @@ const Village = () => {
       setScores([...newScores]);
       setTotalScore(newTotalScore);
     } else {
-      const didGuessEarly = newScores.some((num) => Math.abs(num % 2) === 1);
-      const recommendation = didGuessEarly ? tipForEarlyGuess : tipForGoodGame;
+      let recommendation = scoreCalculator.feedbackForOverallScore(newTotalScore, conversations.length);
       setScores([...newScores]);
       setTotalScore(newTotalScore);
       setScoreNoticeButtonTitle("Continue");
 
       // Display the end-of-stage modal dialog
       setModalConfig({
-        textToDisplay: "Thank you so much for playing! Tip for next time: " + recommendation,
+        textToDisplay: "Thank you so much for playing! Overall, you " + recommendation,
         buttonText: "Ok",
         onClose:() => {setIsGameTransitioning(true)}
       });

@@ -31,11 +31,10 @@ export const InstructionsStageTwo = () => (
 );
 
 export const tipForEarlyGuess =
-  "I see you guessed too early on at least one conversation.\
-  \nGuessing early is worse than guessing late.";
+  "⏱️ You guessed too early. Guessing early is worse than guessing late.";
 export const tipForGoodGame =
-  "You're on the right track honestly. You'll have\n\
-  an advantage when you get conversations that you've already seen.";
+  "On the right track 👍🏽. You'll have an advantage on conversations that you've already seen.";
+export const tipForWin = "🎉 Well done! 🎉";
 
 export const patienceRequest = 
   "Hi, this is Gabriel. Thanks for your patience with this prototype.\

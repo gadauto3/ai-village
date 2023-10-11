@@ -340,6 +340,13 @@ function Conversation({
           </div>
         )}
 
+        {data.feedback && !isPhaseTwo && (
+          <div className="feedback">
+            {data.feedback}
+            <br />
+          </div>
+        )}
+
         {inputError && (
           <div className="spacing-top">
             {inputError}<br />
@@ -349,7 +356,7 @@ function Conversation({
         {areStatsShowing && (
           <div className="spacing-top">
             Conversation stats: Total lines: {data.lines.length} Until AI:{" "}
-            {data.lines.length - data.currentLineIndex - 1} {" "}
+            {data.lines.length - data.currentLineIndex - 1}{" "}
             {hasFetched ? "Just added by AI:" + numAddedLines : ""}
           </div>
         )}

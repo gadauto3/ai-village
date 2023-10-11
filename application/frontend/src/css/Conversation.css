@@ -18,6 +18,11 @@
   margin-top: 10px;
 }
 
+.feedback {
+  color: #f06013;
+  margin-left: 57px;
+}
+
 /* Conversation token icon */
 @keyframes pulse {
   0% {

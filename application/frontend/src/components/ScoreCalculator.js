@@ -1,3 +1,5 @@
+import { tipForEarlyGuess, tipForGoodGame, tipForWin } from "./longStrings";
+
 // ScoreCalculator.js
 class ScoreCalculator {
   constructor(linesLengths) {
@@ -31,6 +33,29 @@ class ScoreCalculator {
     this.scores[index] = score;
 
     return this.scores;
+  }
+
+  feedbackForScore(score) {
+    const didGuessEarly = Math.abs(score % 2) === 1;
+    if (score == this.PERFECT_SCORE) {
+      return tipForWin;
+    } else if (didGuessEarly) {
+      return tipForEarlyGuess;
+    } else {
+      return tipForGoodGame;
+    }
+  }
+
+  feedbackForOverallScore(score, numConvos) {
+    let recommendation = "need practice. Please read the tips."
+    if (score > 13 * numConvos) {
+      recommendation = "are amazing!"
+    } else if (score > 10 * numConvos) {
+      recommendation = "are on the right track!"
+    } else if (score > 0 * numConvos) {
+      recommendation = "should consider the tips."
+    }
+    return recommendation;
   }
 
   // Original method from the React class
