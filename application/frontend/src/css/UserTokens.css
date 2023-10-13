@@ -1,0 +1,39 @@
+.user-tokens {
+  margin-top: 10px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center; /* vertically center */
+}
+
+.user-tokens button {
+  width: 100px;
+  height: 100px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background-size: cover;
+  margin: 5px;
+}
+
+.user-tokens button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.token-button {
+  background-size: cover;
+  
+  /* Ensure a smooth transition */
+  transition: transform 0.3s ease;
+
+  /* Default scale (normal size) */
+  transform: scale(1);
+}
+
+.token-button:hover {
+  transform: scale(1.1);
+}
+
+.token-button:active {
+  transform: scale(0.9);
+}

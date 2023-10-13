@@ -1,0 +1,6 @@
+===
+Also, PLAYER_NAME heard the conversation and has provided the following input.
+At least once villager should use PLAYER_NAME's name to help them feel included.
+For example, a villager could say "Great point PLAYER_NAME! Maybe..." 
+Please adjust or tailor the villager's conversation based on PLAYER_NAME's input: 
+"PLAYER_MESSAGE"

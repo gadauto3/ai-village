@@ -1,0 +1,122 @@
+
+.conversation-row svg {
+  width: 100px; 
+  display: block;
+  margin: 10px;
+}
+
+.conversation-container {
+  display: flex;
+  align-items: center; /* if you want to vertically center the TargetVisualizer with the Person components */
+}
+
+.persons-container {
+  flex: 1; /* takes up the remaining space after TargetVisualizer */
+}
+
+.spacing-top {
+  margin-top: 10px;
+}
+
+/* Conversation token icon */
+@keyframes pulse {
+  0% {
+      transform: scale(1);
+  }
+  50% {
+      transform: scale(1.1);
+  }
+  100% {
+      transform: scale(1);
+  }
+}
+
+.conv-token-icon {
+  transition: transform 0.3s ease;
+  transform: scale(1);
+  width: 56px !important;
+  min-width: 48px;
+  border: none;
+  background-color: transparent;
+  animation: pulse 3s infinite;
+}
+
+.conv-token-icon:hover {
+  transform: scale(1.1);
+  animation: none;
+}
+
+.conv-token-icon:active {
+  transform: scale(0.9);
+  animation: none;
+}
+
+.conv-token-icon:disabled {
+  transform: scale(0.9);
+  animation: none;
+  opacity: 0.4;
+}
+
+.conv-token-button {
+  background-size: cover;
+  transition: transform 0.3s ease;
+  transform: scale(1);
+  width: 100px;
+  height: 100px;
+  border: none;
+  outline: none;
+  margin: 10px;
+}
+
+.conv-token-button:hover {
+  transform: scale(1.1);
+}
+
+.conv-token-button:active {
+  transform: scale(0.9);
+}
+
+.you-container {
+  background-color: "black";
+  border: 2px solid #00D9FF;
+}
+
+.you-button {
+  display: inline-block;
+  background-color: #444;
+  color: #FFF;  /* Text color */
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  margin-right: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.you-button:hover {
+  background-color: #555;  /* Darker shade on hover */
+}
+
+.you-button:disabled {
+  cursor: not-allowed;
+}
+
+.user-input-field {
+  display: inline-block;
+  background-color: #FFF;
+  border: 1px solid #DDD;
+  padding: 5px 10px;
+  width: 200px;  /* Adjust based on desired width */
+  font-size: 16px;
+  margin-right: 10px;
+  transition: border-color 0.3s ease;
+}
+
+.user-input-field:focus {
+  border-color: #AAA;
+}
+
+.user-input-field:disabled {
+  background-color: #F5F5F5;
+  cursor: not-allowed;
+}

@@ -1,0 +1,30 @@
+
+.wide-btn {
+  min-width: 120px;
+}
+
+.spacing {
+  margin: 5px;
+}
+
+.no-shadow {
+  text-shadow: none;
+}
+
+.form-control {
+  display: table;
+  resize: none;
+  border: none;
+  outline: none;
+  overflow: visible;
+  padding: 10px;
+  border-radius: 4px;
+  background: #f9f9f9;
+  min-height: 32px;
+}
+
+.glowing-border {
+  border: 1px solid #00D9FF; /* or whatever border style you want */
+  box-shadow: 0 0 7px #00D9FF;  /* Middle shadow */
+  padding: 10px; /* Optional: If you want some space inside the border */
+}

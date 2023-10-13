@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap');
+
+.no-wrap {
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+/* Mobile devices */
+@media only screen and (max-width: 768px) {
+    #game-container {
+        display: none;
+    }
+
+    #mobile-warning {
+        display: block;
+        margin: 20px;
+        background-color: black;
+        font-family: 'Noto Sans', sans-serif;
+        color: #00D9FF;
+        text-shadow: 0 0 10px #00D9FF;  /* Middle shadow */
+    }
+
+    body {
+        background-color: black;
+        margin: 0; /* This removes any default margin */
+        height: 100vh; /* This ensures the body takes up the full viewport height */
+        overflow: hidden; /* This prevents any unwanted scrolling */
+    }
+
+    img {
+        width: 100%;
+        margin-top: 20px;
+    }
+}
+
+/* Desktop devices */
+@media only screen and (min-width: 769px) {
+    #game-container {
+        display: block;
+    }
+
+    #mobile-warning {
+        display: none;
+    }
+}

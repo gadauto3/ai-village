@@ -16,7 +16,6 @@ app.get('/api/getConversations', (req, res) => {
     res.send({ conversations: data });
 });
 
-// Modified addToConversation route
 app.post('/api/addToConversation', (req, res) => {
     // Get data from request body
     const data = req.body;
@@ -24,6 +23,21 @@ app.post('/api/addToConversation', (req, res) => {
     conversationExtender.extendConversation(data, (err, response) => {
         if (err) {
             console.error("Conversation extension failed: ", err);
+            res.send({ moreLines: [] });
+            return;
+        } else {
+            res.send({ moreLines: response });
+        }
+    });
+});
+
+app.post('/api/addPlayerToConversation', (req, res) => {
+    // Get data from request body
+    const data = req.body;
+
+    conversationExtender.extendConversationWithUser(data, (err, response) => {
+        if (err) {
+            console.error("Conversation with user extension failed: ", err);
             res.send({ moreLines: [] });
             return;
         } else {

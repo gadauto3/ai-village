@@ -8,6 +8,7 @@ const ssm = new AWS.SSM();
 // Read and clean up the prompt text
 const systemPromptTextFromFile = fs.readFileSync(path.join(__dirname, 'system-prompt.txt'), 'utf8').trim().replace(/\s+/g, ' ');
 const userPromptTextFromFile = fs.readFileSync(path.join(__dirname, 'user-prompt.txt'), 'utf8').trim().replace(/\s+/g, ' ');
+const userInputPromptTextFromFile = fs.readFileSync(path.join(__dirname, 'user-input-prompt.txt'), 'utf8').trim().replace(/\s+/g, ' ');
 
 class ConversationExtender {
   constructor() {
@@ -65,7 +66,20 @@ class ConversationExtender {
 
     return userText.trim();
   }
+
+  adjustPromptWithPlayerInfo(prompt, playerName, playerMessage) {
+    let newPrompt = userInputPromptTextFromFile;
+
+    newPrompt = newPrompt.replace(/PLAYER_NAME/g, playerName);
+    newPrompt = newPrompt.replace('PLAYER_MESSAGE', playerMessage);
+    
+    return prompt + newPrompt;
+  }
   
+  removePlayerFromLines(lines, playerName) {
+    return lines.filter(line => line.name !== playerName);
+  }
+
   removeMatchingElements(priorArray, newArray) {
     const priorArrayMap = new Map();
   
@@ -80,15 +94,36 @@ class ConversationExtender {
     });
   }
   
+  async extendConversationWithUser(context, callback) {
+    const playerName = context.playerName;
+    const playerLine = context.playerMessage;
+    if (!playerName || !playerLine) {
+      const err = `Invalid values for player name (${playerName}) or message (${playerLine})`;
+      console.log(err);
+      callback(err, null);
+    }
+    
+    let prompt = this.adjustPrompt(userPromptTextFromFile, {lines: context.lines});
+    prompt = this.adjustPromptWithPlayerInfo(prompt, playerName, playerLine);
+
+    this.callOpenAI(prompt, context.lines, callback);
+  }
+
   async extendConversation(context, callback) {
 
+    const fullContext = this.adjustPrompt(userPromptTextFromFile, context); // Use the cleaned-up prompt
+
+    this.callOpenAI(fullContext, context.lines, callback);
+  }
+
+  async callOpenAI(fullContext, originalLines, callback, playerName = null) {
+
+    let responseCapture = "uninitialized";
     if (!this.isInitialized) {
       let timeout = 5000;
       await new Promise(resolve => setTimeout(resolve, timeout)); // wait for 5s
     }
 
-    let responseCapture = "uninitialized";
-    const fullContext = this.adjustPrompt(userPromptTextFromFile, context); // Use the cleaned-up prompt
     this.openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [
@@ -111,14 +146,20 @@ class ConversationExtender {
         responseCapture = message;
         let responseJson = JSON.parse(message.content);
 
-        const responseLines = this.removeMatchingElements(context.lines, responseJson.lines);
+        let responseLines = this.removeMatchingElements(originalLines, responseJson.lines);
+        if (playerName) {
+          console.log("Player name caught in lines");
+          responseLines = this.removePlayerFromLines(responseLines, playerName);
+        }
         callback(null, responseLines);
       } catch (e) {
+        console.log("Error context:", fullContext);
+        console.error("Problematic message: ", responseCapture.content);
         callback(e, null);
       }
     })
     .catch(err => {
-      console.log("extendConversation response error in", responseCapture, "\n\nError:", err);
+      console.log("extendConversation response error in", responseCapture.content, "\n\nError:", err);
       callback(err, null);
     });
   }

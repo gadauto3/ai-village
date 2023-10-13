@@ -1,5 +1,5 @@
 #!/bin/bash
-cd frontend
-npx babel src --out-dir public/js --presets react-app/prod
+cd frontend/
+npm run build
 cd ..
 terraform apply -auto-approve

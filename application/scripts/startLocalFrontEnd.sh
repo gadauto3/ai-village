@@ -1,3 +1,4 @@
 #!/bin/bash
 cd frontend
-npm run start
+open http://localhost:8080/
+npm run dev
