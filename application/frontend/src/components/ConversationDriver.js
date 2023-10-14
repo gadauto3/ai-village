@@ -4,7 +4,10 @@ import { GameState, iconsPath } from "./utils";
 import "../css/ConversationDriver.css";
 
 const ConversationDriver = ({ conversation, gameState }) => {
-  if (!conversation) return <div className="conversation-driver">Please select a conversation</div>;
+  if (!conversation)
+    return (
+      <div className="conversation-driver"></div>
+    );
 
   const getIconPath = (name) => {
       const person = conversation.people.find(p => p.name === name);

@@ -6,7 +6,6 @@ import ConversationDriver from './ConversationDriver';
 import Instructions from './Instructions';
 
 import "../css/UIController.css";
-import conversationData from './conversationSeeds.json';
 
 const UIController = () => {
   
@@ -15,16 +14,11 @@ const UIController = () => {
   const [selectedConversation, setSelectedConversation] = useState(null);
 
   useEffect(() => {
-    // This is where you would normally fetch the data from an API or other source.
-    // For now, we'll use the provided data.
-    setConversations(conversationData);
-
-    // Set the first conversation as the default selected one
-    if (conversationData.length > 0) {
-      setSelectedConversation(conversationData[0]);
+    if (conversations.length > 1 && gameState == GameState.INIT) {
+      setGameState(GameState.NOTICE_AI);
     }
-  }, []);
-
+  }, [conversations]);
+  
   return (
     <div>
     <h1 className="text-center title-noto-sans">
@@ -34,6 +28,8 @@ const UIController = () => {
       <div className="top-section">
         <ConversationChooser
           conversations={conversations}
+          setConversations={setConversations}
+          gameState={gameState}
           selectedConversation={selectedConversation}
           setSelectedConversation={setSelectedConversation}
         />

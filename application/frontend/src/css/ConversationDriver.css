@@ -2,7 +2,7 @@
   padding-top: 12px;
   padding-bottom: 10px; /* Padding to give some space above the border */
   border-bottom: 1px solid #D4D4D4; /* Example gray border */
-  background-color: #f6f2f2;
+  background-color: #f5f1ee;
   display: flex;           /* Makes .participants a flex container */
   align-items: center;     /* Vertically centers all direct children of .participants */
 }
@@ -20,6 +20,7 @@
   display: inline-flex;
   align-items: center;
   margin-left: 10px;
+  color: #23282f;
 }
 
 .participant.first {

@@ -1,58 +1,133 @@
-import React, { useState } from 'react';
-import { iconsPath } from "./utils";
+import React, { useState } from "react";
+import { GameState, MAX_CONVOS, iconsPath, isLocalHost } from "./utils";
+import { getConversations } from './APIService';
+
+import conversationData from './conversationSeeds.json';
 
 import "../css/ConversationChooser.css";
 import "../css/utils.css";
 
-const ConversationChooser = ({ conversations, selectedConversation, setSelectedConversation }) => {
+const ConversationChooser = ({
+  conversations,
+  setConversations,
+  gameState,
+  selectedConversation,
+  setSelectedConversation
+}) => {
   const [areConversationsSet, setAreConversationsSet] = useState(false);
+  const [isConvosMax, setIsConvosMax] = useState(false);
   const [preInitConvos, setPreInitConvos] = useState(["Conversation 1"]);
 
-  
-    return (
+  const addConversation = () => {
+    const convos = [...preInitConvos];
+
+    if (convos.length == MAX_CONVOS) {
+      setIsConvosMax(true);
+    } else {
+      convos.push("Conversation " + (convos.length + 1));
+      setPreInitConvos(convos);
+    }
+  };
+
+  const clickStart = () => {
+    setAreConversationsSet(true);
+    getConversations(preInitConvos.length, handleSuccess, handleError);
+  };
+
+  const handleSuccess = (conversations) => {
+    setConversations(conversations);
+    setIsApiSuccess(true);
+  };
+
+  const handleError = (err) => {
+    console.log("retrieveConversations api error\n", err);
+
+    if (isLocalHost()) {
+      makeMockLines();
+    } else {
+      alert("Sorry, failed to retrieve conversations due to an error, try refreshing.\n" + err);
+    }
+  };
+
+  const makeMockLines = () => {
+    setConversations(conversationData);
+
+    // Set the first conversation as the default selected one
+    // if (conversationData.length > 0) {
+    //   setSelectedConversation(conversationData[0]);
+    // }
+  }
+
+  return (
     <div className="conversation-chooser">
-    {areConversationsSet && conversations.map((conversation, index) => (
-        <div 
+      {areConversationsSet &&
+        conversations.map((conversation, index) => (
+          <div
             key={index}
-            className={`conversation-item ${conversation === selectedConversation ? 'selected' : ''}`}
+            className={`conversation-item ${
+              conversation === selectedConversation ? "selected" : ""
+            }`}
             onClick={() => setSelectedConversation(conversation)}
-        >
+          >
             <div className="image-container">
-                <img src={`${iconsPath}/${conversation.people[0].icon}`} alt="Bottom Image" className="bottom-image"/>
-                <img src={`${iconsPath}/${conversation.people[1].icon}`} alt="Top Image" className="top-image"/>
+              <img
+                src={`${iconsPath}/${conversation.people[0].icon}`}
+                alt="Bottom Image"
+                className="bottom-image"
+              />
+              <img
+                src={`${iconsPath}/${conversation.people[1].icon}`}
+                alt="Top Image"
+                className="top-image"
+              />
             </div>
-            
+
             <div className="text-container">
-                <span className={`conversation-item-names ${conversation === selectedConversation ? 'selected' : ''}`}>
-                    {conversation.people.map(person => person.name).join(', ')}
-                </span>
-                <span className={`conversation-item-preview ${conversation === selectedConversation ? 'selected' : ''}`}>
-                    {conversation.people[0].currentLine.split(' ').slice(0, 4).join(' ')}...
-                </span>
+              <span
+                className={`conversation-item-names ${
+                  conversation === selectedConversation ? "selected" : ""
+                }`}
+              >
+                {conversation.people.map((person) => person.name).join(", ")}
+              </span>
+              <span
+                className={`conversation-item-preview ${
+                  conversation === selectedConversation ? "selected" : ""
+                }`}
+              >
+                {conversation.people[0].currentLine.split(" ").slice(0, 4).join(" ")}
+                ...
+              </span>
             </div>
-        </div>
-    ))}
+          </div>
+        ))}
 
-    {!areConversationsSet && preInitConvos.map((preConvo, index) => (
-        <div 
-            key={index}
-            className="conversation-item"
-        > 
+      {!areConversationsSet &&
+        preInitConvos.map((preConvo, index) => (
+          <div key={index} className="conversation-item">
             <div className="text-container spacing">
-                <span className="conversation-item-names">
-                    {preConvo}
-                </span>
+              <span className="conversation-item-names">{preConvo}</span>
             </div>
-        </div>
-    ))}
+          </div>
+        ))}
 
-    
-    <button className="add-conversation-button">Add conversation</button>
-    <button className="start-button">Start</button>
-</div>
+      {gameState == GameState.INIT && (
+        <button
+          className="add-conversation-button"
+          onClick={addConversation}
+          disabled={isConvosMax}
+        >
+          Add conversation
+        </button>
+      )}
 
+      {gameState == GameState.INIT && (
+        <button className="start-button" onClick={clickStart}>
+          Start
+        </button>
+      )}
+    </div>
   );
-}
-
+};
 
 export default ConversationChooser;

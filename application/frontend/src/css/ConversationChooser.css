@@ -1,7 +1,7 @@
 .conversation-chooser {
     display: flex;
     flex-direction: column;
-    background-color: #e7e4e2;
+    background-color: #eeeae7;
 }
 
 .conversation-item {
@@ -59,6 +59,7 @@
 
 .conversation-item-names {
   font-weight: bold; /* Bold names */
+  color: #23282f;
 }
 
 .conversation-item-names.selected {
@@ -94,9 +95,9 @@
 }
 
 /* Optional: Effect when the button is pressed/clicked */
-.button:active {
+.add-conversation-button:disabled, .start-button:disabled {
   top: 1px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  box-shadow: none;
 }
 
 .add-conversation-button:hover {

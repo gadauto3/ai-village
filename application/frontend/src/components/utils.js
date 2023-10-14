@@ -17,6 +17,8 @@ export const GameState = Object.freeze({
   SHOW_CREDITS: 4,
 }); 
 
+export const MAX_CONVOS = 7;
+
 export const config = {
   apiPrefix: "/dev",
 };
