@@ -1,0 +1,104 @@
+.conversation-chooser {
+    display: flex;
+    flex-direction: column;
+    background-color: #e7e4e2;
+}
+
+.conversation-item {
+  padding: 0px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #dfdbdb;
+  border-radius: 8px; /* Rounded corners */
+  cursor: pointer; /* Hand cursor on hover */
+  display: flex;
+  align-items: center; /* This will vertically center the image container and the text container */
+}
+
+.conversation-item.selected {
+  background-color: #3478F6;
+}
+
+.conversation-item:hover {
+  background-color: #d5d5d5; /* Slightly darker background on hover */
+}
+
+.image-container {
+  margin-left: 10px;
+  margin-right: 15px; /* Spacing between the images and the text */
+  position: relative;
+  width: [width_of_image]px;  
+  height: [height_of_image]px;
+}
+
+.conversation-item img {
+  width: 36px;
+  height: 36px;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+.bottom-image {
+  z-index: 2;  /* This will make the bottom image appear on top */
+  display: block;
+  position: relative;  /* This makes the image a positioned element */
+}
+
+.top-image {
+  position: absolute; 
+  bottom: 0px;  /* This offsets the image 15 pixels from the bottom */
+  left: 14px;  /* This ensures the image is aligned to the left edge of the container */
+  z-index: 1;  /* This will make the top image appear beneath the bottom image */
+}
+
+.text-container {
+  display: flex;
+  flex-direction: column; /* This keeps the names on top of the previews */
+}
+
+.conversation-item-names {
+  font-weight: bold; /* Bold names */
+}
+
+.conversation-item-names.selected {
+  color: #fff;
+}
+
+.conversation-item-preview {
+  display: block;
+  margin-top: 0px; /* Some space between names and preview text */
+  color: #888; /* Grayish text color for the preview */
+}
+
+.conversation-item-preview.selected {
+  color: #fff;
+}
+
+.add-conversation-button {
+  margin-top: auto; /* Pushes the button to the bottom */
+}
+
+.add-conversation-button, .start-button {
+  padding: 10px 20px;
+  border: 2px solid #fff;
+  border-radius: 5px;
+  background-color: #e6e6e8;
+  cursor: pointer;
+  margin-right: 12px;
+  margin-left: 12px;
+  margin-bottom: 12px;
+  position: relative;
+  transition: all 0.3s ease; /* Smoothens the effect of pressing the button */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); /* Adds a soft shadow beneath the button */
+}
+
+/* Optional: Effect when the button is pressed/clicked */
+.button:active {
+  top: 1px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.add-conversation-button:hover {
+  background-color: #d5d5d5;
+}

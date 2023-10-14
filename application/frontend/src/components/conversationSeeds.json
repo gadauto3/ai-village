@@ -1,0 +1,144 @@
+[
+    {
+        "color": "#A8DADC",
+        "people": [
+            {
+                "name": "Maria",
+                "icon": "icons8-old-woman-medium-light-skin-tone-48.png",
+                "currentLine": "Leo, did you ever hear about those moths that have a sneaky relationship with ants?"
+            },
+            {
+                "name": "Leo",
+                "icon": "icons8-man-medium-skin-tone-48.png",
+                "currentLine": "👈🏽"
+            }
+        ],
+        "lines": [
+            {
+                "name": "Maria",
+                "text": "Leo, did you ever hear about those moths that have a sneaky relationship with ants?"
+            },
+            {
+                "name": "Leo",
+                "text": "Oh, I think so! They produce a sweet milk that ants love, right?"
+            },
+            {
+                "name": "Maria",
+                "text": "Exactly! The caterpillars bribe the ants with this treat, and in return, ants protect them from predators. Some ants even bring them into their nests."
+            },
+            {
+                "name": "Leo",
+                "text": "But doesn't it turn a bit dark inside the nest? I've heard some caterpillars then start feasting on ant babies!"
+            },
+            {
+                "name": "Maria",
+                "text": "You're spot on. While some caterpillars just enjoy the protection, others eat their \"siblings\" o_O. And then, after their trickery, they fly away as moths to start the cycle anew."
+            },
+            {
+                "name": "Leo",
+                "text": "Nature's full of such fascinating dynamics. A mix of collaboration and cunning!"
+            }
+        ],
+        "currentLineIndex": 0
+    },
+    {
+        "color": "#F4A261",
+        "people": [
+            {
+                "name": "Mika",
+                "icon": "icons8-woman-with-beard-light-skin-tone-48.png",
+                "currentLine": "You know, Helen, I was reading about that crazy stunt the artist Banksy pulled off a while ago, sneaking his own art into world-famous museums."
+            },
+            {
+                "name": "Helen",
+                "icon": "icons8-old-woman-medium-dark-skin-tone-48.png",
+                "currentLine": "👈🏽"
+            }
+        ],
+        "lines": [
+            {
+                "name": "Mika",
+                "text": "You know, Helen, I was reading about that crazy stunt the artist Banksy pulled off a while ago, sneaking his own art into world-famous museums."
+            },
+            {
+                "name": "Helen",
+                "text": "Oh, you mean when he slipped those real-looking paintings into the main art museums in San Francisco and New York? Brilliant and hilarious!"
+            },
+            {
+                "name": "Mika",
+                "text": "Didn't he also place that insect with fighter jet wings in the American Museum of Natural History? Imagine visitors walking by, thinking it's genuine."
+            },
+            {
+                "name": "Helen",
+                "text": "Exactly! It's like he was playfully mocking the sanctity of these revered institutions. Making people think: who gets to decide what is art?"
+            },
+            {
+                "name": "Mika",
+                "text": "Apparently, his sister once teased him, saying,\"It's not like any of your pieces will actually end up in the Louvre.\" Can you imagine?"
+            },
+            {
+                "name": "Helen",
+                "text": "It's such a Banksy move. Taking a playful jest and turning it into a powerful statement about art and its institutions."
+            },
+            {
+                "name": "Mika",
+                "text": "Yes! It wasn't just about proving his sister wrong, but questioning the entire establishment. Who decides what's worthy of being in a museum?"
+            },
+            {
+                "name": "Helen",
+                "text": "It's not just about the art, but the statement. Banksy really knows how to leave an impression, both on the canvas and in our minds."
+            },
+            {
+                "name": "Mika",
+                "text": "Know of any other clever stunts pulled by famous artists?"
+            }
+        ],
+        "currentLineIndex": 0
+    },
+    {
+        "color": "#2A9D8F",
+        "people": [
+            {
+                "name": "Sivan",
+                "icon": "icons8-older-person-medium-dark-skin-tone-48.png",
+                "currentLine": "Hey Violet, did you know the Earth's magnetic poles flip, weakening the field?"
+            },
+            {
+                "name": "Violet",
+                "icon": "icons8-girl-medium-skin-tone-48.png",
+                "currentLine": "👈🏽"
+            }
+        ],
+        "lines": [
+            {
+                "name": "Sivan",
+                "text": "Hey Violet, did you know the Earth's magnetic poles flip, weakening the field?"
+            },
+            {
+                "name": "Violet",
+                "text": "Yes, over thousands of years! At those times, more cosmic and solar radiation would get down to us here on Earth."
+            },
+            {
+                "name": "Sivan",
+                "text": "Sounds concerning. Would it harm us or our tech?"
+            },
+            {
+                "name": "Violet",
+                "text": "Our atmosphere protects us to an extent, but satellites could be affected. And we might see more auroras, even in places like New York!"
+            },
+            {
+                "name": "Sivan",
+                "text": "What about animals that rely on the magnetic field?"
+            },
+            {
+                "name": "Violet",
+                "text": "Migratory animals like birds could get confused. But remember, these changes happen slowly, giving time for adaptation."
+            },
+            {
+                "name": "Sivan",
+                "text": "Crazy, what other strange facts do you know about the Earth?"
+            }
+        ],
+        "currentLineIndex": 0
+    }
+]

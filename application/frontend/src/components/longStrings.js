@@ -1,5 +1,22 @@
 import React from "react";
 
+export const InstructionsInit =
+  'Use "Add conversation" to add more conversations to the game. The more you\
+  add, the higher the possible score, but it may make the game more difficult.';
+
+export const InstructionsNoticeAI2 =
+  'Now your goal is to select the "I\'m noticing AI generation" button when you\
+  think you notice that the AI is creating further conversation between the people.\
+  The AI thinks that it is a playwright making up further dialogue\
+  The highest score is 15 per conversation. You can guess once per conversation.';
+
+export const InstructionsInteract =
+  'Now it\'s time to discover how the AI behaves and reacts to your input. You have\
+  3 chances per game to add input to conversations.';
+
+export const InstructionsShowCredits =
+  'Hope you\'re enjoying the game!';
+
 export const InstructionsStart = () => (
   <p>
     Start by using Add Conversation. The more conversations you choose to add,
@@ -23,10 +40,11 @@ export const InstructionsNoticeAI = () => (
 
 export const InstructionsStageTwo = () => (
   <React.Fragment>
-    Now it's time to discover how the AI behaves and reacts to your input.<br />
-    Use a token below to influence the villagers in your favorite conversation above. 
-    The targets show you the countdown until the change. You may 
-    choose to observe as the conversation evolves, or use tokens to change it.
+    Now it's time to discover how the AI behaves and reacts to your input.
+    <br />
+    Use a token below to influence the villagers in your favorite conversation
+    above. The targets show you the countdown until the change. You may choose
+    to observe as the conversation evolves, or use tokens to change it.
   </React.Fragment>
 );
 
@@ -37,7 +55,7 @@ export const tipForGoodGame =
   "You're on the right track honestly. You'll have\n\
   an advantage when you get conversations that you've already seen.";
 
-export const patienceRequest = 
+export const patienceRequest =
   "Hi, this is Gabriel. Thanks for your patience with this prototype.\
   \nWould you try another conversation or this one again in 5 seconds?";
 

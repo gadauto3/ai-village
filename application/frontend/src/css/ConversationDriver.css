@@ -1,0 +1,81 @@
+.participants {
+  padding-top: 12px;
+  padding-bottom: 10px; /* Padding to give some space above the border */
+  border-bottom: 1px solid #D4D4D4; /* Example gray border */
+  background-color: #f6f2f2;
+  display: flex;           /* Makes .participants a flex container */
+  align-items: center;     /* Vertically centers all direct children of .participants */
+}
+
+.to-label {
+  color: #7f7d7d;
+  margin-left: 48px;
+}
+
+.spacer {
+  margin-left: 50px;
+}
+
+.participant {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.participant.first {
+  margin-left: 4px;
+}
+
+.participant img {
+  margin-left: 2px;
+  margin-right: 2px;
+  height: 32px;
+  width: 32px;
+}
+
+.line-item {
+  display: flex;
+  align-items: flex-end; /* Align the bottom of the icon with the bottom of the text container */
+  margin-bottom: 15px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.line-item.first {
+  margin-top: 20px;
+}
+
+.line-item img {
+  margin-right: 10px;
+  height: 32px;
+  width: 32px;
+}
+
+.line-container {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px; /* Rounded corners */
+  border: 1px solid #DDD;
+  overflow-wrap: break-word; /* Wrap long words */
+}
+
+.driver-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px;
+}
+
+.next-button, .notice-button {
+  padding: 10px 20px;
+  border: 1px solid #fff;
+  border-radius: 5px;
+  background-color: #e6e6e8;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease; /* Smoothens the effect of pressing the button */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); /* Adds a soft shadow beneath the button */
+}
+
+.next-button:hover, .notice-button:hover {
+  background-color: #d5d5d5;
+}

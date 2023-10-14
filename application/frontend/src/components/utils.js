@@ -10,6 +10,13 @@ export function isLocalHost() {
   }
 }
 
+export const GameState = Object.freeze({
+  INIT: 1,
+  NOTICE_AI: 2,
+  INTERACT: 3,
+  SHOW_CREDITS: 4,
+}); 
+
 export const config = {
   apiPrefix: "/dev",
 };
