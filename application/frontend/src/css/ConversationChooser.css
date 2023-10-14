@@ -42,13 +42,21 @@
 .bottom-image {
   z-index: 2;  /* This will make the bottom image appear on top */
   display: block;
+  bottom: 2px;
   position: relative;  /* This makes the image a positioned element */
 }
 
 .top-image {
   position: absolute; 
-  bottom: 0px;  /* This offsets the image 15 pixels from the bottom */
+  bottom: 0px;  /* This offsets the image from the bottom */
   left: 14px;  /* This ensures the image is aligned to the left edge of the container */
+  z-index: 1;  /* This will make the top image appear beneath the bottom image */
+}
+
+.top-image2 {
+  position: absolute; 
+  bottom: 0px;  /* This offsets the image from the bottom */
+  left: 10px;  /* This ensures the image is aligned to the left edge of the container */
   z-index: 1;  /* This will make the top image appear beneath the bottom image */
 }
 

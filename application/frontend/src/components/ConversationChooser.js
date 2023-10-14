@@ -18,6 +18,8 @@ const ConversationChooser = ({
   const [isConvosMax, setIsConvosMax] = useState(false);
   const [preInitConvos, setPreInitConvos] = useState(["Conversation 1"]);
 
+  const defaultHeadIcon = "icons8-head-profile-50.png";
+
   const addConversation = () => {
     const convos = [...preInitConvos];
 
@@ -105,6 +107,18 @@ const ConversationChooser = ({
       {!areConversationsSet &&
         preInitConvos.map((preConvo, index) => (
           <div key={index} className="conversation-item">
+            <div className="image-container">
+              <img
+                src={`${iconsPath}/${defaultHeadIcon}`}
+                alt="Bottom Image"
+                className="bottom-image"
+              />
+              <img
+                src={`${iconsPath}/${defaultHeadIcon}`}
+                alt="Top Image"
+                className="top-image2"
+              />
+            </div>
             <div className="text-container spacing">
               <span className="conversation-item-names">{preConvo}</span>
             </div>
