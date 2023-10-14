@@ -1,3 +1,9 @@
+.conversation-driver {
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Take up full height of parent */
+}
+
 .participants {
   padding-top: 12px;
   padding-bottom: 10px; /* Padding to give some space above the border */
@@ -10,10 +16,6 @@
 .to-label {
   color: #7f7d7d;
   margin-left: 48px;
-}
-
-.spacer {
-  margin-left: 50px;
 }
 
 .participant {
@@ -32,6 +34,11 @@
   margin-right: 2px;
   height: 32px;
   width: 32px;
+}
+
+.lines-container {
+  flex-grow: 1; /* Make it take up all available space */
+  overflow-y: auto; /* Add scrolling if the content exceeds container height */
 }
 
 .line-item {

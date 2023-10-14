@@ -1,9 +1,18 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { GameState, iconsPath } from "./utils";
 
 import "../css/ConversationDriver.css";
 
 const ConversationDriver = ({ conversation, gameState }) => {
+  const [conversationIndex, setConversationIndex] = useState(0);
+  const linesContainerRef = useRef(null);
+
+  useEffect(() => {
+      if (linesContainerRef.current) {
+          linesContainerRef.current.scrollTop = linesContainerRef.current.scrollHeight;
+      }
+  }, [conversationIndex]);
+
   if (!conversation)
     return (
       <div className="conversation-driver"></div>
@@ -16,6 +25,10 @@ const ConversationDriver = ({ conversation, gameState }) => {
       }
       return ''; // default if no icon found
   }
+
+  const handleNextClick = () => {
+    setConversationIndex(prevIndex => prevIndex + 1);
+  };
 
   return (
     <div className="conversation-driver">
@@ -31,17 +44,26 @@ const ConversationDriver = ({ conversation, gameState }) => {
           </span>
         ))}
       </div>
-      {conversation.lines.map((line, index) => (
-        <div key={index} className={`line-item ${index === 0 ? "first" : ""}`}>
-          <img src={getIconPath(line.name)} alt={line.name} />
-          <div className="line-container">
-            <span>{line.text}</span>
-          </div>
-        </div>
-      ))}
+
+      <div className="lines-container" ref={linesContainerRef}>
+        {conversation.lines.slice(0, conversationIndex + 1).map((line, index) => (
+            <div
+              key={index}
+              className={`line-item ${index === 0 ? "first" : ""}`}
+            >
+              <img src={getIconPath(line.name)} alt={line.name} />
+              <div className="line-container">
+                <span>{line.text}</span>
+              </div>
+            </div>
+          ))}
+      </div>
+
       <div className="driver-buttons">
         {gameState > GameState.INIT && (
-          <button className="next-button">Next</button>
+          <button className="next-button" onClick={handleNextClick}>
+            Next
+          </button>
         )}
         {gameState > GameState.INIT && (
           <button className="notice-button">I'm noticing AI generation</button>
