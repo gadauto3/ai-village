@@ -4,6 +4,7 @@
   height: 100%; /* Take up full height of parent */
 }
 
+/* Header with To: participants */
 .participants {
   padding-top: 12px;
   padding-bottom: 10px; /* Padding to give some space above the border */
@@ -29,13 +30,7 @@
   margin-left: 4px;
 }
 
-.participant img {
-  margin-left: 2px;
-  margin-right: 2px;
-  height: 32px;
-  width: 32px;
-}
-
+/* Main area containing lines of the conversation */
 .lines-container {
   flex-grow: 1; /* Make it take up all available space */
   overflow-y: auto; /* Add scrolling if the content exceeds container height */
@@ -47,6 +42,23 @@
   margin-bottom: 15px;
   margin-left: 12px;
   margin-right: 20px;
+  position: relative; /* Added for the AI message positioning */
+}
+
+.line-message {
+  position: absolute;
+  top: -20px; /* Adjust as needed */
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 3px 6px;
+  border-radius: 3px;
+  font-size: 0.9rem;
+}
+
+/* Row of content in the line - image, text field, checkbox (when active) */
+.line-content {
+  display: flex;
+  align-items: flex-end;
 }
 
 .line-item.first {
@@ -65,6 +77,8 @@
   border-radius: 14px; /* Rounded corners */
   background-color: #f1f1f1;
   overflow-wrap: break-word; /* Wrap long words */
+  display: flex; /* Added for aligning the text and checkbox */
+  align-items: center; /* Align the content of line-container vertically */
 }
 
 .line-checkbox {

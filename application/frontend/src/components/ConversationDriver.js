@@ -3,7 +3,7 @@ import { GameState, iconsPath } from "./utils";
 
 import "../css/ConversationDriver.css";
 
-const ConversationDriver = ({ conversation, gameState, setGameState }) => {
+const ConversationDriver = ({ conversation, updateConversation, gameState, setGameState }) => {
   const [conversationIndex, setConversationIndex] = useState(0);
   const [showCheckboxes, setShowCheckboxes] = useState(false);  // To show/hide checkboxes
   const [checkedIndex, setCheckedIndex] = useState(null);  // Index of the checked checkbox
@@ -43,6 +43,11 @@ const ConversationDriver = ({ conversation, gameState, setGameState }) => {
       setGameState(GameState.SELECT_AI);
       setShowCheckboxes(true);
     } else {
+      // Deep clone the current conversation to avoid direct state mutation
+      let updatedConversation = JSON.parse(JSON.stringify(conversation));
+      updatedConversation.lines[checkedIndex].message = "You selected this message"; 
+      updateConversation(updatedConversation);
+
       setGameState(GameState.NOTICE_AI);
       setCheckedIndex(null);
       setShowCheckboxes(false);
@@ -73,36 +78,54 @@ const ConversationDriver = ({ conversation, gameState, setGameState }) => {
       </div>
 
       <div className="lines-container" ref={linesContainerRef}>
-        {conversation.lines.slice(0, conversationIndex + 1).map((line, index) => (
+        {conversation.lines
+          .slice(0, conversationIndex + 1)
+          .map((line, index) => (
             <div
               key={index}
               className={`line-item ${index === 0 ? "first" : ""}`}
             >
-              <img src={getIconPath(line.name)} alt={line.name} />
-              <div className="line-container">
-                <span>{line.text}</span>
-              </div>
-                {showCheckboxes && 
-                  <input 
-                    type="checkbox" 
-                    className="line-checkbox" 
+              {line.message && (
+                <span className="line-message">{line.message}</span>
+              )}
+
+              <div className="line-content">
+                <img src={getIconPath(line.name)} alt={line.name} />
+                <div className="line-container">
+                  <span>{line.text}</span>
+                </div>
+                {showCheckboxes && (
+                  <input
+                    type="checkbox"
+                    className="line-checkbox"
                     checked={checkedIndex === index}
                     onChange={() => handleCheckboxChange(index)}
                   />
-                }
+                )}
+              </div>
             </div>
           ))}
       </div>
 
       <div className="driver-buttons">
         {gameState >= GameState.NEXT_CONVO && (
-          <button className="next-button" onClick={handleNextClick} disabled={showCheckboxes}>
+          <button
+            className="next-button"
+            onClick={handleNextClick}
+            disabled={showCheckboxes}
+          >
             Next
           </button>
         )}
         {gameState >= GameState.NOTICE_AI && (
-          <button className="notice-button" onClick={handleNoticeClick} disabled={isNoticeDisabled()}>
-            {gameState == GameState.SELECT_AI ? "Submit guess" : "I'm noticing AI generation"}
+          <button
+            className="notice-button"
+            onClick={handleNoticeClick}
+            disabled={isNoticeDisabled()}
+          >
+            {gameState == GameState.SELECT_AI
+              ? "Submit guess"
+              : "I'm noticing AI generation"}
           </button>
         )}
       </div>

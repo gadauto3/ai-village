@@ -1,6 +1,8 @@
 [
     {
         "color": "#A8DADC",
+        "key": 1,
+        "currentLineIndex": 0,
         "people": [
             {
                 "name": "Maria",
@@ -16,33 +18,41 @@
         "lines": [
             {
                 "name": "Maria",
+                "message": null,
                 "text": "Leo, did you ever hear about those moths that have a sneaky relationship with ants?"
             },
             {
                 "name": "Leo",
+                "message": null,
                 "text": "Oh, I think so! They produce a sweet milk that ants love, right?"
             },
             {
                 "name": "Maria",
+                "message": null,
                 "text": "Exactly! The caterpillars bribe the ants with this treat, and in return, ants protect them from predators. Some ants even bring them into their nests."
             },
             {
                 "name": "Leo",
+                "message": null,
                 "text": "But doesn't it turn a bit dark inside the nest? I've heard some caterpillars then start feasting on ant babies!"
             },
             {
                 "name": "Maria",
+                "message": null,
                 "text": "You're spot on. While some caterpillars just enjoy the protection, others eat their \"siblings\" o_O. And then, after their trickery, they fly away as moths to start the cycle anew."
             },
             {
                 "name": "Leo",
+                "message": null,
                 "text": "Nature's full of such fascinating dynamics. A mix of collaboration and cunning!"
             }
-        ],
-        "currentLineIndex": 0
+        ]
     },
     {
         "color": "#F4A261",
+        "key": 2,
+        "currentLineIndex": 0,
+        "message": null,
         "people": [
             {
                 "name": "Mika",
@@ -58,45 +68,56 @@
         "lines": [
             {
                 "name": "Mika",
+                "message": null,
                 "text": "You know, Helen, I was reading about that crazy stunt the artist Banksy pulled off a while ago, sneaking his own art into world-famous museums."
             },
             {
                 "name": "Helen",
+                "message": null,
                 "text": "Oh, you mean when he slipped those real-looking paintings into the main art museums in San Francisco and New York? Brilliant and hilarious!"
             },
             {
                 "name": "Mika",
+                "message": null,
                 "text": "Didn't he also place that insect with fighter jet wings in the American Museum of Natural History? Imagine visitors walking by, thinking it's genuine."
             },
             {
                 "name": "Helen",
+                "message": null,
                 "text": "Exactly! It's like he was playfully mocking the sanctity of these revered institutions. Making people think: who gets to decide what is art?"
             },
             {
                 "name": "Mika",
+                "message": null,
                 "text": "Apparently, his sister once teased him, saying,\"It's not like any of your pieces will actually end up in the Louvre.\" Can you imagine?"
             },
             {
                 "name": "Helen",
+                "message": null,
                 "text": "It's such a Banksy move. Taking a playful jest and turning it into a powerful statement about art and its institutions."
             },
             {
                 "name": "Mika",
+                "message": null,
                 "text": "Yes! It wasn't just about proving his sister wrong, but questioning the entire establishment. Who decides what's worthy of being in a museum?"
             },
             {
                 "name": "Helen",
+                "message": null,
                 "text": "It's not just about the art, but the statement. Banksy really knows how to leave an impression, both on the canvas and in our minds."
             },
             {
                 "name": "Mika",
+                "message": null,
                 "text": "Know of any other clever stunts pulled by famous artists?"
             }
-        ],
-        "currentLineIndex": 0
+        ]
     },
     {
         "color": "#2A9D8F",
+        "key": 3,
+        "currentLineIndex": 0,
+        "message": null,
         "people": [
             {
                 "name": "Sivan",
@@ -112,33 +133,39 @@
         "lines": [
             {
                 "name": "Sivan",
+                "message": null,
                 "text": "Hey Violet, did you know the Earth's magnetic poles flip, weakening the field?"
             },
             {
                 "name": "Violet",
+                "message": "asdfasdfsadf",
                 "text": "Yes, over thousands of years! At those times, more cosmic and solar radiation would get down to us here on Earth."
             },
             {
                 "name": "Sivan",
+                "message": null,
                 "text": "Sounds concerning. Would it harm us or our tech?"
             },
             {
                 "name": "Violet",
+                "message": null,
                 "text": "Our atmosphere protects us to an extent, but satellites could be affected. And we might see more auroras, even in places like New York!"
             },
             {
                 "name": "Sivan",
+                "message": null,
                 "text": "What about animals that rely on the magnetic field?"
             },
             {
                 "name": "Violet",
+                "message": null,
                 "text": "Migratory animals like birds could get confused. But remember, these changes happen slowly, giving time for adaptation."
             },
             {
                 "name": "Sivan",
+                "message": null,
                 "text": "Crazy, what other strange facts do you know about the Earth?"
             }
-        ],
-        "currentLineIndex": 0
+        ]
     }
 ]

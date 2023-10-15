@@ -19,6 +19,22 @@ const UIController = () => {
     }
   }, [conversations]);
   
+  const handleUpdateConversation = (updatedConversation) => {
+    // Find the index of the conversation with the same key as updatedConversation
+    const index = conversations.findIndex(convo => convo.key === updatedConversation.key);
+  
+    if (index !== -1) {
+      // Create a copy of the conversations array
+      const newConversations = [...conversations];
+  
+      // Replace the old conversation with the updated one
+      newConversations[index] = updatedConversation;
+  
+      // Update the state
+      setConversations(newConversations);
+    }
+  };  
+
   return (
     <div>
     <h1 className="text-center title-noto-sans">
@@ -35,6 +51,7 @@ const UIController = () => {
         />
         <ConversationDriver
           conversation={selectedConversation}
+          updateConversation={handleUpdateConversation}
           gameState={gameState}
           setGameState={setGameState}
         />
