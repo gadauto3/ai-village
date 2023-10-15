@@ -14,8 +14,9 @@ export const GameState = Object.freeze({
   INIT: 1,
   NEXT_CONVO: 2,
   NOTICE_AI: 3,
-  INTERACT: 4,
-  SHOW_CREDITS: 5,
+  SELECT_AI: 4,
+  INTERACT: 5,
+  SHOW_CREDITS: 6,
 }); 
 
 export const MAX_CONVOS = 7;

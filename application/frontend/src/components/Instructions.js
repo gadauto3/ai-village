@@ -6,6 +6,7 @@ import {
   InstructionsInteract,
   InstructionsNextConvo,
   InstructionsNoticeAI2,
+  InstructionsSelectAI,
   InstructionsShowCredits,
 } from "./longStrings";
 
@@ -16,6 +17,8 @@ const Instructions = (gameState) => {
         return InstructionsNextConvo;
       case GameState.NOTICE_AI:
         return InstructionsNoticeAI2;
+      case GameState.SELECT_AI:
+        return InstructionsSelectAI;
       case GameState.INTERACT:
         return InstructionsInteract;
       case GameState.SHOW_CREDITS:

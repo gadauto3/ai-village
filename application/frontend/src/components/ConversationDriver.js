@@ -9,7 +9,7 @@ const ConversationDriver = ({ conversation, gameState, setGameState }) => {
   const [checkedIndex, setCheckedIndex] = useState(null);  // Index of the checked checkbox
   const linesContainerRef = useRef(null);
 
-  const NOTICE_INDEX = 1;
+  const NOTICE_INDEX = 0;
 
   useEffect(() => {
       if (linesContainerRef.current) {
@@ -37,6 +37,21 @@ const ConversationDriver = ({ conversation, gameState, setGameState }) => {
       setGameState(GameState.NOTICE_AI);
     }
   };
+
+  const handleNoticeClick = () => {
+    if (gameState == GameState.NOTICE_AI){
+      setGameState(GameState.SELECT_AI);
+      setShowCheckboxes(true);
+    } else {
+      setGameState(GameState.NOTICE_AI);
+      setCheckedIndex(null);
+      setShowCheckboxes(false);
+    }
+  };
+
+  const isNoticeDisabled = () => {
+    return gameState == GameState.SELECT_AI && checkedIndex == null;
+  }
 
   const handleCheckboxChange = (index) => {
     setCheckedIndex(index);
@@ -86,8 +101,8 @@ const ConversationDriver = ({ conversation, gameState, setGameState }) => {
           </button>
         )}
         {gameState >= GameState.NOTICE_AI && (
-          <button className="notice-button" onClick={() => setShowCheckboxes(!showCheckboxes)}>
-            I'm noticing AI generation
+          <button className="notice-button" onClick={handleNoticeClick} disabled={isNoticeDisabled()}>
+            {gameState == GameState.SELECT_AI ? "Submit guess" : "I'm noticing AI generation"}
           </button>
         )}
       </div>
