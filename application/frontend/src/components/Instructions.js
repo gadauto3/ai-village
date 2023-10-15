@@ -4,14 +4,16 @@ import { GameState } from "./utils";
 import {
   InstructionsInit,
   InstructionsInteract,
+  InstructionsNextConvo,
   InstructionsNoticeAI2,
   InstructionsShowCredits,
 } from "./longStrings";
 
 const Instructions = (gameState) => {
   const getInstructionsForState = (gameState) => {
-    console.log("gameState", gameState);
     switch (gameState.gameState) {
+      case GameState.NEXT_CONVO:
+        return InstructionsNextConvo;
       case GameState.NOTICE_AI:
         return InstructionsNoticeAI2;
       case GameState.INTERACT:

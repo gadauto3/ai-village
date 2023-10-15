@@ -3,7 +3,7 @@ import { GameState, iconsPath } from "./utils";
 
 import "../css/ConversationDriver.css";
 
-const ConversationDriver = ({ conversation, gameState }) => {
+const ConversationDriver = ({ conversation, gameState, setGameState }) => {
   const [conversationIndex, setConversationIndex] = useState(0);
   const [showCheckboxes, setShowCheckboxes] = useState(false);  // To show/hide checkboxes
   const [checkedIndex, setCheckedIndex] = useState(null);  // Index of the checked checkbox
@@ -32,6 +32,10 @@ const ConversationDriver = ({ conversation, gameState }) => {
 
   const handleNextClick = () => {
     setConversationIndex(prevIndex => prevIndex + 1);
+
+    if (conversationIndex > NOTICE_INDEX) {
+      setGameState(GameState.NOTICE_AI);
+    }
   };
 
   const handleCheckboxChange = (index) => {
@@ -76,12 +80,12 @@ const ConversationDriver = ({ conversation, gameState }) => {
       </div>
 
       <div className="driver-buttons">
-        {gameState > GameState.INIT && (
+        {gameState >= GameState.NEXT_CONVO && (
           <button className="next-button" onClick={handleNextClick} disabled={showCheckboxes}>
             Next
           </button>
         )}
-        {gameState > GameState.INIT && conversationIndex > NOTICE_INDEX && (
+        {gameState >= GameState.NOTICE_AI && (
           <button className="notice-button" onClick={() => setShowCheckboxes(!showCheckboxes)}>
             I'm noticing AI generation
           </button>

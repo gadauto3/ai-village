@@ -12,9 +12,10 @@ export function isLocalHost() {
 
 export const GameState = Object.freeze({
   INIT: 1,
-  NOTICE_AI: 2,
-  INTERACT: 3,
-  SHOW_CREDITS: 4,
+  NEXT_CONVO: 2,
+  NOTICE_AI: 3,
+  INTERACT: 4,
+  SHOW_CREDITS: 5,
 }); 
 
 export const MAX_CONVOS = 7;

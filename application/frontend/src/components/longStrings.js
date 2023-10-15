@@ -4,6 +4,9 @@ export const InstructionsInit =
   'Use "Add conversation" to add more conversations to the game. The more you\
   add, the higher the possible score, but it may make the game more difficult.';
 
+export const InstructionsNextConvo =
+  'Select a messenger group them use "Next" to advance the conversation between them.';
+
 export const InstructionsNoticeAI2 =
   'Now your goal is to select the "I\'m noticing AI generation" button when you\
   notice that the AI is creating further conversation between the people.\

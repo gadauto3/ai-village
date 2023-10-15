@@ -15,7 +15,7 @@ const UIController = () => {
 
   useEffect(() => {
     if (conversations.length > 1 && gameState == GameState.INIT) {
-      setGameState(GameState.NOTICE_AI);
+      setGameState(GameState.NEXT_CONVO);
     }
   }, [conversations]);
   
@@ -36,6 +36,7 @@ const UIController = () => {
         <ConversationDriver
           conversation={selectedConversation}
           gameState={gameState}
+          setGameState={setGameState}
         />
       </div>
       <Instructions gameState={gameState} />
