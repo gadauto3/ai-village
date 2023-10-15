@@ -5,7 +5,8 @@ import "../css/ConversationDriver.css";
 
 const ConversationDriver = ({ conversation, gameState }) => {
   const [conversationIndex, setConversationIndex] = useState(0);
-  const [showCheckboxes, setShowCheckboxes] = useState(false); 
+  const [showCheckboxes, setShowCheckboxes] = useState(false);  // To show/hide checkboxes
+  const [checkedIndex, setCheckedIndex] = useState(null);  // Index of the checked checkbox
   const linesContainerRef = useRef(null);
 
   const NOTICE_INDEX = 1;
@@ -26,15 +27,15 @@ const ConversationDriver = ({ conversation, gameState }) => {
       if (person && person.icon) {
           return `${iconsPath}/${person.icon}`;
       }
-      return ''; // default if no icon found
+      return '';
   }
 
   const handleNextClick = () => {
     setConversationIndex(prevIndex => prevIndex + 1);
   };
 
-  const handleNoticeClick = () => {
-    setShowCheckboxes(prevState => !prevState);  // Toggle checkbox visibility
+  const handleCheckboxChange = (index) => {
+    setCheckedIndex(index);
   };
 
   return (
@@ -62,7 +63,14 @@ const ConversationDriver = ({ conversation, gameState }) => {
               <div className="line-container">
                 <span>{line.text}</span>
               </div>
-                {showCheckboxes && <input type="checkbox" className="line-checkbox" />}
+                {showCheckboxes && 
+                  <input 
+                    type="checkbox" 
+                    className="line-checkbox" 
+                    checked={checkedIndex === index}
+                    onChange={() => handleCheckboxChange(index)}
+                  />
+                }
             </div>
           ))}
       </div>
@@ -74,7 +82,9 @@ const ConversationDriver = ({ conversation, gameState }) => {
           </button>
         )}
         {gameState > GameState.INIT && conversationIndex > NOTICE_INDEX && (
-          <button className="notice-button" onClick={handleNoticeClick}>I'm noticing AI generation</button>
+          <button className="notice-button" onClick={() => setShowCheckboxes(!showCheckboxes)}>
+            I'm noticing AI generation
+          </button>
         )}
       </div>
     </div>
