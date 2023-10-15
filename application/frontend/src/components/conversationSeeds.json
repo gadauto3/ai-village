@@ -52,7 +52,6 @@
         "color": "#F4A261",
         "key": 2,
         "currentLineIndex": 0,
-        "message": null,
         "people": [
             {
                 "name": "Mika",
@@ -117,7 +116,6 @@
         "color": "#2A9D8F",
         "key": 3,
         "currentLineIndex": 0,
-        "message": null,
         "people": [
             {
                 "name": "Sivan",
@@ -138,7 +136,7 @@
             },
             {
                 "name": "Violet",
-                "message": "asdfasdfsadf",
+                "message": null,
                 "text": "Yes, over thousands of years! At those times, more cosmic and solar radiation would get down to us here on Earth."
             },
             {

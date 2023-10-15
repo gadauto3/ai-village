@@ -14,6 +14,7 @@ const UIController = () => {
   const [selectedConversation, setSelectedConversation] = useState(null);
 
   useEffect(() => {
+    console.log("conversations", conversations);
     if (conversations.length > 1 && gameState == GameState.INIT) {
       setGameState(GameState.NEXT_CONVO);
     }
@@ -38,7 +39,7 @@ const UIController = () => {
   return (
     <div>
     <h1 className="text-center title-noto-sans">
-      MessAIges
+      WhatsAIpp
     </h1>
     <div className="ui-controller">
       <div className="top-section">

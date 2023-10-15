@@ -38,27 +38,27 @@
 
 .line-item {
   display: flex;
-  align-items: flex-end; /* Align the bottom of the icon with the bottom of the text container */
-  margin-bottom: 15px;
+  flex-direction: column; /* Updated to stack children vertically */
+  align-items: center; /* Center content horizontally */
+  margin-bottom: 16px;
   margin-left: 12px;
   margin-right: 20px;
-  position: relative; /* Added for the AI message positioning */
 }
 
 .line-message {
-  position: absolute;
-  top: -20px; /* Adjust as needed */
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 3px 6px;
+  padding: 0px 6px;
   border-radius: 3px;
-  font-size: 0.9rem;
+  font-size: 0.7rem;
+  color: #a3a3a3;
+  text-align: center;
+  margin-bottom: 5px; /* Space between message and the line content */
 }
 
 /* Row of content in the line - image, text field, checkbox (when active) */
 .line-content {
   display: flex;
   align-items: flex-end;
+  width: 100%; /* Take the full width */
 }
 
 .line-item.first {

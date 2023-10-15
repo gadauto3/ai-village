@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { GameState, iconsPath } from "./utils";
+import { GameState, deepCopy, iconsPath } from "./utils";
 
 import "../css/ConversationDriver.css";
 
@@ -43,10 +43,12 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
       setGameState(GameState.SELECT_AI);
       setShowCheckboxes(true);
     } else {
+      const oldLine = conversation.lines[checkedIndex];
       // Deep clone the current conversation to avoid direct state mutation
-      let updatedConversation = JSON.parse(JSON.stringify(conversation));
-      updatedConversation.lines[checkedIndex].message = "You selected this message"; 
-      updateConversation(updatedConversation);
+      const updatedLine = deepCopy(oldLine);
+      updatedLine.message = "You selected this message";
+      conversation.lines[checkedIndex] = updatedLine;
+      updateConversation(conversation);
 
       setGameState(GameState.NOTICE_AI);
       setCheckedIndex(null);
