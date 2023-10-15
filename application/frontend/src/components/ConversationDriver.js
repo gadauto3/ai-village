@@ -5,7 +5,10 @@ import "../css/ConversationDriver.css";
 
 const ConversationDriver = ({ conversation, gameState }) => {
   const [conversationIndex, setConversationIndex] = useState(0);
+  const [showCheckboxes, setShowCheckboxes] = useState(false); 
   const linesContainerRef = useRef(null);
+
+  const NOTICE_INDEX = 1;
 
   useEffect(() => {
       if (linesContainerRef.current) {
@@ -28,6 +31,10 @@ const ConversationDriver = ({ conversation, gameState }) => {
 
   const handleNextClick = () => {
     setConversationIndex(prevIndex => prevIndex + 1);
+  };
+
+  const handleNoticeClick = () => {
+    setShowCheckboxes(prevState => !prevState);  // Toggle checkbox visibility
   };
 
   return (
@@ -55,6 +62,7 @@ const ConversationDriver = ({ conversation, gameState }) => {
               <div className="line-container">
                 <span>{line.text}</span>
               </div>
+                {showCheckboxes && <input type="checkbox" className="line-checkbox" />}
             </div>
           ))}
       </div>
@@ -65,8 +73,8 @@ const ConversationDriver = ({ conversation, gameState }) => {
             Next
           </button>
         )}
-        {gameState > GameState.INIT && (
-          <button className="notice-button">I'm noticing AI generation</button>
+        {gameState > GameState.INIT && conversationIndex > NOTICE_INDEX && (
+          <button className="notice-button" onClick={handleNoticeClick}>I'm noticing AI generation</button>
         )}
       </div>
     </div>

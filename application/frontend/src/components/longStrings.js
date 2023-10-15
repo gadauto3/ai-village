@@ -6,8 +6,8 @@ export const InstructionsInit =
 
 export const InstructionsNoticeAI2 =
   'Now your goal is to select the "I\'m noticing AI generation" button when you\
-  think you notice that the AI is creating further conversation between the people.\
-  The AI thinks that it is a playwright making up further dialogue.\
+  notice that the AI is creating further conversation between the people.\
+  The AI tries to be a playwright making up further dialogue.\
   The highest score is 15 per conversation. You can guess once per conversation.';
 
 export const InstructionsInteract =

@@ -17,7 +17,9 @@
   padding: 0px;
   padding-top: 6px;
   padding-bottom: 6px;
-  margin-bottom: 10px;
+  margin-left: 6px;
+  margin-right: 6px;
+  margin-top: 10px;
   border-bottom: 1px solid #dfdbdb;
   border-radius: 8px; /* Rounded corners */
   cursor: pointer; /* Hand cursor on hover */

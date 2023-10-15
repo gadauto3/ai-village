@@ -22,7 +22,7 @@ const UIController = () => {
   return (
     <div>
     <h1 className="text-center title-noto-sans">
-      iMessAIge
+      MessAIges
     </h1>
     <div className="ui-controller">
       <div className="top-section">

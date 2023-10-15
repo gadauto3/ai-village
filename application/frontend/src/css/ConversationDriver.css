@@ -45,7 +45,7 @@
   display: flex;
   align-items: flex-end; /* Align the bottom of the icon with the bottom of the text container */
   margin-bottom: 15px;
-  margin-left: 20px;
+  margin-left: 12px;
   margin-right: 20px;
 }
 
@@ -62,11 +62,17 @@
 .line-container {
   flex: 1;
   padding: 10px;
-  border-radius: 8px; /* Rounded corners */
-  border: 1px solid #DDD;
+  border-radius: 14px; /* Rounded corners */
+  background-color: #f1f1f1;
   overflow-wrap: break-word; /* Wrap long words */
 }
 
+.line-checkbox {
+  margin-left: 11px;
+  margin-bottom: 15px;
+}
+
+/* Bottom buttons */
 .driver-buttons {
   display: flex;
   justify-content: space-between;
