@@ -20,6 +20,7 @@ const ConversationChooser = ({
   const [preInitConvos, setPreInitConvos] = useState(["Conversation 1"]);
 
   const defaultHeadIcon = "icons8-head-profile-50.png";
+  const numPreviewChars = 25;
 
   const addConversation = () => {
     const convos = [...preInitConvos];
@@ -99,11 +100,9 @@ const ConversationChooser = ({
                   conversation === selectedConversation ? "selected" : ""
                 }`}
               >
-                {conversation.people[0].currentLine
-                  .split(" ")
-                  .slice(0, 4)
-                  .join(" ")}
-                ...
+                {conversation.people[0].currentLine.length > numPreviewChars
+                  ? conversation.people[0].currentLine.slice(0, numPreviewChars).trim() + "..."
+                  : conversation.people[0].currentLine}
               </span>
             </div>
           </div>

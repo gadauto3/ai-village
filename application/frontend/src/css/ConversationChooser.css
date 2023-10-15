@@ -83,6 +83,7 @@
 
 .conversation-item-names {
   font-weight: bold; /* Bold names */
+  font-size: 0.8rem;
   color: #23282f;
 }
 
@@ -91,6 +92,7 @@
 }
 
 .conversation-item-preview {
+  font-size: 0.8rem;
   display: block;
   margin-top: 0px; /* Some space between names and preview text */
   color: #888; /* Grayish text color for the preview */
