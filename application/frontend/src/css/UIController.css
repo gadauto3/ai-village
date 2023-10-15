@@ -25,7 +25,6 @@
   min-width: 240px;
   max-width: 248px;
   overflow-y: auto; /* Add scrolling if content exceeds pane height */
-  padding: 5px; /* Some padding for inner content */
   border-right: 1px solid #C0BCBB;
 }
 

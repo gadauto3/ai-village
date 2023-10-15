@@ -3,6 +3,7 @@ import { GameState, MAX_CONVOS, iconsPath, isLocalHost } from "./utils";
 import { getConversations } from './APIService';
 
 import conversationData from './conversationSeeds.json';
+import searchBarImg from '../assets/images/searchBar.png';
 
 import "../css/ConversationChooser.css";
 import "../css/utils.css";
@@ -62,6 +63,7 @@ const ConversationChooser = ({
 
   return (
     <div className="conversation-chooser">
+      <img className="search-bar" src={searchBarImg} alt="Search Bar" />
       {areConversationsSet &&
         conversations.map((conversation, index) => (
           <div
@@ -97,7 +99,10 @@ const ConversationChooser = ({
                   conversation === selectedConversation ? "selected" : ""
                 }`}
               >
-                {conversation.people[0].currentLine.split(" ").slice(0, 4).join(" ")}
+                {conversation.people[0].currentLine
+                  .split(" ")
+                  .slice(0, 4)
+                  .join(" ")}
                 ...
               </span>
             </div>
@@ -116,7 +121,7 @@ const ConversationChooser = ({
               <img
                 src={`${iconsPath}/${defaultHeadIcon}`}
                 alt="Top Image"
-                className="top-image2"
+                className="top-image"
               />
             </div>
             <div className="text-container spacing">

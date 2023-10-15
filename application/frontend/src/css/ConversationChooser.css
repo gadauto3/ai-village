@@ -4,6 +4,15 @@
     background-color: #eeeae7;
 }
 
+.search-bar {
+  padding-top: 15px; /* Adjust the space as desired */
+  padding-left: 4px; /* Adjust the space as desired */
+  padding-right: 4px; /* Adjust the space as desired */
+  border-bottom: 1px solid #C0BCBB; /* Adjust the color and thickness as desired */
+  padding-bottom: 4px; /* Adjust the space as desired */
+  display: block; /* Ensure the image behaves as a block element to accept padding and border correctly */
+}
+
 .conversation-item {
   padding: 0px;
   padding-top: 6px;
@@ -26,38 +35,45 @@
 
 .image-container {
   margin-left: 10px;
-  margin-right: 15px; /* Spacing between the images and the text */
+  margin-right: 15px;
   position: relative;
-  width: [width_of_image]px;  
-  height: [height_of_image]px;
+  width: 44px;  /* Adjust to desired width */
+  height: 44px; /* Adjust to desired height */
+}
+
+.image-container::before {
+  content: ""; /* Required for the pseudo-element to be generated */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Centers the circle */
+  width: 44px;  /* Adjust to desired width */
+  height: 44px; /* Adjust to desired height */
+  background-color: #f8f8f8; /* Circle color */
+  border-radius: 50%; /* Makes it a circle */
+  z-index: 0; /* Ensures the circle is behind the images */
 }
 
 .conversation-item img {
-  width: 36px;
-  height: 36px;
+  width: 18px;
+  height: 18px;
   margin-right: 5px;
   vertical-align: middle;
 }
 
 .bottom-image {
-  z-index: 2;  /* This will make the bottom image appear on top */
+  z-index: 2;
   display: block;
-  bottom: 2px;
-  position: relative;  /* This makes the image a positioned element */
+  position: relative;
+  left: 6px;
+  top: 4px;
 }
 
 .top-image {
   position: absolute; 
-  bottom: 0px;  /* This offsets the image from the bottom */
-  left: 14px;  /* This ensures the image is aligned to the left edge of the container */
-  z-index: 1;  /* This will make the top image appear beneath the bottom image */
-}
-
-.top-image2 {
-  position: absolute; 
-  bottom: 0px;  /* This offsets the image from the bottom */
-  left: 10px;  /* This ensures the image is aligned to the left edge of the container */
-  z-index: 1;  /* This will make the top image appear beneath the bottom image */
+  bottom: 6px;
+  left: 22px;
+  z-index: 1;
 }
 
 .text-container {
