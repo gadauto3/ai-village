@@ -55,11 +55,6 @@ const ConversationChooser = ({
 
   const makeMockLines = () => {
     setConversations(conversationData);
-
-    // Set the first conversation as the default selected one
-    // if (conversationData.length > 0) {
-    //   setSelectedConversation(conversationData[0]);
-    // }
   }
 
   return (

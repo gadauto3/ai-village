@@ -11,6 +11,7 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
   const linesContainerRef = useRef(null);
 
   const NOTICE_INDEX = 0;
+  const NUM_BEFORE_API_CALL = 4;
 
   useEffect(() => {
       if (linesContainerRef.current) {
@@ -38,7 +39,7 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
       setGameState(GameState.NOTICE_AI);
     }
 
-    if (conversationIndex === conversation.lines.length - 4) {
+    if (conversationIndex === conversation.lines.length - NUM_BEFORE_API_CALL) {
       retrieveAdditionalConversation(conversation.lines, handleAPISuccess, handleAPIError);
     }
   };
@@ -51,7 +52,7 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
       const oldLine = conversation.lines[checkedIndex];
       // Deep clone the current conversation to avoid direct state mutation
       const updatedLine = deepCopy(oldLine);
-      const delta = conversation.initialLength - checkedIndex;
+      const delta = Math.abs(conversation.initialLength - checkedIndex);
       updatedLine.message = `Your guess is ${delta} away from the answer.`;
       conversation.lines[checkedIndex] = updatedLine;
       updateConversation(conversation);

@@ -4,6 +4,7 @@
     background-color: #eeeae7;
 }
 
+/* Faux search bar */
 .search-bar {
   padding-top: 15px; /* Adjust the space as desired */
   padding-left: 4px; /* Adjust the space as desired */
@@ -13,6 +14,7 @@
   display: block; /* Ensure the image behaves as a block element to accept padding and border correctly */
 }
 
+/* Main items */
 .conversation-item {
   padding: 0px;
   padding-top: 6px;
@@ -35,6 +37,7 @@
   background-color: #d5d5d5; /* Slightly darker background on hover */
 }
 
+/* Image composed of 3 parts */
 .image-container {
   margin-left: 10px;
   margin-right: 15px;
@@ -63,7 +66,7 @@
   vertical-align: middle;
 }
 
-.bottom-image {
+.top-image {
   z-index: 2;
   display: block;
   position: relative;
@@ -71,11 +74,12 @@
   top: 4px;
 }
 
-.top-image {
+.bottom-image {
   position: absolute; 
   bottom: 6px;
   left: 22px;
   z-index: 1;
+  transform: scaleX(-1);
 }
 
 .text-container {
