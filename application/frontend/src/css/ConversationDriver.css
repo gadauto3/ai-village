@@ -90,6 +90,10 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); /* Adds a soft shadow beneath the button */
 }
 
+.next-button:disabled {
+  box-shadow: none;
+}
+
 .next-button:hover, .notice-button:hover {
   background-color: #d5d5d5;
 }

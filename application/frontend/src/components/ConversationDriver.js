@@ -77,7 +77,7 @@ const ConversationDriver = ({ conversation, gameState }) => {
 
       <div className="driver-buttons">
         {gameState > GameState.INIT && (
-          <button className="next-button" onClick={handleNextClick}>
+          <button className="next-button" onClick={handleNextClick} disabled={showCheckboxes}>
             Next
           </button>
         )}
