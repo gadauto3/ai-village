@@ -48,3 +48,31 @@ export function deepCopy(obj) {
     return copy;
   }
 }
+
+export const makeMockLines = (lines) => {
+  const mockTexts = [
+      "Mind blown!",
+      "Really? I didn't know that!",
+      "You always have such cool facts!",
+      "That's so interesting!",
+      "You're so smart!",
+      "That's amazing.",
+      "Tell me more!"
+  ];
+
+  const getRandomText = () => mockTexts[Math.floor(Math.random() * mockTexts.length)];
+
+  const numberOfLines = Math.floor(Math.random() * 4) + 3;  // Generate random number between 3 and 6 inclusive
+  const mockLines = [];
+  const lastNames = [lines[lines.length - 2].name, lines[lines.length - 1].name];
+
+  for (let i = 0; i < numberOfLines; i++) {
+      mockLines.push({
+          name: lastNames[i % 2],
+          message: null,
+          text: getRandomText()
+      });
+  }
+
+  return mockLines;
+}

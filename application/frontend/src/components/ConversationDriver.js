@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { GameState, deepCopy, iconsPath } from "./utils";
+import { GameState, deepCopy, iconsPath, makeMockLines, isLocalHost } from "./utils";
 
 import "../css/ConversationDriver.css";
+import { retrieveAdditionalConversation } from './APIService';
 
 const ConversationDriver = ({ conversation, updateConversation, gameState, setGameState }) => {
   const [conversationIndex, setConversationIndex] = useState(0);
@@ -36,6 +37,10 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
     if (conversationIndex > NOTICE_INDEX) {
       setGameState(GameState.NOTICE_AI);
     }
+
+    if (conversationIndex === conversation.lines.length - 4) {
+      retrieveAdditionalConversation(conversation.lines, handleAPISuccess, handleAPIError);
+    }
   };
 
   const handleNoticeClick = () => {
@@ -63,6 +68,25 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
 
   const handleCheckboxChange = (index) => {
     setCheckedIndex(index);
+  };
+
+  // Handle API calls
+  const handleAPISuccess = (moreLines) => {
+    const convoLines = deepCopy(conversation.lines);
+    convoLines.push(...moreLines);
+    conversation.lines = convoLines;
+    updateConversation(conversation);
+  };
+
+  const handleAPIError = (err) => {
+    console.log("retrieveConversations api error\n", err);
+
+    if (isLocalHost()) {
+      const moreLines = makeMockLines(conversation.lines);
+      handleAPISuccess(moreLines);
+    } else {
+      alert("Sorry, failed to retrieve conversations due to an error, try refreshing.\n" + err);
+    }
   };
 
   return (
