@@ -46,7 +46,8 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
       const oldLine = conversation.lines[checkedIndex];
       // Deep clone the current conversation to avoid direct state mutation
       const updatedLine = deepCopy(oldLine);
-      updatedLine.message = "You selected this message";
+      const delta = conversation.initialLength - checkedIndex;
+      updatedLine.message = `Your guess is ${delta} away from the answer.`;
       conversation.lines[checkedIndex] = updatedLine;
       updateConversation(conversation);
 
