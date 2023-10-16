@@ -2,6 +2,7 @@ import React from "react";
 import { GameState } from "./utils";
 
 import {
+  InstructionsCelebrate,
   InstructionsInit,
   InstructionsInteract,
   InstructionsMoveConvos,
@@ -22,6 +23,8 @@ const Instructions = (gameState) => {
         return InstructionsSelectAI;
       case GameState.MOVE_CONVOS:
         return InstructionsMoveConvos;
+      case GameState.CELEBRATE:
+        return InstructionsCelebrate;
       case GameState.INTERACT:
         return InstructionsInteract;
       case GameState.SHOW_CREDITS:

@@ -17,8 +17,9 @@ export const InstructionsSelectAI =
   'Choose which conversation you think the AI began to write the dialogue.\
   Then click "Submit guess".';
 
-export const InstructionsMoveConvos =
-  '☝🏽 Now select another conversation.';
+export const InstructionsMoveConvos = "☝🏽 Now select another conversation.";
+
+export const InstructionsCelebrate = "🎉 Celebrate your effort! 🎉";
 
 export const InstructionsInteract =
   "Now it's time to discover how the AI behaves and reacts to your input. You have\

@@ -1,0 +1,41 @@
+/* Modal.css */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;               /* Ensures its children can be centered using flexbox */
+  justify-content: center;     /* Horizontally centers children */
+  align-items: center;         /* Vertically centers children */
+}
+
+.modal {
+  background: rgb(239, 239, 239);
+  padding: 20px;
+  border-radius: 5px;
+  width: 80%; 
+  height: 70%;
+  color: #000;
+  display: flex;
+  flex-direction: column;      /* stack children vertically */
+  align-items: center;         /* horizontally center */
+  z-index: 1000;               /* Make sure it sits on top of other content */
+  box-shadow: 1px 6px 9px rgba(0, 0, 1, 0.4); /* optional shadow for a bit of depth */
+  position: relative;          /* For positioning context of the button */
+}
+
+.modal h1 {
+  margin-top: 50px;
+  margin-bottom: 30px;
+}
+
+.modal button {
+  position: absolute; /* Absolute positioning */
+  top: 10px;          /* Adjust these values as needed */
+  right: 10px;        /* Adjust these values as needed */
+  border-radius: 5px;
+  border-color: white;
+  background-color: transparent; /* Optional: To make sure the button has no background */
+}

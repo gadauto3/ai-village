@@ -6,12 +6,14 @@ import ConversationDriver from './ConversationDriver';
 import Instructions from './Instructions';
 
 import "../css/UIController.css";
+import ModalPopupCelebrate from './ModalPopupCelebrate';
 
 const UIController = () => {
   
   const [gameState, setGameState] = useState(GameState.INIT);
   const [conversations, setConversations] = useState([]);
   const [selectedConversation, setSelectedConversation] = useState(null);
+  const [isModalShowing, setIsModalShowing] = useState(false);
 
   useEffect(() => {
     if (conversations.length > 1 && gameState == GameState.INIT) {
@@ -26,7 +28,8 @@ const UIController = () => {
       );
 
       if (allConversationsHaveResults) {
-        setGameState(GameState.INTERACT);
+        setGameState(GameState.CELEBRATE);
+        setIsModalShowing(true);
       }
     }
   }, [gameState]);
@@ -47,29 +50,38 @@ const UIController = () => {
     }
   };  
 
+  const handleCloseModal = () => {
+    setIsModalShowing(false);
+    setGameState(GameState.INTERACT);
+  }
+
   return (
     <div>
-    <h1 className="text-center title-noto-sans">
-      WhatsAIpp or MessAIges
-    </h1>
-    <div className="ui-controller">
-      <div className="top-section">
-        <ConversationChooser
-          conversations={conversations}
-          setConversations={setConversations}
-          gameState={gameState}
-          selectedConversation={selectedConversation}
-          setSelectedConversation={setSelectedConversation}
-        />
-        <ConversationDriver
-          conversation={selectedConversation}
-          updateConversation={handleUpdateConversation}
-          gameState={gameState}
-          setGameState={setGameState}
-        />
+      <h1 className="text-center title-noto-sans">WhatsAIpp or MessAIges</h1>
+      <div className="ui-controller">
+        <div className="top-section">
+          <ConversationChooser
+            conversations={conversations}
+            setConversations={setConversations}
+            gameState={gameState}
+            selectedConversation={selectedConversation}
+            setSelectedConversation={setSelectedConversation}
+          />
+          <ConversationDriver
+            conversation={selectedConversation}
+            updateConversation={handleUpdateConversation}
+            gameState={gameState}
+            setGameState={setGameState}
+          />
+        </div>
+        <Instructions gameState={gameState} />
       </div>
-      <Instructions gameState={gameState} />
-    </div>
+      {isModalShowing && (
+        <ModalPopupCelebrate
+          closeModal={handleCloseModal}
+          conversations={conversations}
+        />
+      )}
     </div>
   );
 };
