@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { GameState, MAX_CONVOS, iconsPath, isLocalHost } from "./utils";
 import { getConversations } from './APIService';
 
@@ -22,6 +22,13 @@ const ConversationChooser = ({
   const defaultHeadIcon = "icons8-head-profile-50.png";
   const numPreviewChars = 25;
 
+  // TODO: For dev, remove later.
+  useEffect(() => {
+    if (gameState == GameState.CELEBRATE && conversations.length > 1) {
+      setAreConversationsSet(true);
+    }
+  }, [conversations]);
+  
   const addConversation = () => {
     const convos = [...preInitConvos];
 

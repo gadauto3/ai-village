@@ -160,6 +160,27 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
           </button>
         )}
       </div>
+
+      <div className="driver-buttons">
+        {gameState >= GameState.INTERACT && (
+          <button
+            className="next-button"
+            onClick={handleNextClick}
+            disabled={showCheckboxes}
+          >
+            Next
+          </button>
+        )}
+        {gameState >= GameState.INTERACT && (
+          <button
+            className="notice-button"
+            onClick={handleNoticeClick}
+            disabled={isNoticeDisabled()}
+          >
+            ⬆
+          </button>
+        )}
+      </div>
     </div>
   );
 }

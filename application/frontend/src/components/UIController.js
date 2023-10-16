@@ -4,9 +4,11 @@ import { GameState } from './utils';
 import ConversationChooser from './ConversationChooser';
 import ConversationDriver from './ConversationDriver';
 import Instructions from './Instructions';
+import ModalPopupCelebrate from './ModalPopupCelebrate';
 
 import "../css/UIController.css";
-import ModalPopupCelebrate from './ModalPopupCelebrate';
+
+import conversationDataInteract from './conversationSeedsForInteract.json';
 
 const UIController = () => {
   
@@ -55,6 +57,12 @@ const UIController = () => {
     setGameState(GameState.INTERACT);
   }
 
+  const jumpToInteract = () => {
+    setGameState(GameState.CELEBRATE);
+    setConversations(conversationDataInteract);
+    setIsModalShowing(true);
+  }
+
   return (
     <div>
       <h1 className="text-center title-noto-sans">WhatsAIpp or MessAIges</h1>
@@ -82,6 +90,7 @@ const UIController = () => {
           conversations={conversations}
         />
       )}
+      <button onClick={jumpToInteract}>Interact</button>
     </div>
   );
 };
