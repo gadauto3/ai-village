@@ -5,7 +5,6 @@ import "../css/ConversationDriver.css";
 import { retrieveAdditionalConversation } from './APIService';
 
 const ConversationDriver = ({ conversation, updateConversation, gameState, setGameState }) => {
-  const [conversationIndex, setConversationIndex] = useState(0); // TODO: Remove and place on conversation
   const [showCheckboxes, setShowCheckboxes] = useState(false);  // To show/hide checkboxes
   const [checkedIndex, setCheckedIndex] = useState(null);  // Index of the checked checkbox
   const linesContainerRef = useRef(null);
@@ -14,17 +13,16 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
   const NUM_BEFORE_API_CALL = 4;
 
   useEffect(() => {
-      if (linesContainerRef.current) {
-          linesContainerRef.current.scrollTop = linesContainerRef.current.scrollHeight;
-      }
-      if (conversation != null){
-      console.log("conversation.aiResult", conversation.aiResult);}
-  }, [conversationIndex]);
+    if (linesContainerRef.current) {
+      linesContainerRef.current.scrollTop =
+        linesContainerRef.current.scrollHeight;
+    }
+  }, [conversation]);
 
-  if (!conversation)
+  if (!conversation){
     return (
       <div className="conversation-driver"></div>
-    );
+    );}
 
   const getIconPath = (name) => {
       const person = conversation.people.find(p => p.name === name);
@@ -35,16 +33,19 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
   }
 
   const handleNextClick = () => {
-    setConversationIndex(prevIndex => prevIndex + 1);
+    const updatedConvo = deepCopy(conversation);
+    updatedConvo.currentLineIndex = conversation.currentLineIndex + 1;
+    updateConversation(updatedConvo);
 
-    if (conversationIndex > NOTICE_INDEX) {
-      setGameState(GameState.NOTICE_AI);
+    if (updatedConvo.currentLineIndex > NOTICE_INDEX) {
+        setGameState(GameState.NOTICE_AI);
     }
 
-    if (conversationIndex === conversation.lines.length - NUM_BEFORE_API_CALL) {
-      retrieveAdditionalConversation(conversation.lines, handleAPISuccess, handleAPIError);
+    if (updatedConvo.currentLineIndex === updatedConvo.lines.length - NUM_BEFORE_API_CALL) {
+        retrieveAdditionalConversation(updatedConvo.lines, handleAPISuccess, handleAPIError);
     }
-  };
+
+};
 
   const handleNoticeClick = () => {
     if (gameState == GameState.NOTICE_AI){
@@ -67,7 +68,11 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
   };
 
   const isNoticeDisabled = () => {
-    return gameState == GameState.SELECT_AI && checkedIndex == null;
+    const info = `select state (${gameState == GameState.SELECT_AI}) checkIdx (${checkedIndex == null}) currLineIdx (${conversation.currentLineIndex < NOTICE_INDEX + 2})`;
+    console.log("isNotDis", info, conversation);
+    return (gameState == GameState.SELECT_AI && checkedIndex == null) || 
+      //TODO: update when change INDEX
+      conversation.currentLineIndex < NOTICE_INDEX + 2;
   }
 
   const handleCheckboxChange = (index) => {
@@ -110,7 +115,7 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
 
       <div className="lines-container" ref={linesContainerRef}>
         {conversation.lines
-          .slice(0, conversationIndex + 1)
+          .slice(0, conversation.currentLineIndex + 1)
           .map((line, index) => (
             <div
               key={index}
@@ -161,8 +166,9 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
         )}
       </div>
 
+      {gameState >= GameState.INTERACT && (
       <div className="driver-buttons">
-        {gameState >= GameState.INTERACT && (
+        
           <button
             className="next-button"
             onClick={handleNextClick}
@@ -170,8 +176,6 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
           >
             Next
           </button>
-        )}
-        {gameState >= GameState.INTERACT && (
           <button
             className="notice-button"
             onClick={handleNoticeClick}
@@ -179,8 +183,8 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
           >
             ⬆
           </button>
-        )}
       </div>
+      )}
     </div>
   );
 }

@@ -49,6 +49,7 @@ const UIController = () => {
   
       // Update the state
       setConversations(newConversations);
+      setSelectedConversation(updatedConversation);
     }
   };  
 
