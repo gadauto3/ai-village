@@ -4,6 +4,7 @@ import { GameState } from "./utils";
 import {
   InstructionsInit,
   InstructionsInteract,
+  InstructionsMoveConvos,
   InstructionsNextConvo,
   InstructionsNoticeAI2,
   InstructionsSelectAI,
@@ -19,6 +20,8 @@ const Instructions = (gameState) => {
         return InstructionsNoticeAI2;
       case GameState.SELECT_AI:
         return InstructionsSelectAI;
+      case GameState.MOVE_CONVOS:
+        return InstructionsMoveConvos;
       case GameState.INTERACT:
         return InstructionsInteract;
       case GameState.SHOW_CREDITS:

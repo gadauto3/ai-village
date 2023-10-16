@@ -5,7 +5,7 @@ import "../css/ConversationDriver.css";
 import { retrieveAdditionalConversation } from './APIService';
 
 const ConversationDriver = ({ conversation, updateConversation, gameState, setGameState }) => {
-  const [conversationIndex, setConversationIndex] = useState(0);
+  const [conversationIndex, setConversationIndex] = useState(0); // TODO: Remove and place on conversation
   const [showCheckboxes, setShowCheckboxes] = useState(false);  // To show/hide checkboxes
   const [checkedIndex, setCheckedIndex] = useState(null);  // Index of the checked checkbox
   const linesContainerRef = useRef(null);
@@ -17,6 +17,8 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
       if (linesContainerRef.current) {
           linesContainerRef.current.scrollTop = linesContainerRef.current.scrollHeight;
       }
+      if (conversation != null){
+      console.log("conversation.aiResult", conversation.aiResult);}
   }, [conversationIndex]);
 
   if (!conversation)
@@ -49,17 +51,18 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
       setGameState(GameState.SELECT_AI);
       setShowCheckboxes(true);
     } else {
-      const oldLine = conversation.lines[checkedIndex];
       // Deep clone the current conversation to avoid direct state mutation
-      const updatedLine = deepCopy(oldLine);
+      const updatedLine = deepCopy(conversation.lines[checkedIndex]);
       const delta = Math.abs(conversation.initialLength - checkedIndex);
-      updatedLine.message = `Your guess is ${delta} away from the answer.`;
+      const topScore = 15; // Todo: calculate
+      conversation.aiResult = delta;
+      updatedLine.message = `Your guess is ${delta} away from the answer. Score: ${conversation.initialLength - delta} of ${conversation.initialLength}`;
       conversation.lines[checkedIndex] = updatedLine;
       updateConversation(conversation);
 
-      setGameState(GameState.NOTICE_AI);
       setCheckedIndex(null);
       setShowCheckboxes(false);
+      setGameState(GameState.MOVE_CONVOS);
     }
   };
 
@@ -136,7 +139,7 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
       </div>
 
       <div className="driver-buttons">
-        {gameState >= GameState.NEXT_CONVO && (
+        {gameState >= GameState.NEXT_CONVO && conversation.aiResult == null && (
           <button
             className="next-button"
             onClick={handleNextClick}
@@ -145,7 +148,7 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
             Next
           </button>
         )}
-        {gameState >= GameState.NOTICE_AI && (
+        {gameState >= GameState.NOTICE_AI && conversation.aiResult == null && (
           <button
             className="notice-button"
             onClick={handleNoticeClick}

@@ -19,6 +19,18 @@ const UIController = () => {
     }
   }, [conversations]);
   
+  useEffect(() => {
+    if (gameState == GameState.MOVE_CONVOS) {
+      const allConversationsHaveResults = conversations.every(
+        (conversation) => conversation.aiResult !== null
+      );
+
+      if (allConversationsHaveResults) {
+        setGameState(GameState.INTERACT);
+      }
+    }
+  }, [gameState]);
+  
   const handleUpdateConversation = (updatedConversation) => {
     // Find the index of the conversation with the same key as updatedConversation
     const index = conversations.findIndex(convo => convo.key === updatedConversation.key);
