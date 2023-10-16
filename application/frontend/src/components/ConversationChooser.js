@@ -47,14 +47,14 @@ const ConversationChooser = ({
     console.log("retrieveConversations api error\n", err);
 
     if (isLocalHost()) {
-      makeMockLines();
+      makeMockLines(preInitConvos.length);
     } else {
       alert("Sorry, failed to retrieve conversations due to an error, try refreshing.\n" + err);
     }
   };
 
   const makeMockLines = () => {
-    setConversations(conversationData);
+    setConversations(conversationData.slice(0, preInitConvos.length));
   }
 
   return (
@@ -135,7 +135,7 @@ const ConversationChooser = ({
       )}
 
       {gameState == GameState.INIT && (
-        <button className="start-button" onClick={clickStart}>
+        <button className="start-button" onClick={clickStart} disabled={preInitConvos.length <= 1}>
           Start
         </button>
       )}
