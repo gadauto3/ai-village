@@ -65,7 +65,7 @@ const UIController = () => {
   }
 
   return (
-    <div>
+    <div className='outer-div'>
       <h1 className="text-center title-noto-sans">WhatsAIpp or MessAIges</h1>
       <div className="ui-controller">
         <div className="top-section">

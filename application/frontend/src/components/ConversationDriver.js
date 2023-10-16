@@ -33,19 +33,23 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
   }
 
   const handleNextClick = () => {
+    const nextIndex = conversation.currentLineIndex;
+
+    if (nextIndex > NOTICE_INDEX) {
+      setGameState(GameState.NOTICE_AI);
+    }
+
+    if (nextIndex === conversation.lines.length - NUM_BEFORE_API_CALL) {
+      retrieveAdditionalConversation(conversation.lines, handleAPISuccess, handleAPIError);
+    }
+    incrementIndex();
+  };
+
+  const incrementIndex = () => {
     const updatedConvo = deepCopy(conversation);
     updatedConvo.currentLineIndex = conversation.currentLineIndex + 1;
     updateConversation(updatedConvo);
-
-    if (updatedConvo.currentLineIndex > NOTICE_INDEX) {
-        setGameState(GameState.NOTICE_AI);
-    }
-
-    if (updatedConvo.currentLineIndex === updatedConvo.lines.length - NUM_BEFORE_API_CALL) {
-        retrieveAdditionalConversation(updatedConvo.lines, handleAPISuccess, handleAPIError);
-    }
-
-};
+  }
 
   const handleNoticeClick = () => {
     if (gameState == GameState.NOTICE_AI){
@@ -88,12 +92,43 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
   };
 
   const handleAPIError = (err) => {
-    console.log("retrieveConversations api error\n", err);
-
     if (isLocalHost()) {
       const moreLines = makeMockLines(conversation.lines);
       handleAPISuccess(moreLines);
     } else {
+      console.log("retrieveConversations api error\n", err);
+      alert("Sorry, failed to retrieve conversations due to an error, try refreshing.\n" + err);
+    }
+  };
+
+  // INTERACT Stage functions
+
+  const handleNextInteractClick = () => {
+    const nextIndex = conversation.currentLineIndex;
+
+    if (nextIndex == conversation.lines.length) {
+      retrieveAdditionalConversation(conversation.lines, handleInteractAPISuccess, handleInteractAPIError);
+    }
+
+    incrementIndex();
+  };
+
+  const handleInteractAPISuccess = (moreLines) => {
+    const newConvo = deepCopy(conversation);
+    const convoLines = newConvo.lines;
+    moreLines[0].message = `AI provided ${moreLines.length} more lines.`;
+    convoLines.push(...moreLines);
+    convoLines[conversation.initialLength].message = "AI-created conversation starts here";
+    conversation.lines = convoLines;
+    updateConversation(conversation);
+  };
+
+  const handleInteractAPIError = (err) => {
+    if (isLocalHost()) {
+      const moreLines = makeMockLines(conversation.lines);
+      handleInteractAPISuccess(moreLines);
+    } else {
+      console.log("retrieveConversations api error\n", err);
       alert("Sorry, failed to retrieve conversations due to an error, try refreshing.\n" + err);
     }
   };
@@ -171,7 +206,7 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
         
           <button
             className="next-button"
-            onClick={handleNextClick}
+            onClick={handleNextInteractClick}
             disabled={showCheckboxes}
           >
             Next
