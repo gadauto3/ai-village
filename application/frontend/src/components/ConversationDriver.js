@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { GameState, deepCopy, iconsPath, makeMockLines, isLocalHost } from "./utils";
+import AnimatedCircles from './AnimatedCircles';
 import ScoreHandler from './ScoreHandler';
 
 import "../css/ConversationDriver.css";
@@ -16,6 +17,7 @@ const ConversationDriver = ({
   const [showCheckboxes, setShowCheckboxes] = useState(false); // To show/hide checkboxes
   const [checkedIndex, setCheckedIndex] = useState(null); // Index of the checked checkbox
   const [isReadyToJoin, setIsReadyToJoin] = useState(false); // Ready to join the conversation
+  const [isFetching, setIsFetching] = useState(false); // Fetching from the API
   const [numTalkTokens, setNumTalkTokens] = useState(NUM_TALK_TOKENS);
   const [userInput, setUserInput] = useState("");
   const [userInputError, setUserInputError] = useState(null);
@@ -32,7 +34,7 @@ const ConversationDriver = ({
       linesContainerRef.current.scrollTop =
         linesContainerRef.current.scrollHeight;
     }
-  }, [conversation]);
+  }, [conversation, isFetching]);
 
   if (!conversation) {
     return <div className="conversation-driver"></div>;
@@ -232,6 +234,11 @@ const ConversationDriver = ({
     handleErrorWithLabel(err, handleInteractWithUserAPISuccess, "withUser");
   };
 
+  const fetchingName = () => {
+    const penultimateLine = conversation.lines[conversation.lines.length - 2];
+    return penultimateLine.name;
+  };
+
   return (
     <div className="conversation-driver">
       <div className="participants">
@@ -275,6 +282,17 @@ const ConversationDriver = ({
               </div>
             </div>
           ))}
+
+        {isFetching && (
+          <div className="line-content">
+            <img
+              className="margin-left"
+              src={getIconPath(fetchingName())}
+              alt={fetchingName()}
+            />
+            <AnimatedCircles />
+          </div>
+        )}
       </div>
 
       {gameState >= GameState.NEXT_CONVO && conversation.aiGuess == null && (

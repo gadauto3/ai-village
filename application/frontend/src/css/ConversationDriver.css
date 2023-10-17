@@ -65,7 +65,7 @@
   margin-top: 20px;
 }
 
-.line-item img {
+.line-content img {
   margin-right: 10px;
   height: 32px;
   width: 32px;
@@ -157,4 +157,8 @@
 .error-message {
   color: brown;
   text-align: center;
+}
+
+.margin-left {
+  margin-left: 12px;
 }
