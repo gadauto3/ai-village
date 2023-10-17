@@ -25,6 +25,7 @@ const ConversationDriver = ({
   const NOTICE_INDEX = 0;
   const NUM_BEFORE_API_CALL = 4;
   const NUM_TALK_TOKENS = 3;
+  const AI_STARTS_HERE_MSG = "AI-created conversation starts here";
 
   useEffect(() => {
     if (linesContainerRef.current) {
@@ -74,14 +75,18 @@ const ConversationDriver = ({
       setShowCheckboxes(true);
     } else {
       // Deep clone the current conversation to avoid direct state mutation
-      const updatedLine = deepCopy(conversation.lines[checkedIndex]);
-      conversation.aiGuess = checkedIndex;
+      const updatedConvo = deepCopy(conversation);
+      updatedConvo.aiGuess = checkedIndex;
+      const updatedLine = updatedConvo.lines[checkedIndex];
       updatedLine.message = scoreHandler.calculateScoreMessage(
         checkedIndex,
         conversation.initialLength
       );
-      conversation.lines[checkedIndex] = updatedLine;
-      updateConversation(conversation);
+      updatedConvo.lines[checkedIndex] = updatedLine;
+      if (conversation.lines.length > conversation.initialLength && checkedIndex != conversation.initialLength) {
+        updatedConvo.lines[conversation.initialLength].message = AI_STARTS_HERE_MSG;
+      }
+      updateConversation(updatedConvo);
 
       setCheckedIndex(null);
       setShowCheckboxes(false);
@@ -151,8 +156,7 @@ const ConversationDriver = ({
     const convoLines = newConvo.lines;
     moreLines[0].message = `AI provided ${moreLines.length} more lines.`;
     convoLines.push(...moreLines);
-    convoLines[conversation.initialLength].message =
-      "AI-created conversation starts here";
+    convoLines[conversation.initialLength].message = AI_STARTS_HERE_MSG;
     conversation.lines = convoLines;
     updateConversation(conversation);
   };
