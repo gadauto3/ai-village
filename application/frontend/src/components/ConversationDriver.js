@@ -187,14 +187,24 @@ const ConversationDriver = ({
     } else if (!regex.test(entry)) {
       errorMessage = `Please use only letters, numbers, .-,()'!? and space characters.`;
     } else if (!userName) {
-      errorMessage = `Would you provide a name for them to call you?`;
-      getUserName();
+      errorMessage = `Would you please provide a name?`;
+      const peeps = conversation.people;
+      getUserName({
+        textToDisplay: `Please provide your name to ${peeps[0].name} and ${peeps[1].name}. Note: your name will be used only for this round of the game.`,
+        buttonText: "Done",
+        entryLengthMin: 3,
+        entryLengthMax: 20,
+        onClose: (name) => {
+          console.log("name", name);;
+          // TODO: call this function afterwards? Will that cause issues?
+        }
+      });
     }
 
     if (errorMessage) {
       setUserInputError(errorMessage);
       return;
-    } else if (inputError) {
+    } else if (userInputError) {
       setUserInputError(null);
     }
 
@@ -208,9 +218,10 @@ const ConversationDriver = ({
   };
 
   const handleInteractWithUserAPISuccess = (moreLines) => {
-    handleAPISuccess(moreLines);
+    handleInteractAPISuccess(moreLines);
     setGameState(GameState.INTERACT);
     setIsReadyToJoin(false);
+    setUserInput("");
   }
 
   const handleInteractWithUserAPIError = (err) => {
@@ -312,13 +323,13 @@ const ConversationDriver = ({
             <input
               type="text"
               className="middle-textfield"
-              placeholder="Please continue the conversation..."
+              placeholder="👈🏽 Please continue the conversation."
               disabled={!isReadyToJoin}
             />
           )}
           {gameState === GameState.JOIN_CONVO && (
             <button
-              class="up-button"
+              className="up-button"
               disabled={!isReadyToJoin}
               onClick={handleMessageSubmit}
             >

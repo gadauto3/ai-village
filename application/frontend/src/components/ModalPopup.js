@@ -30,7 +30,7 @@ const ModalPopup = ({ isVisible, closeModal, config }) => {
 
     setError("");
     onClose(inputValue.trim());
-    closeModal();
+    closeModal(inputValue.trim());
   };
 
   return isVisible ? (

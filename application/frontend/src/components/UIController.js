@@ -4,6 +4,7 @@ import { GameState } from './utils';
 import ConversationChooser from './ConversationChooser';
 import ConversationDriver from './ConversationDriver';
 import Instructions from './Instructions';
+import ModalPopup from "./ModalPopup";
 import ModalPopupCelebrate from './ModalPopupCelebrate';
 
 import "../css/UIController.css";
@@ -16,7 +17,13 @@ const UIController = () => {
   const [conversations, setConversations] = useState([]);
   const [userName, setUserName] = useState(null);
   const [selectedConversation, setSelectedConversation] = useState(null);
-  const [isModalShowing, setIsModalShowing] = useState(false);
+  const [isCelebrateModalShowing, setIsCelebrateModalShowing] = useState(false);
+  const [isNameModalShowing, setIsNameModalShowing] = useState(false);
+  const [nameModalConfig, setNameModalConfig] = useState({
+    textToDisplay: "Default message",
+    buttonText: "Ok",
+    onClose: () => {}
+  });
 
   useEffect(() => {
     if (conversations.length > 1 && gameState == GameState.INIT) {
@@ -32,7 +39,7 @@ const UIController = () => {
 
       if (allConversationsHaveResults) {
         setGameState(GameState.CELEBRATE);
-        setIsModalShowing(true);
+        setIsCelebrateModalShowing(true);
       }
     }
   }, [gameState]);
@@ -54,8 +61,8 @@ const UIController = () => {
     }
   };  
 
-  const handleCloseModal = () => {
-    setIsModalShowing(false);
+  const handleCloseCelebrateModal = () => {
+    setIsCelebrateModalShowing(false);
     setGameState(GameState.INTERACT);
   }
 
@@ -63,12 +70,19 @@ const UIController = () => {
     setGameState(GameState.CELEBRATE);
     setConversations(conversationDataInteract);
     setSelectedConversation(conversations[1]);
-    setIsModalShowing(true);
+    setIsCelebrateModalShowing(true);
   }
 
-  const getNameFromUser = () => {
+  const getNameFromUser = (modalConfig) => {
     console.log("pop up modal to get username");
+    setNameModalConfig(modalConfig);
+    setIsNameModalShowing(true);
   };
+
+  const handleCloseNameModal = (name) => {
+    setUserName(name);
+    setIsNameModalShowing(false);
+  }
 
   return (
     <div className='outer-div'>
@@ -93,10 +107,17 @@ const UIController = () => {
         </div>
         <Instructions gameState={gameState} />
       </div>
-      {isModalShowing && (
+      {isCelebrateModalShowing && (
         <ModalPopupCelebrate
-          closeModal={handleCloseModal}
+          closeModal={handleCloseCelebrateModal}
           conversations={conversations}
+        />
+      )}
+      {isNameModalShowing && (
+        <ModalPopup
+          isVisible={isNameModalShowing}
+          closeModal={handleCloseNameModal}
+          config={nameModalConfig}
         />
       )}
       <button onClick={jumpToInteract}>Interact</button>
