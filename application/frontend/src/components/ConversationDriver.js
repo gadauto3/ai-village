@@ -72,8 +72,6 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
   };
 
   const isNoticeDisabled = () => {
-    const info = `select state (${gameState == GameState.SELECT_AI}) checkIdx (${checkedIndex == null}) currLineIdx (${conversation.currentLineIndex < NOTICE_INDEX + 2})`;
-    console.log("isNotDis", info, conversation);
     return (gameState == GameState.SELECT_AI && checkedIndex == null) || 
       //TODO: update when change INDEX
       conversation.currentLineIndex < NOTICE_INDEX + 2;
@@ -178,8 +176,8 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
           ))}
       </div>
 
-      <div className="driver-buttons">
-        {gameState >= GameState.NEXT_CONVO && conversation.aiResult == null && (
+      {gameState >= GameState.NEXT_CONVO && conversation.aiResult == null && (
+        <div className="driver-buttons">
           <button
             className="next-button"
             onClick={handleNextClick}
@@ -187,8 +185,7 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
           >
             Next
           </button>
-        )}
-        {gameState >= GameState.NOTICE_AI && conversation.aiResult == null && (
+
           <button
             className="notice-button"
             onClick={handleNoticeClick}
@@ -198,12 +195,11 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
               ? "Submit guess"
               : "I'm noticing AI generation"}
           </button>
-        )}
-      </div>
+        </div>
+      )}
 
       {gameState >= GameState.INTERACT && (
-      <div className="driver-buttons">
-        
+        <div className="driver-buttons">
           <button
             className="next-button"
             onClick={handleNextInteractClick}
@@ -218,7 +214,7 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
           >
             ⬆
           </button>
-      </div>
+        </div>
       )}
     </div>
   );
