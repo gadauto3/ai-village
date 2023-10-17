@@ -26,7 +26,7 @@ const UIController = () => {
   useEffect(() => {
     if (gameState == GameState.MOVE_CONVOS) {
       const allConversationsHaveResults = conversations.every(
-        (conversation) => conversation.aiResult !== null
+        (conversation) => conversation.aiGuess !== null
       );
 
       if (allConversationsHaveResults) {

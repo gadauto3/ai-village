@@ -11,7 +11,7 @@ const ModalPopupCelebrate = ({ closeModal, conversations }) => {
 
   const resultText = (conversation) => {
     const result = `${
-      conversation.initialLength - conversation.aiResult
+      conversation.initialLength - conversation.aiGuess
     } out of ${conversation.initialLength}`;
     return result;
   };

@@ -111,3 +111,27 @@
 .next-button:hover, .notice-button:hover {
   background-color: #d5d5d5;
 }
+
+/* Bottom buttons for Interact state */
+.middle-textfield {
+  flex-grow: 1;          /* Allows the text field to grow and take up available space */
+  margin: 0 10px;        /* Adds a little margin on left and right for spacing */
+  padding: 8px 12px;     /* Padding inside the text field */
+  border-radius: 5px;    /* Optional: Rounds the corners */
+  border: 1px solid #ccc;/* Optional: Defines a border */
+}
+
+.up-button {
+  background-color: transparent;  /* Makes the background transparent */
+  border: none;                   /* Removes the default border */
+  cursor: pointer;                /* Changes the cursor to a hand when hovered */
+  font-size: 3rem;                /* Adjusts the size of the symbol */
+  line-height: 0;
+  padding: 0px;                  /* Adds some spacing around the symbol */
+  color: #333;                    /* Sets the color of the symbol */
+  transition: color 0.3s;         /* Smoothens the color transition on hover */
+}
+
+.up-button:hover {
+  color: #007BFF;                 /* Changes the color on hover */
+}

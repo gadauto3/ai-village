@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { GameState, deepCopy, iconsPath, makeMockLines, isLocalHost } from "./utils";
+import ScoreHandler from './ScoreHandler';
 
 import "../css/ConversationDriver.css";
 import { retrieveAdditionalConversation } from './APIService';
@@ -9,6 +10,7 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
   const [checkedIndex, setCheckedIndex] = useState(null);  // Index of the checked checkbox
   const linesContainerRef = useRef(null);
 
+  const scoreHandler = ScoreHandler();
   const NOTICE_INDEX = 0;
   const NUM_BEFORE_API_CALL = 4;
 
@@ -58,10 +60,8 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
     } else {
       // Deep clone the current conversation to avoid direct state mutation
       const updatedLine = deepCopy(conversation.lines[checkedIndex]);
-      const delta = Math.abs(conversation.initialLength - checkedIndex);
-      const topScore = 15; // Todo: calculate
-      conversation.aiResult = delta;
-      updatedLine.message = `Your guess is ${delta} away from the answer. Score: ${conversation.initialLength - delta} of ${conversation.initialLength}`;
+      conversation.aiGuess = checkedIndex;
+      updatedLine.message = scoreHandler.calculateScoreMessage(checkedIndex, conversation.initialLength);
       conversation.lines[checkedIndex] = updatedLine;
       updateConversation(conversation);
 
@@ -176,7 +176,7 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
           ))}
       </div>
 
-      {gameState >= GameState.NEXT_CONVO && conversation.aiResult == null && (
+      {gameState >= GameState.NEXT_CONVO && conversation.aiGuess == null && (
         <div className="driver-buttons">
           <button
             className="next-button"
@@ -207,11 +207,8 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
           >
             Next
           </button>
-          <button
-            className="notice-button"
-            onClick={handleNoticeClick}
-            disabled={isNoticeDisabled()}
-          >
+          <input type="text" className="middle-textfield" placeholder="Enter text here..." />
+          <button class="up-button">
             ⬆
           </button>
         </div>

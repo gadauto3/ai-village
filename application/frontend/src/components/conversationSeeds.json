@@ -4,7 +4,7 @@
         "key": 1,
         "currentLineIndex": 0,
         "initialLength": 6,
-        "aiResult": null,
+        "aiGuess": null,
         "people": [
             {
                 "name": "Maria",
@@ -55,7 +55,7 @@
         "key": 2,
         "currentLineIndex": 0,
         "initialLength": 9,
-        "aiResult": null,
+        "aiGuess": null,
         "people": [
             {
                 "name": "Mika",
@@ -121,7 +121,7 @@
         "key": 3,
         "currentLineIndex": 0,
         "initialLength": 7,
-        "aiResult": null,
+        "aiGuess": null,
         "people": [
             {
                 "name": "Sivan",
