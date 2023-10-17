@@ -26,6 +26,10 @@ export const InstructionsInteract =
   "Now it's time to discover how the AI behaves and reacts to your input. You have\
   3 chances per game to add input to conversations.";
 
+export const InstructionsJoinConvo =
+"Join the conversation by entering your message to the text thread then pressing\
+  the upload arrow.";
+
 export const InstructionsShowCredits =
   'Hope you\'re enjoying the game!';
 

@@ -14,6 +14,7 @@ const UIController = () => {
   
   const [gameState, setGameState] = useState(GameState.INIT);
   const [conversations, setConversations] = useState([]);
+  const [userName, setUserName] = useState(null);
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [isModalShowing, setIsModalShowing] = useState(false);
 
@@ -61,8 +62,13 @@ const UIController = () => {
   const jumpToInteract = () => {
     setGameState(GameState.CELEBRATE);
     setConversations(conversationDataInteract);
+    setSelectedConversation(conversations[1]);
     setIsModalShowing(true);
   }
+
+  const getNameFromUser = () => {
+    console.log("pop up modal to get username");
+  };
 
   return (
     <div className='outer-div'>
@@ -81,6 +87,8 @@ const UIController = () => {
             updateConversation={handleUpdateConversation}
             gameState={gameState}
             setGameState={setGameState}
+            userName={userName}
+            getUserName={getNameFromUser}
           />
         </div>
         <Instructions gameState={gameState} />

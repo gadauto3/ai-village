@@ -62,3 +62,34 @@ export const retrieveAdditionalConversation = (lines, onSuccess, onError) => {
         onError(err);
       });
   }
+
+  export const retrieveAdditionalConversationWithUserInput = (userName, userInput, lines, onSuccess, onError) => {
+    const endPoint = "/api/addPlayerToConversation";
+
+    const startTime = new Date();
+    fetch(config.apiPrefix + endPoint, {
+      method: "POST",
+      headers: {
+        accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        lines: lines,
+        playerName: userName,
+        playerMessage: userInput,
+      }),
+    })
+      .then((response) => response.json())
+      .then((responseData) => {
+        const durationInSeconds = (new Date() - startTime) / 1000;
+        console.log("responseData in", durationInSeconds, "seconds:", responseData);
+        if (responseData.moreLines.length) {
+            onSuccess(moreLines);
+        } else {
+            onError("Did not receive additional lines");
+        }
+      })
+      .catch((err) => {
+        onError(err);
+      });
+  }

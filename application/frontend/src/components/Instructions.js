@@ -10,6 +10,7 @@ import {
   InstructionsNoticeAI2,
   InstructionsSelectAI,
   InstructionsShowCredits,
+  InstructionsJoinConvo
 } from "./longStrings";
 
 const Instructions = (gameState) => {
@@ -27,6 +28,8 @@ const Instructions = (gameState) => {
         return InstructionsCelebrate;
       case GameState.INTERACT:
         return InstructionsInteract;
+      case GameState.JOIN_CONVO:
+        return InstructionsJoinConvo;
       case GameState.SHOW_CREDITS:
         return InstructionsShowCredits;
       default:

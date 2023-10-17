@@ -3,16 +3,28 @@ import { GameState, deepCopy, iconsPath, makeMockLines, isLocalHost } from "./ut
 import ScoreHandler from './ScoreHandler';
 
 import "../css/ConversationDriver.css";
-import { retrieveAdditionalConversation } from './APIService';
+import { retrieveAdditionalConversation, retrieveAdditionalConversationWithUserInput } from './APIService';
 
-const ConversationDriver = ({ conversation, updateConversation, gameState, setGameState }) => {
-  const [showCheckboxes, setShowCheckboxes] = useState(false);  // To show/hide checkboxes
-  const [checkedIndex, setCheckedIndex] = useState(null);  // Index of the checked checkbox
+const ConversationDriver = ({
+  conversation,
+  updateConversation,
+  gameState,
+  setGameState,
+  userName,
+  getUserName
+}) => {
+  const [showCheckboxes, setShowCheckboxes] = useState(false); // To show/hide checkboxes
+  const [checkedIndex, setCheckedIndex] = useState(null); // Index of the checked checkbox
+  const [isReadyToJoin, setIsReadyToJoin] = useState(false); // Ready to join the conversation
+  const [numTalkTokens, setNumTalkTokens] = useState(NUM_TALK_TOKENS);
+  const [userInput, setUserInput] = useState("");
+  const [userInputError, setUserInputError] = useState(null);
   const linesContainerRef = useRef(null);
 
   const scoreHandler = ScoreHandler();
   const NOTICE_INDEX = 0;
   const NUM_BEFORE_API_CALL = 4;
+  const NUM_TALK_TOKENS = 3;
 
   useEffect(() => {
     if (linesContainerRef.current) {
@@ -21,18 +33,17 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
     }
   }, [conversation]);
 
-  if (!conversation){
-    return (
-      <div className="conversation-driver"></div>
-    );}
+  if (!conversation) {
+    return <div className="conversation-driver"></div>;
+  }
 
   const getIconPath = (name) => {
-      const person = conversation.people.find(p => p.name === name);
-      if (person && person.icon) {
-          return `${iconsPath}/${person.icon}`;
-      }
-      return '';
-  }
+    const person = conversation.people.find((p) => p.name === name);
+    if (person && person.icon) {
+      return `${iconsPath}/${person.icon}`;
+    }
+    return "";
+  };
 
   const handleNextClick = () => {
     const nextIndex = conversation.currentLineIndex;
@@ -42,7 +53,11 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
     }
 
     if (nextIndex === conversation.lines.length - NUM_BEFORE_API_CALL) {
-      retrieveAdditionalConversation(conversation.lines, handleAPISuccess, handleAPIError);
+      retrieveAdditionalConversation(
+        conversation.lines,
+        handleAPISuccess,
+        handleAPIError
+      );
     }
     incrementIndex();
   };
@@ -51,17 +66,20 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
     const updatedConvo = deepCopy(conversation);
     updatedConvo.currentLineIndex = conversation.currentLineIndex + 1;
     updateConversation(updatedConvo);
-  }
+  };
 
   const handleNoticeClick = () => {
-    if (gameState == GameState.NOTICE_AI){
+    if (gameState == GameState.NOTICE_AI) {
       setGameState(GameState.SELECT_AI);
       setShowCheckboxes(true);
     } else {
       // Deep clone the current conversation to avoid direct state mutation
       const updatedLine = deepCopy(conversation.lines[checkedIndex]);
       conversation.aiGuess = checkedIndex;
-      updatedLine.message = scoreHandler.calculateScoreMessage(checkedIndex, conversation.initialLength);
+      updatedLine.message = scoreHandler.calculateScoreMessage(
+        checkedIndex,
+        conversation.initialLength
+      );
       conversation.lines[checkedIndex] = updatedLine;
       updateConversation(conversation);
 
@@ -72,10 +90,12 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
   };
 
   const isNoticeDisabled = () => {
-    return (gameState == GameState.SELECT_AI && checkedIndex == null) || 
+    return (
+      (gameState == GameState.SELECT_AI && checkedIndex == null) ||
       //TODO: update when change INDEX
-      conversation.currentLineIndex < NOTICE_INDEX + 2;
-  }
+      conversation.currentLineIndex < NOTICE_INDEX + 2
+    );
+  };
 
   const handleCheckboxChange = (index) => {
     setCheckedIndex(index);
@@ -90,22 +110,37 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
   };
 
   const handleAPIError = (err) => {
+    handleErrorWithLabel(err, handleAPISuccess);
+  };
+
+  const handleErrorWithLabel = (err, addLines, label = "") => {
     if (isLocalHost()) {
-      const moreLines = makeMockLines(conversation.lines);
-      handleAPISuccess(moreLines);
+      const moreLines = makeMockLines(conversation.lines, label);
+      addLines(moreLines);
     } else {
       console.log("retrieveConversations api error\n", err);
-      alert("Sorry, failed to retrieve conversations due to an error, try refreshing.\n" + err);
+      alert(
+        "Sorry, failed to retrieve conversations due to an error, try refreshing.\n" +
+        err
+      );
     }
-  };
+  }
 
   // INTERACT Stage functions
 
   const handleNextInteractClick = () => {
     const nextIndex = conversation.currentLineIndex;
 
-    if (nextIndex == conversation.lines.length) {
-      retrieveAdditionalConversation(conversation.lines, handleInteractAPISuccess, handleInteractAPIError);
+    if (nextIndex == conversation.lines.length - 1) {
+      if (gameState === GameState.JOIN_CONVO) {
+        setIsReadyToJoin(true);
+      } else {
+        retrieveAdditionalConversation(
+          conversation.lines,
+          handleInteractAPISuccess,
+          handleInteractAPIError
+        );
+      }
     }
 
     incrementIndex();
@@ -116,7 +151,8 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
     const convoLines = newConvo.lines;
     moreLines[0].message = `AI provided ${moreLines.length} more lines.`;
     convoLines.push(...moreLines);
-    convoLines[conversation.initialLength].message = "AI-created conversation starts here";
+    convoLines[conversation.initialLength].message =
+      "AI-created conversation starts here";
     conversation.lines = convoLines;
     updateConversation(conversation);
   };
@@ -127,8 +163,58 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
       handleInteractAPISuccess(moreLines);
     } else {
       console.log("retrieveConversations api error\n", err);
-      alert("Sorry, failed to retrieve conversations due to an error, try refreshing.\n" + err);
+      alert(
+        "Sorry, failed to retrieve conversations due to an error, try refreshing.\n" +
+          err
+      );
     }
+  };
+
+  const handleJoinConvo = () => {
+    setGameState(GameState.JOIN_CONVO);
+  };
+
+  const handleMessageSubmit = () => {
+    console.log("playerName", userName, "lastPerson", "??lastPerson");
+    const maxChars = 140;
+    const entry = userInput.trim();
+    const regex = /^[a-zA-Z0-9-. ,()'!?]+$/;
+    let errorMessage = null;
+    if (entry.length < 20) {
+      errorMessage = `Please provide a longer sentence with more details, up to ${maxChars} characters.`;
+    } else if (entry.length > maxChars) {
+      errorMessage = `Sorry, please use less than ${maxChars} characters in your message. It is currently ${entry.length}.`;
+    } else if (!regex.test(entry)) {
+      errorMessage = `Please use only letters, numbers, .-,()'!? and space characters.`;
+    } else if (!userName) {
+      errorMessage = `Would you provide a name for them to call you?`;
+      getUserName();
+    }
+
+    if (errorMessage) {
+      setUserInputError(errorMessage);
+      return;
+    } else if (inputError) {
+      setUserInputError(null);
+    }
+
+    retrieveAdditionalConversationWithUserInput(
+      userName,
+      userInput,
+      conversation.lines,
+      handleInteractWithUserAPISuccess,
+      handleInteractWithUserAPIError
+    );
+  };
+
+  const handleInteractWithUserAPISuccess = (moreLines) => {
+    handleAPISuccess(moreLines);
+    setGameState(GameState.INTERACT);
+    setIsReadyToJoin(false);
+  }
+
+  const handleInteractWithUserAPIError = (err) => {
+    handleErrorWithLabel(err, handleInteractWithUserAPISuccess, "withUser");
   };
 
   return (
@@ -203,18 +289,47 @@ const ConversationDriver = ({ conversation, updateConversation, gameState, setGa
           <button
             className="next-button"
             onClick={handleNextInteractClick}
-            disabled={showCheckboxes}
+            disabled={showCheckboxes || isReadyToJoin}
           >
             Next
           </button>
-          <input type="text" className="middle-textfield" placeholder="Enter text here..." />
-          <button class="up-button">
-            ⬆
-          </button>
+
+          {gameState !== GameState.JOIN_CONVO && (
+            <button className="notice-button" onClick={handleJoinConvo}>
+              Join conversation
+            </button>
+          )}
+          {isReadyToJoin && (
+            <textarea
+              rows="2"
+              className="form-control spacing no-shadow"
+              value={userInput}
+              onChange={(e) => setUserInput(e.target.value)}
+              placeholder="Enter your message for the conversation here then click the arrow to submit..."
+            ></textarea>
+          )}
+          {gameState === GameState.JOIN_CONVO && !isReadyToJoin && (
+            <input
+              type="text"
+              className="middle-textfield"
+              placeholder="Please continue the conversation..."
+              disabled={!isReadyToJoin}
+            />
+          )}
+          {gameState === GameState.JOIN_CONVO && (
+            <button
+              class="up-button"
+              disabled={!isReadyToJoin}
+              onClick={handleMessageSubmit}
+            >
+              ⬆
+            </button>
+          )}
         </div>
       )}
+      {userInputError && <div className="error-message">{userInputError}</div>}
     </div>
   );
-}
+};
 
 export default ConversationDriver;
