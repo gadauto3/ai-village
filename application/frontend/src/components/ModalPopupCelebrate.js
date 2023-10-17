@@ -20,7 +20,7 @@ const ModalPopupCelebrate = ({ closeModal, conversations }) => {
     <div className="modal-celeb-overlay">
       <div className="modal-celeb no-shadow">
         <button onClick={handleDismiss}>✖️</button>
-        <h1>Congrats, you finished guessing!</h1>
+        <h1>🎉 Guessing complete! 🎉</h1>
         <p>Here are your results:</p>
         <ul>
           {conversations.map((conversation, index) => (
