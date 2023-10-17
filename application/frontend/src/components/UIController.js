@@ -85,7 +85,7 @@ const UIController = () => {
   }
 
   return (
-    <div className='outer-div'>
+    <div className="outer-div">
       <h1 className="text-center title-noto-sans">WhatsAIpp or MessAIges</h1>
       <div className="ui-controller">
         <div className="top-section">
@@ -120,7 +120,9 @@ const UIController = () => {
           config={nameModalConfig}
         />
       )}
-      <button onClick={jumpToInteract}>Interact</button>
+      <div>
+        <button onClick={jumpToInteract}>Interact</button>
+      </div>
     </div>
   );
 };

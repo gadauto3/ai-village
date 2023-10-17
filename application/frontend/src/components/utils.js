@@ -3,7 +3,6 @@ export function isLocalHost() {
     typeof window !== "undefined" &&
     window.location.host.includes("localhost")
   ) {
-    console.log("You are running on localhost!");
     return true;
   } else {
     return false;

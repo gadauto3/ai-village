@@ -12,7 +12,7 @@ const ModalPopupCelebrate = ({ closeModal, conversations }) => {
   const resultText = (conversation) => {
     const result = `${
       conversation.initialLength - conversation.aiGuess
-    } out of ${conversation.initialLength}`;
+    } away`;
     return result;
   };
 
@@ -22,16 +22,17 @@ const ModalPopupCelebrate = ({ closeModal, conversations }) => {
         <button onClick={handleDismiss}>✖️</button>
         <h1>🎉 Guessing complete! 🎉</h1>
         <p>Here are your results:</p>
-        <ul>
+        <p>
           {conversations.map((conversation, index) => (
-            <li key={index}>
-              {conversation.people[0].name} and {conversation.people[1].name}:{" "}
+            <span key={index}>
+              <strong>{conversation.people[0].name} and {conversation.people[1].name}</strong>:{" "}
               {resultText(conversation)}
-            </li>
+              <br />
+            </span>
           ))}
-        </ul>
+        </p>
         <p>Tip for next time:</p>
-        <p>TBD</p>
+        <p><strong>TBD</strong></p>
         <h6>
           But the experience is not over: now it's time to chat with the AI
           yourself!
