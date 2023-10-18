@@ -43,7 +43,7 @@ const ConversationDriver = ({
   const getIconPath = (name) => {
     const person = conversation.people.find((p) => p.name === name);
     if (person && person.icon) {
-      return `${iconsPath}/${person.icon}`;
+      return `${iconsPath}${person.icon}`;
     }
     return "";
   };

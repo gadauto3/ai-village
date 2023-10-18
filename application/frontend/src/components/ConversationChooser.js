@@ -77,12 +77,12 @@ const ConversationChooser = ({
           >
             <div className="image-container">
               <img
-                src={`${iconsPath}/${conversation.people[0].icon}`}
+                src={`${iconsPath}${conversation.people[0].icon}`}
                 alt="Bottom Image"
                 className="bottom-image"
               />
               <img
-                src={`${iconsPath}/${conversation.people[1].icon}`}
+                src={`${iconsPath}${conversation.people[1].icon}`}
                 alt="Top Image"
                 className="top-image"
               />

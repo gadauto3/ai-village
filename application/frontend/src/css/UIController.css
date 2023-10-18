@@ -22,8 +22,7 @@
 
 .conversation-chooser {
   flex: 1 1 27%; /* grow, shrink, basis */
-  min-width: 240px;
-  max-width: 248px;
+  min-width: 245px;
   overflow-y: auto; /* Add scrolling if content exceeds pane height */
   border-right: 1px solid #C0BCBB;
 }

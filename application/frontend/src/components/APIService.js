@@ -46,7 +46,7 @@ export const retrieveAdditionalConversation = (lines, onSuccess, onError) => {
         accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(lines),
+      body: JSON.stringify({ lines: lines }),
     })
       .then((response) => response.json())
       .then((responseData) => {
