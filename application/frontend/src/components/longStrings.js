@@ -17,8 +17,9 @@ export const InstructionsSelectAI =
   'Choose which conversation you think the AI began to write the dialogue.\
   Then click "Submit guess".';
 
-export const InstructionsMoveConvos = "☝🏽 Now select another conversation and\
-  click \"Next\" to move it along.";
+export const InstructionsMoveConvos = "Great! ☝🏽 Now select another conversation and\
+  click \"Next\" to move it along. You got some feedback on your choice but we'll review\
+  results later as well.";
 
 export const InstructionsCelebrate = "🎉 Celebrate your effort! 🎉";
 

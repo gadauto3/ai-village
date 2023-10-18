@@ -11,7 +11,7 @@ const ModalPopupCelebrate = ({ closeModal, conversations }) => {
 
   const resultText = (conversation) => {
     const result = `${
-      conversation.initialLength - conversation.aiGuess
+      Math.abs(conversation.initialLength - conversation.aiGuess)
     } away`;
     return result;
   };
@@ -32,11 +32,11 @@ const ModalPopupCelebrate = ({ closeModal, conversations }) => {
           ))}
         </p>
         <p>Tip for next time:</p>
-        <p><strong>TBD</strong></p>
-        <h6>
-          But the experience is not over: now it's time to chat with the AI
-          yourself!
-        </h6>
+        <p><strong>Coming soon!</strong></p>
+        <p>&nbsp;</p>
+        <h5>
+          But we're not done yet, now it's time to chat with the AI yourself!
+        </h5>
         <p>Dismiss this to move forward.</p>
       </div>
     </div>

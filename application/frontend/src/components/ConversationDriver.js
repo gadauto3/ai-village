@@ -130,6 +130,7 @@ const ConversationDriver = ({
   // Handle API calls
   const handleAPISuccess = (moreLines) => {
     const convo = deepCopy(conversation);
+    // This async call is holding onto state from when retrieve was called
     convo.currentLineIndex = currentLineIndexRef.current;
     convo.lines.push(...moreLines);
     updateConversation(convo);
@@ -164,6 +165,8 @@ const ConversationDriver = ({
       if (gameState === GameState.JOIN_CONVO) {
         setIsReadyToJoin(true);
       } else {
+        setIsFetching(true);
+        isFetchingRef.current = true;
         retrieveAdditionalConversation(
           conversation.lines,
           handleInteractAPISuccess,
@@ -176,13 +179,22 @@ const ConversationDriver = ({
   };
 
   const handleInteractAPISuccess = (moreLines) => {
+    if (!moreLines.length) {
+      handleInteractAPIError("More lines were not added.");
+      return;
+    }
+
     const newConvo = deepCopy(conversation);
+    // This async call is holding onto state from when retrieve was called
+    newConvo.currentLineIndex = currentLineIndexRef.current;
     const convoLines = newConvo.lines;
     moreLines[0].message = `AI provided ${moreLines.length} more lines.`;
     convoLines.push(...moreLines);
-    convoLines[conversation.initialLength].message = AI_STARTS_HERE_MSG;
-    conversation.lines = convoLines;
-    updateConversation(conversation);
+    convoLines[newConvo.initialLength].message = AI_STARTS_HERE_MSG;
+    newConvo.lines = convoLines;
+    updateConversation(newConvo);
+
+    setIsFetching(false);
   };
 
   const handleInteractAPIError = (err) => {
@@ -232,6 +244,8 @@ const ConversationDriver = ({
       setUserInputError(null);
     }
 
+    setIsFetching(true);
+    isFetchingRef.current = true;
     retrieveAdditionalConversationWithUserInput(
       userName,
       userInput,
