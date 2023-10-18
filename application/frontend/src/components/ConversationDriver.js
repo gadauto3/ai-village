@@ -17,6 +17,7 @@ const ConversationDriver = ({
   const [showCheckboxes, setShowCheckboxes] = useState(false); // To show/hide checkboxes
   const [checkedIndex, setCheckedIndex] = useState(null); // Index of the checked checkbox
   const [isReadyToJoin, setIsReadyToJoin] = useState(false); // Ready to join the conversation
+  const [isFetchingForGuess, setIsFetchingForGuess] = useState(false); // Fetching from the API
   const [isFetching, setIsFetching] = useState(false); // Fetching from the API
   const [numTalkTokens, setNumTalkTokens] = useState(NUM_TALK_TOKENS);
   const [userInput, setUserInput] = useState("");
@@ -50,18 +51,29 @@ const ConversationDriver = ({
 
   const handleNextClick = () => {
     const nextIndex = conversation.currentLineIndex;
+    console.log("nextIndex", nextIndex, "vs length", conversation.lines.length);
 
     if (nextIndex > NOTICE_INDEX) {
       setGameState(GameState.NOTICE_AI);
     }
 
     if (nextIndex === conversation.lines.length - NUM_BEFORE_API_CALL) {
+      setIsFetchingForGuess(true);
       retrieveAdditionalConversation(
         conversation.lines,
         handleAPISuccess,
         handleAPIError
       );
     }
+
+    if (nextIndex === conversation.lines.length) {
+      console.log("isFetchingForGuess", isFetchingForGuess);
+      if (isFetchingForGuess) {
+        setIsFetching(true);
+      }
+      return;
+    }
+
     incrementIndex();
   };
 
@@ -100,7 +112,7 @@ const ConversationDriver = ({
     return (
       (gameState == GameState.SELECT_AI && checkedIndex == null) ||
       //TODO: update when change INDEX
-      conversation.currentLineIndex < NOTICE_INDEX + 2
+      conversation.currentLineIndex < NOTICE_INDEX + 2 || isFetching
     );
   };
 
@@ -110,10 +122,13 @@ const ConversationDriver = ({
 
   // Handle API calls
   const handleAPISuccess = (moreLines) => {
-    const convoLines = deepCopy(conversation.lines);
-    convoLines.push(...moreLines);
-    conversation.lines = convoLines;
-    updateConversation(conversation);
+    console.log("handleAPISuccess isFetching", isFetching, moreLines.length, "currIdx", conversation.currentLineIndex);
+    const convo = deepCopy(conversation);
+    convo.lines.push(...moreLines);
+    updateConversation(convo);
+
+    setIsFetchingForGuess(false);
+    setIsFetching(false);
   };
 
   const handleAPIError = (err) => {
@@ -300,7 +315,7 @@ const ConversationDriver = ({
           <button
             className="next-button"
             onClick={handleNextClick}
-            disabled={showCheckboxes}
+            disabled={showCheckboxes || isFetching}
           >
             Next
           </button>
