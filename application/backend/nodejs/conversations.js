@@ -1,18 +1,19 @@
 const fs = require('fs');
 const path = require('path');
 const seedrandom = require('seedrandom');
-const RainbowColors = require('./rainbowColors');
+const ConversationAdapter = require('./conversationAdapter');
 
 class Conversations {
     constructor() {
         this.data = this._loadData();
-        this.rainbowColors = new RainbowColors();
     }
 
     _loadData() {
         try {
             const rawData = fs.readFileSync(path.join(__dirname, 'conversationSeeds.json'), 'utf-8');
-            return JSON.parse(rawData);
+            const parsedJson = JSON.parse(rawData);
+            const transformedData = ConversationAdapter.transform(parsedJson);
+            return transformedData;
         } catch (error) {
             console.error("Error loading the conversations data", error);
             return [];
@@ -23,7 +24,6 @@ class Conversations {
         let convos = [...this.data];
         count = Math.max(count, 2); // Less than 2 is not fun and doesn't count as a game
         let randGenerator = seedrandom(randomSeed);
-        const colors = this.rainbowColors.getColors(count, randGenerator);
 
         // Shuffle the convos array using the Fisher-Yates (aka Knuth) shuffle algorithm
         for (let i = convos.length - 1; i > 0; i--) {
@@ -32,16 +32,8 @@ class Conversations {
         }
         convos = convos.slice(0, count); // Now get the ones we need
 
-        // Add the rainbow colors
-        const coloredConvos = convos.map((item, index) => {
-            if (colors[index] !== undefined) {
-              item.color = colors[index];
-            }
-            return item;
-          });
-
         // If the count is more than available data, return all data.
-        return coloredConvos;
+        return convos;
     }
 }
 

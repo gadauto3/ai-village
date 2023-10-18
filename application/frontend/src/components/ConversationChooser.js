@@ -47,7 +47,6 @@ const ConversationChooser = ({
 
   const handleSuccess = (conversations) => {
     setConversations(conversations);
-    setIsApiSuccess(true);
   };
 
   const handleError = (err) => {
@@ -115,12 +114,12 @@ const ConversationChooser = ({
           <div key={index} className="conversation-item">
             <div className="image-container">
               <img
-                src={`${iconsPath}/${defaultHeadIcon}`}
+                src={`${iconsPath}${defaultHeadIcon}`}
                 alt="Bottom Image"
                 className="bottom-image"
               />
               <img
-                src={`${iconsPath}/${defaultHeadIcon}`}
+                src={`${iconsPath}${defaultHeadIcon}`}
                 alt="Top Image"
                 className="top-image"
               />
