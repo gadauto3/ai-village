@@ -12,12 +12,12 @@
 }
 
 .modal {
-  background: #000;
+  background: rgb(239, 239, 239);
   padding: 20px;
   border-radius: 5px;
   width: 80%; 
   height: 30%;
-  color: #00D9FF;
+  color: #000;
   display: flex;
   flex-direction: column;  /* stack children vertically */
   justify-content: center; /* vertically center */
@@ -28,7 +28,7 @@
   left: 50%;        /* Move the left edge to the horizontal middle of the viewport */
   transform: translate(-50%, -50%); /* Adjusts for the modal's own dimensions */
   z-index: 1000;    /* Make sure it sits on top of other content */
-  box-shadow: 1px 6px 9px rgba(0, 217, 255, 0.9); /* optional shadow for a bit of depth */
+  box-shadow: 1px 6px 9px rgba(0, 0, 1, 0.4); /* optional shadow for a bit of depth */
 }
 
 .error {
@@ -36,7 +36,9 @@
 }
 
 .modal button {
-  margin-top: 10px;
+  margin-top: 16px;
   min-width: 100px;
   border-radius: 5px;
+  border-color: white;
+  box-shadow: 1px 6px 9px rgba(0, 0, 1, 0.4); /* optional shadow for a bit of depth */
 }

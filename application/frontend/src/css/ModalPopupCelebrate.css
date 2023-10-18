@@ -38,4 +38,5 @@
   border-radius: 5px;
   border-color: white;
   background-color: transparent; /* Optional: To make sure the button has no background */
+  box-shadow: 1px 6px 9px rgba(0, 0, 1, 0.4); /* optional shadow for a bit of depth */
 }

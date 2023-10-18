@@ -150,7 +150,8 @@ const ConversationDriver = ({
     } else {
       console.log("retrieveConversations api error\n", err);
       alert(
-        "Sorry, failed to retrieve conversations due to an error, try refreshing.\n" +
+        "Sorry, failed to retrieve conversations due to an error, \
+        try pressing again or if that fails, refresh the page.\n" +
         err
       );
     }
