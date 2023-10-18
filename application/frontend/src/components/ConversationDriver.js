@@ -24,6 +24,10 @@ const ConversationDriver = ({
   const [userInputError, setUserInputError] = useState(null);
   const linesContainerRef = useRef(null);
 
+  const isFetchingRef = useRef(isFetching);
+  const isFetchingForGuessRef = useRef(isFetchingForGuess);
+  const currentLineIndexRef = useRef(0);
+  
   const scoreHandler = ScoreHandler();
   const NOTICE_INDEX = 0;
   const NUM_BEFORE_API_CALL = 4;
@@ -39,6 +43,8 @@ const ConversationDriver = ({
 
   if (!conversation) {
     return <div className="conversation-driver"></div>;
+  } else {
+    currentLineIndexRef.current = conversation.currentLineIndex;
   }
 
   const getIconPath = (name) => {
@@ -51,7 +57,6 @@ const ConversationDriver = ({
 
   const handleNextClick = () => {
     const nextIndex = conversation.currentLineIndex;
-    console.log("nextIndex", nextIndex, "vs length", conversation.lines.length);
 
     if (nextIndex > NOTICE_INDEX) {
       setGameState(GameState.NOTICE_AI);
@@ -59,6 +64,7 @@ const ConversationDriver = ({
 
     if (nextIndex === conversation.lines.length - NUM_BEFORE_API_CALL) {
       setIsFetchingForGuess(true);
+      isFetchingForGuessRef.current = true;
       retrieveAdditionalConversation(
         conversation.lines,
         handleAPISuccess,
@@ -67,9 +73,9 @@ const ConversationDriver = ({
     }
 
     if (nextIndex === conversation.lines.length) {
-      console.log("isFetchingForGuess", isFetchingForGuess);
       if (isFetchingForGuess) {
         setIsFetching(true);
+        isFetchingRef.current = true;
       }
       return;
     }
@@ -81,6 +87,7 @@ const ConversationDriver = ({
     const updatedConvo = deepCopy(conversation);
     updatedConvo.currentLineIndex = conversation.currentLineIndex + 1;
     updateConversation(updatedConvo);
+    currentLineIndexRef.current = updatedConvo.currentLineIndex;
   };
 
   const handleNoticeClick = () => {
@@ -122,8 +129,8 @@ const ConversationDriver = ({
 
   // Handle API calls
   const handleAPISuccess = (moreLines) => {
-    console.log("handleAPISuccess isFetching", isFetching, moreLines.length, "currIdx", conversation.currentLineIndex);
     const convo = deepCopy(conversation);
+    convo.currentLineIndex = currentLineIndexRef.current;
     convo.lines.push(...moreLines);
     updateConversation(convo);
 
@@ -196,7 +203,6 @@ const ConversationDriver = ({
   };
 
   const handleMessageSubmit = () => {
-    console.log("playerName", userName, "lastPerson", "??lastPerson");
     const maxChars = 140;
     const entry = userInput.trim();
     const regex = /^[a-zA-Z0-9-. ,()'!?]+$/;
@@ -215,10 +221,7 @@ const ConversationDriver = ({
         buttonText: "Done",
         entryLengthMin: 3,
         entryLengthMax: 20,
-        onClose: (name) => {
-          console.log("name", name);;
-          // TODO: call this function afterwards? Will that cause issues?
-        }
+        onClose: () => {}
       });
     }
 

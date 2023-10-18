@@ -74,7 +74,6 @@ const UIController = () => {
   }
 
   const getNameFromUser = (modalConfig) => {
-    console.log("pop up modal to get username");
     setNameModalConfig(modalConfig);
     setIsNameModalShowing(true);
   };
