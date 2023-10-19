@@ -5,13 +5,14 @@ export const InstructionsInit =
   add, the higher the possible score, but it may make the game more difficult.';
 
 export const InstructionsNextConvo =
-  'Select a messenger group them use "Next" to advance the conversation between them.';
+  'First select a messenger group above. Then, use "Next" to get more messages\
+  from the conversation.';
 
 export const InstructionsNoticeAI2 =
   'Now your goal is to select the "I\'m noticing AI generation" button when you\
-  notice that the AI is creating further conversation between the people.\
-  The AI tries to be a playwright making up further dialogue.\
-  The highest score is 15 per conversation. You can guess once per conversation.';
+  notice that the AI (who thinks it\'s a writer making up dialogue) is creating\
+  further conversation between the people. HINT: the shortest conversation is 7 messages\
+  so don\'t click right away.';
 
 export const InstructionsSelectAI =
   'Choose which conversation you think the AI began to write the dialogue.\

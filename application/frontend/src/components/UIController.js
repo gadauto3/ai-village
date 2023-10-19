@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { GameState } from './utils';
+import { GameState, isLocalHost } from './utils';
 
 import ConversationChooser from './ConversationChooser';
 import ConversationDriver from './ConversationDriver';
@@ -119,9 +119,11 @@ const UIController = () => {
           config={nameModalConfig}
         />
       )}
-      <div>
-        <button onClick={jumpToInteract}>Interact</button>
-      </div>
+      {isLocalHost() && (
+        <div>
+          <button onClick={jumpToInteract}>Interact</button>
+        </div>
+      )}
     </div>
   );
 };

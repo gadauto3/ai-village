@@ -385,7 +385,7 @@ const ConversationDriver = ({
           {gameState === GameState.JOIN_CONVO && (
             <button
               className="up-button"
-              disabled={!isReadyToJoin}
+              disabled={!isReadyToJoin || isFetching}
               onClick={handleMessageSubmit}
             >
               ⬆
