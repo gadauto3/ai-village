@@ -12,7 +12,7 @@ class Conversations {
         try {
             const rawData = fs.readFileSync(path.join(__dirname, 'conversationSeeds.json'), 'utf-8');
             const parsedJson = JSON.parse(rawData);
-            const transformedData = ConversationAdapter.transform(parsedJson);
+            const transformedData = ConversationAdapter.adaptConversation(parsedJson);
             return transformedData;
         } catch (error) {
             console.error("Error loading the conversations data", error);

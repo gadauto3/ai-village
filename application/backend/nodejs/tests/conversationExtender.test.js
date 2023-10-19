@@ -13,7 +13,7 @@ describe('ConversationExtender', () => {
   });
 
   test("extendConversation returns valid JSON", (done) => {
-    if (!process.env.OPENAI_API_KEY || true) { // TODO: REMOVE
+    if (!process.env.OPENAI_API_KEY) {
       console.warn("Skipping ConversationExtender tests since OPENAI_API_KEY is not defined");
       done();
       return;

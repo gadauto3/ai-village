@@ -3,6 +3,7 @@ const path = require('path');
 const AWS = require('aws-sdk');
 const OpenAI = require("openai");
 const { response } = require('express');
+const ConversationAdapter = require('./conversationAdapter');
 
 const ssm = new AWS.SSM();
 // Read and clean up the prompt text
@@ -76,8 +77,11 @@ class ConversationExtender {
     return prompt + newPrompt;
   }
   
-  removePlayerFromLines(lines, playerName) {
-    return lines.filter(line => line.name !== playerName);
+  removeOthersFromLines(originalLines, newLines) {
+    // Get the names from the original conversation lines
+    const originalNames = originalLines.map(line => line.name);
+    // Filter out lines that do not belong to these names
+    return newLines.filter(line => originalNames.includes(line.name));
   }
 
   removeMatchingElements(priorArray, newArray) {
@@ -148,9 +152,9 @@ class ConversationExtender {
 
         let responseLines = this.removeMatchingElements(originalLines, responseJson.lines);
         if (playerName) {
-          console.log("Player name caught in lines");
-          responseLines = this.removePlayerFromLines(responseLines, playerName);
+          responseLines = this.removeOthersFromLines(originalLines, responseLines);
         }
+        responseLines = ConversationAdapter.adaptLines(responseLines);
         callback(null, responseLines);
       } catch (e) {
         console.log("Error context:", fullContext);
