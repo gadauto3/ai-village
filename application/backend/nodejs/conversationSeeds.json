@@ -75,11 +75,27 @@
         "lines": [
             {
                 "name": "Mika",
-                "text": "You know, Helen, I was reading about that crazy stunt the artist Banksy pulled off a while ago, sneaking his own art into world-famous museums."
+                "text": "It was a real pleasure to meet you two at the museum today, thx SOOO much for helping me find my bag! 🙏👜"
             },
             {
                 "name": "Helen",
-                "text": "Oh, you mean when he slipped those real-looking paintings into the main art museums in San Francisco and New York? Brilliant and hilarious!"
+                "text": "no worries at all, glad you got it, fun to meet a fellow art aficionado"
+            },
+            {
+                "name": "Mika",
+                "text": "It cracked me up when you looked behind that installation, I felt like we were doing something illegal"
+            },
+            {
+                "name": "Helen",
+                "text": "I swear I saw a strap hanging out, no harm done"
+            },
+            {
+                "name": "Mika",
+                "text": "If it had been there, it would've been like that crazy stunt the artist Banksy pulled off a while ago, sneaking his own art into world-famous museums"
+            },
+            {
+                "name": "Helen",
+                "text": "you mean when he slipped those real-looking paintings into the big art museums in San Francisco and New York? Brilliant and hilarious!"
             },
             {
                 "name": "Mika",
@@ -87,27 +103,27 @@
             },
             {
                 "name": "Helen",
-                "text": "Exactly! It's like he was playfully mocking the sanctity of these revered institutions. Making people think: who gets to decide what is art?"
+                "text": "like he was playfully mocking the institutions of art. I wonder if some folks that walked by your bag thought it was a piece? 😆🖼️"
             },
             {
                 "name": "Mika",
-                "text": "Apparently, his sister once teased him, saying,\"It's not like any of your pieces will actually end up in the Louvre.\" Can you imagine?"
+                "text": "🤣🤣🤣"
             },
             {
                 "name": "Helen",
-                "text": "It's such a Banksy move. Taking a playful jest and turning it into a powerful statement about art and its institutions."
+                "text": "hey, did you hear why banksy did it? apparently his sister once teased him: It's not like any of your pieces will actually end up in the Louvre..."
             },
             {
                 "name": "Mika",
-                "text": "Yes! It wasn't just about proving his sister wrong, but questioning the entire establishment. Who decides what's worthy of being in a museum?"
+                "text": "What a Banksy response right?!? Taking a playful jab and turning it into a powerful statement about art and who gets to decide what is Art."
             },
             {
                 "name": "Helen",
-                "text": "It's not just about the art, but the statement. Banksy really knows how to leave an impression, both on the canvas and in our minds."
+                "text": "Banksy really knows how to leave an impression, both on the canvas and in our minds 😛"
             },
             {
                 "name": "Mika",
-                "text": "Know of any other clever stunts pulled by famous artists?"
+                "text": "Good one!! know of any other clever stunts pulled by famous artists?"
             }
         ]
     },
