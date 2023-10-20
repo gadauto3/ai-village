@@ -67,7 +67,9 @@
 
 .player-line .line-container {
   background-color: #3478F6; /* background color of the line-item is blue */
-  text-align: right;      /* text is justified right */
+  color: white;
+  justify-content: flex-end;
+  margin-left: 42px;
 }
 
 .player-line img {

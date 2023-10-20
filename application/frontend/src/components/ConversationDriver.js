@@ -27,6 +27,7 @@ const ConversationDriver = ({
   const isFetchingRef = useRef(isFetching);
   const isFetchingForGuessRef = useRef(isFetchingForGuess);
   const currentLineIndexRef = useRef(0);
+  const conversationRef = useRef(conversation);
   
   const scoreHandler = ScoreHandler();
   const NOTICE_INDEX = 0;
@@ -65,6 +66,7 @@ const ConversationDriver = ({
     if (nextIndex === conversation.lines.length - NUM_BEFORE_API_CALL) {
       setIsFetchingForGuess(true);
       isFetchingForGuessRef.current = true;
+      conversationRef.current = conversation;
       retrieveAdditionalConversation(
         conversation.lines,
         handleAPISuccess,
@@ -84,8 +86,8 @@ const ConversationDriver = ({
   };
 
   const incrementIndex = (convoCopy = null) => {
-    const updatedConvo = convoCopy ?? deepCopy(conversation);
-    updatedConvo.currentLineIndex = conversation.currentLineIndex + 1;
+    const updatedConvo = convoCopy == null ? deepCopy(conversation) : convoCopy;
+    updatedConvo.currentLineIndex = updatedConvo.currentLineIndex + 1;
     updateConversation(updatedConvo);
     currentLineIndexRef.current = updatedConvo.currentLineIndex;
   };
@@ -129,7 +131,7 @@ const ConversationDriver = ({
 
   // Handle API calls
   const handleAPISuccess = (moreLines) => {
-    const convo = deepCopy(conversation);
+    const convo = deepCopy(conversationRef.current);
     // This async call is holding onto state from when retrieve was called
     convo.currentLineIndex = currentLineIndexRef.current;
     convo.lines.push(...moreLines);
@@ -145,7 +147,7 @@ const ConversationDriver = ({
 
   const handleErrorWithLabel = (err, addLines, label = "") => {
     if (isLocalHost()) {
-      const moreLines = makeMockLines(conversation.lines, label);
+      const moreLines = makeMockLines(conversationRef.current.lines, label);
       addLines(moreLines);
     } else {
       console.log("retrieveConversations api error\n", err);
@@ -168,6 +170,7 @@ const ConversationDriver = ({
       } else {
         setIsFetching(true);
         isFetchingRef.current = true;
+        conversationRef.current = conversation;
         retrieveAdditionalConversation(
           filterLinesByName(conversation.lines, userName),
           handleInteractAPISuccess,
@@ -250,6 +253,8 @@ const ConversationDriver = ({
     const newConvo = deepCopy(conversation);
     newConvo.lines.push({"name":userName, "message":null, "text":userInput});
     incrementIndex(newConvo);
+    conversationRef.current = newConvo;
+    console.log("newConvo", newConvo);
 
     // Set fetching state and make the api call
     setIsFetching(true);
