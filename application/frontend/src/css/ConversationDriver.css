@@ -65,6 +65,15 @@
   margin-top: 20px;
 }
 
+.player-line .line-container {
+  background-color: #3478F6; /* background color of the line-item is blue */
+  text-align: right;      /* text is justified right */
+}
+
+.player-line img {
+  display: none;          /* no icon for the player */
+}
+
 .line-content img {
   margin-right: 10px;
   height: 32px;

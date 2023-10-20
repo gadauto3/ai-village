@@ -83,8 +83,8 @@ const ConversationDriver = ({
     incrementIndex();
   };
 
-  const incrementIndex = () => {
-    const updatedConvo = deepCopy(conversation);
+  const incrementIndex = (convoCopy = null) => {
+    const updatedConvo = convoCopy ?? deepCopy(conversation);
     updatedConvo.currentLineIndex = conversation.currentLineIndex + 1;
     updateConversation(updatedConvo);
     currentLineIndexRef.current = updatedConvo.currentLineIndex;
@@ -169,7 +169,7 @@ const ConversationDriver = ({
         setIsFetching(true);
         isFetchingRef.current = true;
         retrieveAdditionalConversation(
-          conversation.lines,
+          filterLinesByName(conversation.lines, userName),
           handleInteractAPISuccess,
           handleInteractAPIError
         );
@@ -238,6 +238,7 @@ const ConversationDriver = ({
       });
     }
 
+    // Check for and handle errors
     if (errorMessage) {
       setUserInputError(errorMessage);
       return;
@@ -245,16 +246,26 @@ const ConversationDriver = ({
       setUserInputError(null);
     }
 
+    // Add lines to the conversation
+    const newConvo = deepCopy(conversation);
+    newConvo.lines.push({"name":userName, "message":null, "text":userInput});
+    incrementIndex(newConvo);
+
+    // Set fetching state and make the api call
     setIsFetching(true);
     isFetchingRef.current = true;
     retrieveAdditionalConversationWithUserInput(
       userName,
       userInput,
-      conversation.lines,
+      filterLinesByName(conversation.lines, userName),
       handleInteractWithUserAPISuccess,
       handleInteractWithUserAPIError
     );
   };
+
+  const filterLinesByName = (lines, name) => {
+    return lines.filter(line => line.name !== name);
+}
 
   const handleInteractWithUserAPISuccess = (moreLines) => {
     handleInteractAPISuccess(moreLines);
@@ -293,7 +304,9 @@ const ConversationDriver = ({
           .map((line, index) => (
             <div
               key={index}
-              className={`line-item ${index === 0 ? "first" : ""}`}
+              className={`line-item ${index === 0 ? "first" : ""} ${
+                line.name === userName ? "player-line" : ""
+              }`}
             >
               {line.message && (
                 <span className="line-message">{line.message}</span>
