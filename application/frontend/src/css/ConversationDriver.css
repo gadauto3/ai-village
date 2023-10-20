@@ -69,11 +69,15 @@
   background-color: #3478F6; /* background color of the line-item is blue */
   color: white;
   justify-content: flex-end;
-  margin-left: 42px;
+  margin-left: 70px;
 }
 
 .player-line img {
   display: none;          /* no icon for the player */
+}
+
+.player-separator {
+  margin-right: 48px;
 }
 
 .line-content img {

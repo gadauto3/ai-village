@@ -141,12 +141,16 @@
         ],
         "lines": [
             {
+                "name": "Violet",
+                "text": "So, to continue the unusual work conversation on this thread... did you know the Earth's magnetic poles flip, weakening the field?"
+            },
+            {
                 "name": "Sivan",
-                "text": "Hey Violet, did you know the Earth's magnetic poles flip, weakening the field?"
+                "text": "I vaguely remember that, when does it heppen and would be noticeable at all?"
             },
             {
                 "name": "Violet",
-                "text": "Yes, over thousands of years! At those times, more cosmic and solar radiation would get down to us here on Earth."
+                "text": "Over thousands of years. During those times, more cosmic and solar radiation would get down to us here on Earth."
             },
             {
                 "name": "Sivan",
@@ -158,11 +162,11 @@
             },
             {
                 "name": "Sivan",
-                "text": "What about animals that rely on the magnetic field?"
+                "text": "Ok, auroras in my backyard cood be cool. But what about animals, don't some need 'em?"
             },
             {
                 "name": "Violet",
-                "text": "Migratory animals like birds could get confused. But remember, these changes happen slowly, giving time for adaptation."
+                "text": "Animals that migrate like birds could get confused. But remember, these changes happen slowly, giving time for adaptation."
             },
             {
                 "name": "Sivan",
@@ -184,31 +188,31 @@
         "lines": [
             {
                 "name": "Vanessa",
-                "text": "Diego, it's kinda mind-blowing to think that a Greenland shark swimming the ocean today might have been born when Leonardo da Vinci was painting the Mona Lisa, isn't it?"
+                "text": "Hey Diego and friend, I thought of y'all watching this cool show about sharks today. Did you know some can live for hundreds of years?"
             },
             {
                 "name": "Diego",
-                "text": "What?!? Do they stay old for a long time or grow slowly?"
+                "text": "Really, mom? That's so cool! Which one?"
             },
             {
                 "name": "Vanessa",
-                "text": "The latter, they only start reproducing when they're 150 years old!"
+                "text": "There's this shark called the Greenland shark, and some living today might have been born before America was settled by europans. Can you imagine being that old?"
             },
             {
                 "name": "Diego",
-                "text": "Interesting, I wonder if it's the same for bristlecone trees. Some are alive today that are older than the Great Pyramids of Giza. One tree is more than 4,800 years old!"
+                "text": "!?!?! Reminds me of something I learned last week about bristalcone pines. Some are super old, like even older than castles!"
             },
             {
                 "name": "Vanessa",
-                "text": "Crazy! While humans were laying stones for the pyramids, this tree was silently growing in the California mountains."
+                "text": "That's amazing son!"
             },
             {
                 "name": "Diego",
-                "text": "It’s like these beings carry a secret history of Earth, witnessing events that we can only learn about in books."
+                "text": "Yeah! I think one tree is like thousands of years old. Its been around for soooo long, before people had computers or even phones."
             },
             {
                 "name": "Vanessa",
-                "text": "What would humans be like if they grew slowly and for a long time like one of these?"
+                "text": "I'm sure it's older than phones 🤣🤣🤣. Makes you wonder what stories they could tell if they could talk, right?"
             }
         ]
     },
@@ -226,7 +230,7 @@
         "lines": [
             {
                 "name": "Preeta",
-                "text": "Can I tell you about an accidental discovery?"
+                "text": "Related to that happy accident earlier today, can I tell you two about an accidental discovery?"
             },
             {
                 "name": "Adisu",
@@ -238,7 +242,7 @@
             },
             {
                 "name": "Adisu",
-                "text": "Ugh, sounds like one of those evil science experiments I find in the back of my fridge sometimes!"
+                "text": "Ugh, sounds like one of those evil science experiments I find in the back of the fridge sometimes!"
             },
             {
                 "name": "Preeta",

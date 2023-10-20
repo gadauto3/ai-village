@@ -22,6 +22,7 @@ const ConversationDriver = ({
   const [numTalkTokens, setNumTalkTokens] = useState(NUM_TALK_TOKENS);
   const [userInput, setUserInput] = useState("");
   const [userInputError, setUserInputError] = useState(null);
+  const [hasUserJoined, setHasUserJoined] = useState(false); // Whether user has joined the convo
   const linesContainerRef = useRef(null);
 
   const isFetchingRef = useRef(isFetching);
@@ -147,7 +148,7 @@ const ConversationDriver = ({
 
   const handleErrorWithLabel = (err, addLines, label = "") => {
     if (isLocalHost()) {
-      const moreLines = makeMockLines(conversationRef.current.lines, label);
+      const moreLines = makeMockLines(filterLinesByName(conversationRef.current.lines, userName), label);
       addLines(moreLines);
     } else {
       console.log("retrieveConversations api error\n", err);
@@ -188,7 +189,7 @@ const ConversationDriver = ({
       return;
     }
 
-    const newConvo = deepCopy(conversation);
+    const newConvo = deepCopy(conversationRef.current);
     // This async call is holding onto state from when retrieve was called
     newConvo.currentLineIndex = currentLineIndexRef.current;
     const convoLines = newConvo.lines;
@@ -203,7 +204,7 @@ const ConversationDriver = ({
 
   const handleInteractAPIError = (err) => {
     if (isLocalHost()) {
-      const moreLines = makeMockLines(conversation.lines);
+      const moreLines = makeMockLines(filterLinesByName(conversation.lines, userName));
       handleInteractAPISuccess(moreLines);
     } else {
       console.log("retrieveConversations api error\n", err);
@@ -254,7 +255,7 @@ const ConversationDriver = ({
     newConvo.lines.push({"name":userName, "message":null, "text":userInput});
     incrementIndex(newConvo);
     conversationRef.current = newConvo;
-    console.log("newConvo", newConvo);
+    setHasUserJoined(true);
 
     // Set fetching state and make the api call
     setIsFetching(true);
@@ -284,8 +285,22 @@ const ConversationDriver = ({
   };
 
   const fetchingName = () => {
-    const penultimateLine = conversation.lines[conversation.lines.length - 2];
+    let penultimateLine = conversation.lines[conversation.lines.length - 2];
+    if (penultimateLine.name === userName) {
+      penultimateLine = conversation.lines[conversation.lines.length - 3];
+    }
     return penultimateLine.name;
+  };
+
+  const getClassForPlayerState = (nameForLine) => {
+    if (hasUserJoined) {
+      if (nameForLine === userName) {
+        return "player-line";
+      } else {
+        return "player-separator";
+      }
+    }
+    return "";
   };
 
   return (
@@ -309,9 +324,9 @@ const ConversationDriver = ({
           .map((line, index) => (
             <div
               key={index}
-              className={`line-item ${index === 0 ? "first" : ""} ${
-                line.name === userName ? "player-line" : ""
-              }`}
+              className={`line-item 
+                ${index === 0 ? "first" : ""} 
+                ${getClassForPlayerState(line.name)}`}
             >
               {line.message && (
                 <span className="line-message">{line.message}</span>
