@@ -31,12 +31,26 @@
   margin-bottom: 30px;
 }
 
-.modal-celeb button {
+.modal-celeb p {
+  margin-left: 30px;
+  margin-right: 30px;
+  text-align: center;
+}
+
+.dismiss-button {
   position: absolute; /* Absolute positioning */
   top: 10px;          /* Adjust these values as needed */
   right: 10px;        /* Adjust these values as needed */
   border-radius: 5px;
   border-color: white;
   background-color: transparent; /* Optional: To make sure the button has no background */
+  box-shadow: 1px 6px 9px rgba(0, 0, 1, 0.4); /* optional shadow for a bit of depth */
+}
+
+.done-button {
+  padding: 4px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-radius: 8px;
   box-shadow: 1px 6px 9px rgba(0, 0, 1, 0.4); /* optional shadow for a bit of depth */
 }

@@ -29,8 +29,8 @@ export const InstructionsInteract =
   3 chances per game to add input to conversations.";
 
 export const InstructionsJoinConvo =
-"Join the conversation by entering your message to the text thread then pressing\
-  the upload arrow.";
+  "Press Next until it's time to join. Then enter your message into the text thread\
+  followed by sending it with ⬆️";
 
 export const InstructionsShowCredits =
   'Hope you\'re enjoying the game!';
