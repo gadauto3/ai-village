@@ -16,6 +16,7 @@
   padding: 20px;
   border-radius: 5px;
   width: 80%; 
+  max-width: 820px;
   height: 70%;
   color: #000;
   display: flex;

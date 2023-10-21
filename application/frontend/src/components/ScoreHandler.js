@@ -21,10 +21,10 @@ const ScoreHandler = () => {
   const tipForScores = (convoData) => {
     console.log("conversationData", convoData);
 
-    if (convoData.some((item) => item.guessIndex < item.answerIndex)) {
+    if (convoData.some((item) => item.guessIndex < item.answerIndex - 1)) {
       return (
         "It looks like you're guessing a bit too early. For example, in the conversation between " +
-        convoData.find((item) => item.guessIndex < item.answerIndex).people +
+        convoData.find((item) => item.guessIndex < item.answerIndex - 1).people +
         ", try waiting a bit longer before making a decision."
       );
     } else if (
@@ -43,6 +43,7 @@ const ScoreHandler = () => {
   const perfectOptions = [
     "Precisely right!",
     "On the money!",
+    "Nailed it!",
     "You did awesome! This is it.",
     "This is the right answer!",
     "How did you know it was this one?",
@@ -50,7 +51,7 @@ const ScoreHandler = () => {
 
   // Return the method for external use.
   // You can also return JSX here if this component has any UI elements.
-  return { calculateScoreMessage, tipForScores };
+  return { calculateScoreMessage, tipForScores, perfectOptions };
 };
 
 export default ScoreHandler;

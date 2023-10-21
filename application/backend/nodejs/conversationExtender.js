@@ -107,17 +107,27 @@ class ConversationExtender {
       callback(err, null);
     }
     
-    let prompt = this.adjustPrompt(userPromptTextFromFile, {lines: context.lines});
+    const filteredLines = context.lines.map((convo) => {
+      delete convo.message;
+      return convo;
+    });
+    let prompt = this.adjustPrompt(userPromptTextFromFile, {
+      lines: filteredLines,
+    });
     prompt = this.adjustPromptWithPlayerInfo(prompt, playerName, playerLine);
 
-    this.callOpenAI(prompt, context.lines, callback);
+    this.callOpenAI(prompt, filteredLines, callback);
   }
 
   async extendConversation(context, callback) {
 
     const fullContext = this.adjustPrompt(userPromptTextFromFile, context); // Use the cleaned-up prompt
 
-    this.callOpenAI(fullContext, context.lines, callback);
+    const filteredLines = context.lines.map((convo) => {
+      delete convo.message;
+      return convo;
+    });
+    this.callOpenAI(fullContext, filteredLines, callback);
   }
 
   async callOpenAI(fullContext, originalLines, callback, playerName = null) {

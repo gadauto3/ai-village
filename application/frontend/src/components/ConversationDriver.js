@@ -158,6 +158,9 @@ const ConversationDriver = ({
         err
       );
     }
+    
+    setIsFetchingForGuess(false);
+    setIsFetching(false);
   }
 
   // INTERACT Stage functions
@@ -275,13 +278,18 @@ const ConversationDriver = ({
 
   const handleInteractWithUserAPISuccess = (moreLines) => {
     handleInteractAPISuccess(moreLines);
-    setGameState(GameState.INTERACT);
-    setIsReadyToJoin(false);
-    setUserInput("");
+    cleanupUserInteraction();
   }
 
   const handleInteractWithUserAPIError = (err) => {
     handleErrorWithLabel(err, handleInteractWithUserAPISuccess, "withUser");
+    cleanupUserInteraction();
+  };
+
+  const cleanupUserInteraction = () => {
+    setGameState(GameState.INTERACT);
+    setIsReadyToJoin(false);
+    setUserInput("");
   };
 
   const fetchingName = () => {

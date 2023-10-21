@@ -3,6 +3,7 @@ import React from "react";
 
 import "../css/ModalPopupCelebrate.css";
 import ScoreHandler from "./ScoreHandler";
+import TargetVisualizer from "./TargetVisualizer";
 
 const ModalPopupCelebrate = ({ closeModal, conversations }) => {
   const scoreHandler = ScoreHandler();
@@ -12,9 +13,12 @@ const ModalPopupCelebrate = ({ closeModal, conversations }) => {
   };
 
   const resultText = (conversation) => {
-    const result = `${
-      Math.abs(conversation.initialLength - conversation.aiGuess)
-    } away`;
+    const resultValue = Math.abs(conversation.initialLength - conversation.aiGuess);
+    let result = `${resultValue} away`;
+    if (resultValue === 0) {
+      const randIndex = Math.floor(Math.random() * scoreHandler.perfectOptions.length);
+      result = scoreHandler.perfectOptions[randIndex];
+    }
     return result;
   };
 
@@ -25,6 +29,25 @@ const ModalPopupCelebrate = ({ closeModal, conversations }) => {
       answerIndex: convo.initialLength,
     }));
     return mappedConvos;
+  };
+
+  const getAccuracy = () => {
+    // Get the sum of all answerIndexes
+    const totalPossible = conversations.reduce(
+      (sum, convo) => sum + convo.initialLength,
+      0
+    );
+
+    // Get the sum of the absolute differences between guessIndexes and answerIndexes
+    const totalDelta = conversations.reduce(
+      (sum, convo) => sum + Math.abs(convo.aiGuess - convo.initialLength),
+      0
+    );
+
+    // Calculate accuracy
+    const accuracy = (totalPossible - totalDelta) / totalPossible;
+
+    return accuracy;
   };
 
   return (
@@ -42,6 +65,7 @@ const ModalPopupCelebrate = ({ closeModal, conversations }) => {
             </span>
           ))}
         </p>
+        <TargetVisualizer numberOfRings={7} fillAmount={getAccuracy()}/><br />
         <p><strong>Tip for next time:</strong></p>
         <p>{scoreHandler.tipForScores(mapDataForTip())}</p>
         <p>&nbsp;</p>

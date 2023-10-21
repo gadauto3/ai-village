@@ -6,6 +6,7 @@
   border-radius: 8px; /* Rounded corners */
   border: 1px solid #DDD;
   margin: 15px;
+  max-width: 1111px;
 }
 
 /* Using Noto Sans */

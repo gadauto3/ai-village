@@ -284,35 +284,39 @@
         "lines": [
             {
                 "name": "Lianna",
-                "text": "Kris, do you know the story of Ada Lovelace, daughter of poet Lord Byron? She's known for her visionary work during the same period the telegraph was invented."
+                "text": "Hola K!"
             },
             {
                 "name": "Kris",
-                "text": "I've heard her name, but not much more. She worked with Charles Babbage, the guy who initially built a computer, right?"
+                "text": "Heyo Li!"
             },
             {
                 "name": "Lianna",
-                "text": "Yes, exactly! In the 1800s, when the telegraph was just starting to be used, Lovelace saw potential in Babbage's analytical engine far beyond math. Drawing from the weaving industry's punch cards, she imagined it creating art and music."
+                "text": "So I was inspired the other day to write about famous women in history."
             },
             {
                 "name": "Kris",
-                "text": "That's quite visionary, to see a machine not just as a calculator but as a tool for creativity."
+                "text": "That's cool, ones that are still relevant today?"
             },
             {
                 "name": "Lianna",
-                "text": "Absolutely, and while translating an article on the analytical engine, she took it a step further, drafting the world's first computer program, envisioning operations akin to modern computing."
+                "text": "Fore sure! I started with Ada Lovelace, the first programmer of what would become computers."
             },
             {
                 "name": "Kris",
-                "text": "It's amazing she foresaw the capabilities of computers while the world was just getting used to the telegraph, isn't it?"
+                "text": "That's totally relevant to the current AI 🤖 craze!"
             },
             {
                 "name": "Lianna",
-                "text": "Definitely. She bridged art and science, imagining a future where machines supported creativity, paving the way for our digital age, while others were tapping out morse code to communicate."
+                "text": "Yes, exactly! In the 1800s, when the telegraph was just starting, Lovelace saw potential in Babbage's analytical engine far beyond math, into the realms of Art and Music."
             },
             {
                 "name": "Kris",
-                "text": "So, she was kind of the bridge between the era of telegraphs and our digital age, envisioning the incredible potential of computers. It’s an inspiring story of an amazing thinker!"
+                "text": "Extrordinary! 💃🏻"
+            },
+            {
+                "name": "Lianna",
+                "text": "Right?!?"
             }
         ]
     }

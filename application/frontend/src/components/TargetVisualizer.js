@@ -1,6 +1,6 @@
 import React from 'react';
 
-function TargetVisualizer({ numberOfRings, fillAmount, useRed }) {
+function TargetVisualizer({ numberOfRings, fillAmount, useRed = true }) {
     const redColors = ['#FFFAE1', '#FFE0A5', '#FFC49E', '#FFA87D', '#FF8D5B', '#FF5A38', '#FF0000'];
     const rainbowColors = ['#5CC93B', '#00000', '#5CC93B', '#00000', '#5CC93B', '#00000', '#87DD76', '#00000', '#D4F5CE', '#00000', '#F6CECC', '#00000', '#ED706A', '#00000', '#E93323'];
     const colors = useRed ? redColors : rainbowColors;
