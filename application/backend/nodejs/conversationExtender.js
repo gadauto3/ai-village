@@ -84,6 +84,15 @@ class ConversationExtender {
     return newLines.filter(line => originalNames.includes(line.name));
   }
 
+  extractUniqueNames(lines) {
+    if (lines === undefined) {
+      return [];
+    }
+    return lines
+        .map(entry => entry.name)  // Extract all names
+        .filter((name, index, self) => self.indexOf(name) === index);  // Filter out duplicates
+  }
+  
   removeMatchingElements(priorArray, newArray) {
     const priorArrayMap = new Map();
   
@@ -160,11 +169,16 @@ class ConversationExtender {
         responseCapture = message;
         let responseJson = JSON.parse(message.content);
 
+        // TODO: remove this debugging, but it's helpful right now.
+        const len1 = responseJson.lines.length;
         let responseLines = this.removeMatchingElements(originalLines, responseJson.lines);
-        if (playerName) {
-          responseLines = this.removeOthersFromLines(originalLines, responseLines);
-        }
+        const len2 = responseLines.length;
+        let len3 = -1;
+        responseLines = this.removeOthersFromLines(originalLines, responseLines);
+        len3 = responseLines.length;
         responseLines = ConversationAdapter.adaptLines(responseLines);
+        const len4 = responseLines.length;
+        console.log("Initial: ", len1, "removeMatching", len2, "removeOthers", len3, "adaptLines", len4, "names", this.extractUniqueNames(responseLines));
         callback(null, responseLines);
       } catch (e) {
         console.log("Error context:", fullContext);
@@ -177,6 +191,7 @@ class ConversationExtender {
       callback(err, null);
     });
   }
+
 }
 
 module.exports = ConversationExtender;

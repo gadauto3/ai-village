@@ -29,6 +29,12 @@
   align-items: center; /* This will vertically center the image container and the text container */
 }
 
+.div-disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .conversation-item.selected {
   background-color: #3478F6;
 }

@@ -198,7 +198,17 @@ const ConversationDriver = ({
     const convoLines = newConvo.lines;
     moreLines[0].message = `AI provided ${moreLines.length} more lines.`;
     convoLines.push(...moreLines);
-    convoLines[newConvo.initialLength].message = AI_STARTS_HERE_MSG;
+
+    // Find the first AI line that may be after the user's line
+    const firstAILine = newConvo.initialLength;
+    if (convoLines.length > firstAILine && checkedIndex != firstAILine) {
+      let msgIndex = firstAILine;
+      if (convoLines[firstAILine].name === userName) {
+        msgIndex++;
+      }
+      convoLines[msgIndex].message = AI_STARTS_HERE_MSG;
+    }
+
     newConvo.lines = convoLines;
     updateConversation(newConvo);
 
@@ -210,11 +220,7 @@ const ConversationDriver = ({
       const moreLines = makeMockLines(filterLinesByName(conversation.lines, userName));
       handleInteractAPISuccess(moreLines);
     } else {
-      console.log("retrieveConversations api error\n", err);
-      alert(
-        "Sorry, failed to retrieve conversations due to an error, try refreshing.\n" +
-          err
-      );
+      handleErrorWithLabel(err, null, "fromInteract");
     }
   };
 
@@ -369,34 +375,36 @@ const ConversationDriver = ({
         )}
       </div>
 
-      {gameState >= GameState.NEXT_CONVO && conversation.aiGuess == null && (
-        <div className="driver-buttons">
-          <button
-            className="next-button"
-            onClick={handleNextClick}
-            disabled={showCheckboxes || isFetching}
-          >
-            Next
-          </button>
+      {gameState >= GameState.NEXT_CONVO &&
+        gameState < GameState.CELEBRATE &&
+        conversation.aiGuess == null && (
+          <div className="driver-buttons">
+            <button
+              className="next-button"
+              onClick={handleNextClick}
+              disabled={showCheckboxes || isFetching}
+            >
+              Next
+            </button>
 
-          <button
-            className="notice-button"
-            onClick={handleNoticeClick}
-            disabled={isNoticeDisabled()}
-          >
-            {gameState == GameState.SELECT_AI
-              ? "Submit guess"
-              : "I'm noticing AI generation"}
-          </button>
-        </div>
-      )}
+            <button
+              className="notice-button"
+              onClick={handleNoticeClick}
+              disabled={isNoticeDisabled()}
+            >
+              {gameState == GameState.SELECT_AI
+                ? "Submit guess"
+                : "I'm noticing AI generation"}
+            </button>
+          </div>
+        )}
 
       {gameState >= GameState.INTERACT && (
         <div className="driver-buttons">
           <button
             className="next-button"
             onClick={handleNextInteractClick}
-            disabled={showCheckboxes || isReadyToJoin}
+            disabled={isReadyToJoin || isFetching}
           >
             Next
           </button>

@@ -16,7 +16,7 @@ ReactDOM.render(
       <p>Alas, I did not make the game interface suitable for mobile devices. 
         Would you try playing on a computer or tablet?</p>
       <p>Warm Regards,<br />Gabriel</p>
-      <img src={screenshot} alt="VillAIge of Wonder screenshot" />
+      <img src={screenshot} alt="WhatsAIpp screenshot" />
       
     </div>
   </React.StrictMode>,

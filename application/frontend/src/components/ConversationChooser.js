@@ -63,6 +63,17 @@ const ConversationChooser = ({
     setConversations(conversationData.slice(0, preInitConvos.length));
   }
 
+  const safeSetConversation = (convo) => {
+    if (!isDivDisabled()) {
+      setSelectedConversation(convo);
+    }
+  };
+
+  const isDivDisabled = () => {
+    return gameState == GameState.SELECT_AI ||
+    gameState == GameState.JOIN_CONVO;
+  };
+
   return (
     <div className="conversation-chooser">
       <img className="search-bar" src={searchBarImg} alt="Search Bar" />
@@ -72,8 +83,8 @@ const ConversationChooser = ({
             key={index}
             className={`conversation-item ${
               conversation === selectedConversation ? "selected" : ""
-            }`}
-            onClick={() => setSelectedConversation(conversation)}
+            } ${isDivDisabled() ? "div-disabled" : ""}`}
+            onClick={() => safeSetConversation(conversation)}
           >
             <div className="image-container">
               <img
@@ -102,7 +113,9 @@ const ConversationChooser = ({
                 }`}
               >
                 {conversation.people[0].currentLine.length > numPreviewChars
-                  ? conversation.people[0].currentLine.slice(0, numPreviewChars).trim() + "..."
+                  ? conversation.people[0].currentLine
+                      .slice(0, numPreviewChars)
+                      .trim() + "..."
                   : conversation.people[0].currentLine}
               </span>
             </div>
@@ -141,7 +154,11 @@ const ConversationChooser = ({
       )}
 
       {gameState == GameState.INIT && (
-        <button className="start-button" onClick={clickStart} disabled={preInitConvos.length <= 1}>
+        <button
+          className="start-button"
+          onClick={clickStart}
+          disabled={preInitConvos.length <= 1}
+        >
           Start
         </button>
       )}
