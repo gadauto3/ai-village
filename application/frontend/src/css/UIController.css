@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap');
+
+.ui-controller {
+  display: flex;
+  flex-direction: column; /* Stack children vertically */
+  border-radius: 8px; /* Rounded corners */
+  border: 1px solid #DDD;
+  margin: 15px;
+}
+
+/* Using Noto Sans */
+.title-noto-sans {
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 500; /* Using the bold version */
+  color: #9a9898;
+}
+
+.top-section {
+  flex: 1; /* This makes the top section take all available vertical space */
+  display: flex; /* This will make the chooser and driver side by side */
+}
+
+.conversation-chooser {
+  flex: 1 1 27%; /* grow, shrink, basis */
+  min-width: 245px;
+  overflow-y: auto; /* Add scrolling if content exceeds pane height */
+  border-right: 1px solid #C0BCBB;
+}
+
+.conversation-driver {
+  flex: 1 1 73%; /* grow, shrink, basis */
+  overflow-y: auto; /* Add scrolling if content exceeds pane height */
+  height: 600px; /* TODO: Try again to wrangle the css to make it work as desired */
+}
+
+.instructions {
+  width: 100%; /* Take the full width of the viewport */
+  padding: 20px; /* Some padding for inner content */
+  background-color: #f5f5f5;
+  border-top: 1px solid #C0BCBB;
+}

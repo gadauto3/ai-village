@@ -2,14 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './css/styles.css';
 import * as serviceWorker from './components/serviceWorker';
-import Village from './components/Village';
+import UIController from './components/UIController';
 
 import screenshot from './assets/images/screenshot.png';
 
 ReactDOM.render(
   <React.StrictMode>
     <div id="game-container">
-      <Village />
+      <UIController />
     </div>
     <div id="mobile-warning">
       <p>Hello and thanks for your interest in playing!</p>

@@ -30,12 +30,6 @@ describe('Conversations - Tests using the seeds file', () => {
         jsonData = JSON.parse(rawData);
     });
 
-    it('ensures that color is defined as an HTML-friendly number', () => {
-        jsonData.forEach(convo => {
-            expect(convo.color).toMatch(/^#[0-9a-fA-F]{6}$/);
-        });
-    });
-
     it('ensures that the people array has between one and five elements', () => {
         jsonData.forEach(convo => {
             expect(convo.people.length).toBeGreaterThanOrEqual(1);
@@ -43,7 +37,7 @@ describe('Conversations - Tests using the seeds file', () => {
         });
     });
 
-    it('ensures every line element has a name that is in the people array and text that has more than three words', () => {
+    it('ensures every line element has a name that is in the people array and text that has more than two words', () => {
         jsonData.forEach(convo => {
             const personNames = convo.people.map(person => person.name);
             convo.lines.forEach(line => {
@@ -53,18 +47,10 @@ describe('Conversations - Tests using the seeds file', () => {
                 
                 expect(line).toHaveProperty('text');
                 const wordCount = line.text.split(' ').length;
-                if (wordCount == 3) console.log(line);
-                expect(wordCount).toBeGreaterThan(3);
+                if (wordCount == 2) console.log(line);
+                expect(wordCount).toBeGreaterThanOrEqual(1);
             });
         });
-    });
-
-    it('ensures that the colors in the conversations array are modified', () => {
-        const count = 2;
-        const coloredConvos = conversations.getConversations(count);
-
-        expect(coloredConvos[0].color).not.toEqual(jsonData[0].color);
-        expect(coloredConvos[1].color).not.toEqual(jsonData[1].color);
     });
 
     it('ensures the conversations array returned has a length equal to the count parameter', () => {

@@ -1,0 +1,179 @@
+.conversation-driver {
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Take up full height of parent */
+}
+
+/* Header with To: participants */
+.participants {
+  padding-top: 12px;
+  padding-bottom: 10px; /* Padding to give some space above the border */
+  border-bottom: 1px solid #D4D4D4; /* Example gray border */
+  background-color: #f5f1ee;
+  display: flex;           /* Makes .participants a flex container */
+  align-items: center;     /* Vertically centers all direct children of .participants */
+}
+
+.to-label {
+  color: #7f7d7d;
+  margin-left: 48px;
+}
+
+.participant {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 10px;
+  color: #23282f;
+}
+
+.participant.first {
+  margin-left: 4px;
+}
+
+/* Main area containing lines of the conversation */
+.lines-container {
+  flex-grow: 1; /* Make it take up all available space */
+  overflow-y: auto; /* Add scrolling if the content exceeds container height */
+}
+
+.line-item {
+  display: flex;
+  flex-direction: column; /* Updated to stack children vertically */
+  align-items: center; /* Center content horizontally */
+  margin-bottom: 16px;
+  margin-left: 12px;
+  margin-right: 20px;
+}
+
+.line-message {
+  padding: 0px 6px;
+  border-radius: 3px;
+  font-size: 0.7rem;
+  color: #7a7a7a;
+  text-align: center;
+  margin-bottom: 5px; /* Space between message and the line content */
+}
+
+/* Row of content in the line - image, text field, checkbox (when active) */
+.line-content {
+  display: flex;
+  align-items: flex-end;
+  width: 100%; /* Take the full width */
+}
+
+.line-item.first {
+  margin-top: 20px;
+}
+
+.player-line .line-container {
+  background-color: #3478F6; /* background color of the line-item is blue */
+  color: white;
+  justify-content: flex-end;
+  margin-left: 70px;
+}
+
+.player-line img {
+  display: none;          /* no icon for the player */
+}
+
+.player-separator {
+  margin-right: 48px;
+}
+
+.line-content img {
+  margin-right: 10px;
+  height: 32px;
+  width: 32px;
+}
+
+.line-container {
+  flex: 1;
+  padding: 10px;
+  border-radius: 14px; /* Rounded corners */
+  background-color: #f1f1f1;
+  overflow-wrap: break-word; /* Wrap long words */
+  display: flex; /* Added for aligning the text and checkbox */
+  align-items: center; /* Align the content of line-container vertically */
+}
+
+.line-checkbox {
+  margin-left: 11px;
+  margin-bottom: 15px;
+}
+
+/* Bottom buttons */
+.driver-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px;
+}
+
+.next-button, .notice-button {
+  padding: 4px 20px;
+  border: 1px solid #fff;
+  border-radius: 5px;
+  background-color: #e6e6e8;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease; /* Smoothens the effect of pressing the button */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); /* Adds a soft shadow beneath the button */
+}
+
+.next-button:disabled, .notice-button:disabled {
+  box-shadow: none;
+}
+
+.next-button:hover, .notice-button:hover {
+  background-color: #d5d5d5;
+}
+
+/* Bottom buttons for Interact state */
+
+.form-control {
+  display: table;
+  resize: none;
+  border: 1px solid #C0BCBC;
+  outline: none;
+  overflow-y: auto;
+  padding: 10px;
+  border-radius: 4px;
+  background: #f9f9f9;
+  min-height: 32px;
+}
+
+.middle-textfield {
+  flex-grow: 1;          /* Allows the text field to grow and take up available space */
+  margin: 0 10px;        /* Adds a little margin on left and right for spacing */
+  padding: 8px 12px;     /* Padding inside the text field */
+  border-radius: 5px;    /* Optional: Rounds the corners */
+  border: 1px solid #ccc;/* Optional: Defines a border */
+}
+
+.up-button {
+  background-color: transparent;  /* Makes the background transparent */
+  border: none;                   /* Removes the default border */
+  cursor: pointer;                /* Changes the cursor to a hand when hovered */
+  font-size: 3rem;                /* Adjusts the size of the symbol */
+  line-height: 0;
+  padding: 0px;                  /* Adds some spacing around the symbol */
+  color: #333;                    /* Sets the color of the symbol */
+  transition: color 0.3s;         /* Smoothens the color transition on hover */
+}
+
+.up-button:hover {
+  color: #007BFF;                 /* Changes the color on hover */
+}
+
+.up-button:disabled {
+  cursor: default;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.error-message {
+  color: brown;
+  text-align: center;
+}
+
+.margin-left {
+  margin-left: 12px;
+}

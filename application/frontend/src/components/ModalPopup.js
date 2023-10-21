@@ -21,7 +21,7 @@ const ModalPopup = ({ isVisible, closeModal, config }) => {
         return;
       }
 
-      const regex = /^[a-zA-Z0-9-. _]+$/;
+      const regex = /^[\p{L}0-9-. _]+$/u;
       if (!regex.test(entry)) {
         setError(`Please use only letters, numbers, .-_ and space characters.`);
         return;
@@ -30,7 +30,7 @@ const ModalPopup = ({ isVisible, closeModal, config }) => {
 
     setError("");
     onClose(inputValue.trim());
-    closeModal();
+    closeModal(inputValue.trim());
   };
 
   return isVisible ? (

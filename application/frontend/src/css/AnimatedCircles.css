@@ -1,0 +1,31 @@
+@keyframes colorShift {
+  0%, 100% {
+      fill: rgb(237, 237, 237);
+  }
+  50% {
+      fill: rgb(54, 54, 54);
+  }
+}
+
+.circle-container {
+  width: 4rem;
+  height: 2rem;
+  background-color: #f1f1f1;
+  overflow: hidden;
+  border-radius: 14px;
+  padding: 3px;
+  padding-left: 8px;
+}
+
+.circle {
+  fill: lightgray;
+  animation: colorShift 2s infinite;
+}
+
+.circle:nth-child(2) {
+  animation-delay: 0.4s;
+}
+
+.circle:nth-child(3) {
+  animation-delay: 0.8s;
+}

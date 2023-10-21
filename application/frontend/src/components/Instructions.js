@@ -1,0 +1,50 @@
+import React from "react";
+import { GameState } from "./utils";
+
+import {
+  InstructionsCelebrate,
+  InstructionsInit,
+  InstructionsInteract,
+  InstructionsMoveConvos,
+  InstructionsNextConvo,
+  InstructionsNoticeAI2,
+  InstructionsSelectAI,
+  InstructionsShowCredits,
+  InstructionsJoinConvo
+} from "./longStrings";
+
+const Instructions = (gameState) => {
+  const getInstructionsForState = (gameState) => {
+    switch (gameState.gameState) {
+      case GameState.NEXT_CONVO:
+        return InstructionsNextConvo;
+      case GameState.NOTICE_AI:
+        return InstructionsNoticeAI2;
+      case GameState.SELECT_AI:
+        return InstructionsSelectAI;
+      case GameState.MOVE_CONVOS:
+        return InstructionsMoveConvos;
+      case GameState.CELEBRATE:
+        return InstructionsCelebrate;
+      case GameState.INTERACT:
+        return InstructionsInteract;
+      case GameState.JOIN_CONVO:
+        return InstructionsJoinConvo;
+      case GameState.SHOW_CREDITS:
+        return InstructionsShowCredits;
+      default:
+        return InstructionsInit; // default or initial state
+    }
+  };
+
+  return (
+    <div className="instructions">
+      <p>
+        <strong>Instructions: </strong>
+        {getInstructionsForState(gameState)}
+      </p>
+    </div>
+  );
+};
+
+export default Instructions;

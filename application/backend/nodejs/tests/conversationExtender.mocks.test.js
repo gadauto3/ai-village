@@ -11,7 +11,13 @@ jest.mock("openai", () => {
             choices: [
               { 
                 message: {
-                  content: JSON.stringify({ lines: ["mocked response"] })
+                  content: JSON.stringify({ 
+                    lines: [
+                      { name: 'MockedName1', text: 'Mocked response 1' },
+                      { name: 'MockedName2', text: 'Mocked response 2' },
+                      { name: 'MockedName3', text: 'Mocked response 3' }
+                    ] 
+                  })
                 }
               }
             ]
@@ -40,8 +46,23 @@ describe("ConversationExtender", () => {
     };
 
     const callback = (error, result) => {
-      expect(error).toBeNull();
-      expect(result).toEqual(["mocked response"]);
+      expect(error).toBeNull();expect(result).toEqual([
+        {
+          message: null,
+          name: "MockedName1",
+          text: "Mocked response 1"
+        },
+        {
+          message: null,
+          name: "MockedName2",
+          text: "Mocked response 2"
+        },
+        {
+          message: null,
+          name: "MockedName3",
+          text: "Mocked response 3"
+        }
+      ]);      
     };
 
     await instance.extendConversation(context, callback);
@@ -106,10 +127,20 @@ describe("ConversationExtender", () => {
     expect(result).toEqual(expectedResult);
   });
 
-  it("should correctly remove lines for a given player", () => {
+  it("should correctly remove lines for those not in the prior lines.", () => {
     const instance = new ConversationExtender();
 
-    const lines = [
+    const linesWithOtherPeople = [
+      { name: "Preeta", text: "Can I tell you about an accidental discovery?" },
+      { name: "Adisu", text: "Sure! Whatcha got Preeta?" },
+      { name: "Gdawgg", text: "What am I doing here?" },
+      { name: "Preeta", text: "Back in 1928, there was this English" },
+      { name: "Adisu", text: "Ugh, sounds like one of those" },
+      { name: "Dre", text: "Yo, yo, yo!" },
+      { name: "Preeta", text: "Ha! But instead of " },
+    ];
+
+    const expectedLines = [
       { name: "Preeta", text: "Can I tell you about an accidental discovery?" },
       { name: "Adisu", text: "Sure! Whatcha got Preeta?" },
       { name: "Preeta", text: "Back in 1928, there was this English" },
@@ -117,12 +148,7 @@ describe("ConversationExtender", () => {
       { name: "Preeta", text: "Ha! But instead of " },
     ];
 
-    const expectedLines = [
-      { name: "Adisu", text: "Sure! Whatcha got Preeta?" },
-      { name: "Adisu", text: "Ugh, sounds like one of those" },
-    ];
-
-    const result = instance.removePlayerFromLines(lines, "Preeta");
+    const result = instance.removeOthersFromLines(expectedLines, linesWithOtherPeople);
     expect(result).toEqual(expectedLines);
   });
 });

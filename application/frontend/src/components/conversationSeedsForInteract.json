@@ -1,0 +1,139 @@
+[
+  {
+    "color": "#A8DADC",
+    "key": 1,
+    "currentLineIndex": 3,
+    "initialLength": 6,
+    "aiGuess": 3,
+    "people": [
+      {
+        "name": "Maria",
+        "icon": "icons8-old-woman-medium-light-skin-tone-48.png",
+        "currentLine": "Leo, did you ever hear about those moths that have a sneaky relationship with ants?"
+      },
+      {
+        "name": "Leo",
+        "icon": "icons8-man-medium-skin-tone-48.png",
+        "currentLine": "👈🏽"
+      }
+    ],
+    "lines": [
+      {
+        "name": "Maria",
+        "message": null,
+        "text": "Leo, did you ever hear about those moths that have a sneaky relationship with ants?"
+      },
+      {
+        "name": "Leo",
+        "message": null,
+        "text": "Oh, I think so! They produce a sweet milk that ants love, right?"
+      },
+      {
+        "name": "Maria",
+        "message": null,
+        "text": "Exactly! The caterpillars bribe the ants with this treat, and in return, ants protect them from predators. Some ants even bring them into their nests."
+      },
+      {
+        "name": "Leo",
+        "message": "Your guess is 3 away from the answer. Score: 3 of 6",
+        "text": "But doesn't it turn a bit dark inside the nest? I've heard some caterpillars then start feasting on ant babies!"
+      },
+      {
+        "name": "Maria",
+        "message": null,
+        "text": "You're spot on. While some caterpillars just enjoy the protection, others eat their \"siblings\" o_O. And then, after their trickery, they fly away as moths to start the cycle anew."
+      },
+      {
+        "name": "Leo",
+        "message": null,
+        "text": "Nature's full of such fascinating dynamics. A mix of collaboration and cunning!"
+      },
+      {
+        "name": "Maria",
+        "message": null,
+        "text": "Mind blown!"
+      },
+      {
+        "name": "Leo",
+        "message": null,
+        "text": "Really? I didn't know that!"
+      },
+      {
+        "name": "Maria",
+        "message": null,
+        "text": "You're so smart!"
+      },
+      {
+        "name": "Leo",
+        "message": null,
+        "text": "That's amazing."
+      }
+    ]
+  },
+  {
+    "color": "#F4A261",
+    "key": 2,
+    "currentLineIndex": 4,
+    "initialLength": 9,
+    "aiGuess": 7,
+    "people": [
+      {
+        "name": "Mika",
+        "icon": "icons8-woman-with-beard-light-skin-tone-48.png",
+        "currentLine": "You know, Helen, I was reading about that crazy stunt the artist Banksy pulled off a while ago, sneaking his own art into world-famous museums."
+      },
+      {
+        "name": "Helen",
+        "icon": "icons8-old-woman-medium-dark-skin-tone-48.png",
+        "currentLine": "👈🏽"
+      }
+    ],
+    "lines": [
+      {
+        "name": "Mika",
+        "message": null,
+        "text": "You know, Helen, I was reading about that crazy stunt the artist Banksy pulled off a while ago, sneaking his own art into world-famous museums."
+      },
+      {
+        "name": "Helen",
+        "message": null,
+        "text": "Oh, you mean when he slipped those real-looking paintings into the main art museums in San Francisco and New York? Brilliant and hilarious!"
+      },
+      {
+        "name": "Mika",
+        "message": "Your guess is 7 away from the answer. Score: 2 of 9",
+        "text": "Didn't he also place that insect with fighter jet wings in the American Museum of Natural History? Imagine visitors walking by, thinking it's genuine."
+      },
+      {
+        "name": "Helen",
+        "message": null,
+        "text": "Exactly! It's like he was playfully mocking the sanctity of these revered institutions. Making people think: who gets to decide what is art?"
+      },
+      {
+        "name": "Mika",
+        "message": null,
+        "text": "Apparently, his sister once teased him, saying,\"It's not like any of your pieces will actually end up in the Louvre.\" Can you imagine?"
+      },
+      {
+        "name": "Helen",
+        "message": null,
+        "text": "It's such a Banksy move. Taking a playful jest and turning it into a powerful statement about art and its institutions."
+      },
+      {
+        "name": "Mika",
+        "message": null,
+        "text": "Yes! It wasn't just about proving his sister wrong, but questioning the entire establishment. Who decides what's worthy of being in a museum?"
+      },
+      {
+        "name": "Helen",
+        "message": null,
+        "text": "It's not just about the art, but the statement. Banksy really knows how to leave an impression, both on the canvas and in our minds."
+      },
+      {
+        "name": "Mika",
+        "message": null,
+        "text": "Know of any other clever stunts pulled by famous artists?"
+      }
+    ]
+  }
+]
