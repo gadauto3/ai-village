@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 function LoadingCircle({ isLoading, loadingTime = 12000 }) {
-  const radius = 20; // Your updated radius
+  const radius = 20;
   const totalCircumference = 2 * Math.PI * radius;
 
   const [offset, setOffset] = useState(totalCircumference); 
