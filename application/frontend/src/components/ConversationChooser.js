@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { GameState, MAX_CONVOS, iconsPath, isLocalHost } from "./utils";
-import { getConversations } from './APIService';
+import { getConversations } from "./APIService";
+import AnimatedCircles from "./AnimatedCircles";
 
-import conversationData from './conversationSeeds.json';
-import searchBarImg from '../assets/images/searchBar.png';
+import conversationData from "./conversationSeeds.json";
+import searchBarImg from "../assets/images/searchBar.png";
 
 import "../css/ConversationChooser.css";
 import "../css/utils.css";
@@ -13,10 +14,11 @@ const ConversationChooser = ({
   setConversations,
   gameState,
   selectedConversation,
-  setSelectedConversation
+  setSelectedConversation,
 }) => {
   const [areConversationsSet, setAreConversationsSet] = useState(false);
   const [isConvosMax, setIsConvosMax] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [preInitConvos, setPreInitConvos] = useState(["Conversation 1"]);
 
   const defaultHeadIcon = "icons8-head-profile-50.png";
@@ -28,7 +30,7 @@ const ConversationChooser = ({
       setAreConversationsSet(true);
     }
   }, [conversations]);
-  
+
   const addConversation = () => {
     const convos = [...preInitConvos];
 
@@ -41,11 +43,13 @@ const ConversationChooser = ({
   };
 
   const clickStart = () => {
-    setAreConversationsSet(true);
+    setIsLoading(true);
     getConversations(preInitConvos.length, handleSuccess, handleError);
   };
 
   const handleSuccess = (conversations) => {
+    setIsLoading(false);
+    setAreConversationsSet(true);
     setConversations(conversations);
   };
 
@@ -53,15 +57,18 @@ const ConversationChooser = ({
     console.log("retrieveConversations api error\n", err);
 
     if (isLocalHost()) {
-      makeMockLines(preInitConvos.length);
+      handleSuccess(makeMockLines(preInitConvos.length));
     } else {
-      alert("Sorry, failed to retrieve conversations due to an error, try refreshing.\n" + err);
+      alert(
+        "Sorry, failed to retrieve conversations due to an error, try refreshing.\n" +
+          err
+      );
     }
   };
 
   const makeMockLines = () => {
-    setConversations(conversationData.slice(0, preInitConvos.length));
-  }
+    return conversationData.slice(0, preInitConvos.length);
+  };
 
   const safeSetConversation = (convo) => {
     if (!isDivDisabled()) {
@@ -70,8 +77,9 @@ const ConversationChooser = ({
   };
 
   const isDivDisabled = () => {
-    return gameState == GameState.SELECT_AI ||
-    gameState == GameState.JOIN_CONVO;
+    return (
+      gameState == GameState.SELECT_AI || gameState == GameState.JOIN_CONVO
+    );
   };
 
   return (
@@ -88,12 +96,12 @@ const ConversationChooser = ({
           >
             <div className="image-container">
               <img
-                src={`${iconsPath}${conversation.people[0].icon}`}
+                src={`${iconsPath}${conversation.people[1].icon}`}
                 alt="Bottom Image"
                 className="bottom-image"
               />
               <img
-                src={`${iconsPath}${conversation.people[1].icon}`}
+                src={`${iconsPath}${conversation.people[0].icon}`}
                 alt="Top Image"
                 className="top-image"
               />
@@ -142,6 +150,12 @@ const ConversationChooser = ({
             </div>
           </div>
         ))}
+
+      {isLoading && (
+        <div className="animated-circles-container">
+          {isLoading && <AnimatedCircles />}
+        </div>
+      )}
 
       {gameState == GameState.INIT && (
         <button

@@ -114,6 +114,15 @@
   color: #fff;
 }
 
+.animated-circles-container {
+  display: flex;
+  align-items: center; /* Horizontally center */
+  justify-content: center; /* Vertically center */
+  width: 100%; /* Ensure it takes full width */
+  margin-top: 10px;
+}
+
+/* Bottom buttons */
 .add-conversation-button {
   margin-top: auto; /* Pushes the button to the bottom */
 }
