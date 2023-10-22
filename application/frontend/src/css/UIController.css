@@ -6,6 +6,7 @@
   border-radius: 8px; /* Rounded corners */
   border: 1px solid #DDD;
   margin: 15px;
+  max-width: 1111px;
 }
 
 /* Using Noto Sans */
@@ -25,12 +26,6 @@
   min-width: 245px;
   overflow-y: auto; /* Add scrolling if content exceeds pane height */
   border-right: 1px solid #C0BCBB;
-}
-
-.conversation-driver {
-  flex: 1 1 73%; /* grow, shrink, basis */
-  overflow-y: auto; /* Add scrolling if content exceeds pane height */
-  height: 600px; /* TODO: Try again to wrangle the css to make it work as desired */
 }
 
 .instructions {

@@ -30,13 +30,15 @@
     img {
         width: 100%;
         margin-top: 20px;
+        border-radius: 5px;
     }
 }
 
 /* Desktop devices */
 @media only screen and (min-width: 769px) {
     #game-container {
-        display: block;
+        display: flex;
+        justify-content: center; /* This centers the child elements horizontally */
     }
 
     #mobile-warning {

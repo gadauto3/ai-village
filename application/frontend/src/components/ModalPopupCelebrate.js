@@ -3,6 +3,7 @@ import React from "react";
 
 import "../css/ModalPopupCelebrate.css";
 import ScoreHandler from "./ScoreHandler";
+import TargetVisualizer from "./TargetVisualizer";
 
 const ModalPopupCelebrate = ({ closeModal, conversations }) => {
   const scoreHandler = ScoreHandler();
@@ -12,9 +13,12 @@ const ModalPopupCelebrate = ({ closeModal, conversations }) => {
   };
 
   const resultText = (conversation) => {
-    const result = `${
-      Math.abs(conversation.initialLength - conversation.aiGuess)
-    } away`;
+    const resultValue = Math.abs(conversation.initialLength - conversation.aiGuess);
+    let result = `${resultValue} away`;
+    if (resultValue === 0) {
+      const randIndex = Math.floor(Math.random() * scoreHandler.perfectOptions.length);
+      result = scoreHandler.perfectOptions[randIndex];
+    }
     return result;
   };
 
@@ -27,28 +31,67 @@ const ModalPopupCelebrate = ({ closeModal, conversations }) => {
     return mappedConvos;
   };
 
+  const getAccuracy = () => {
+    // Get the sum of all answerIndexes
+    const totalPossible = conversations.reduce(
+      (sum, convo) => sum + convo.initialLength,
+      0
+    );
+
+    // Get the sum of the absolute differences between guessIndexes and answerIndexes
+    const totalDelta = conversations.reduce(
+      (sum, convo) => sum + Math.abs(convo.aiGuess - convo.initialLength),
+      0
+    );
+
+    // Calculate accuracy
+    const accuracy = (totalPossible - totalDelta) / totalPossible;
+
+    return accuracy;
+  };
+
   return (
     <div className="modal-celeb-overlay">
       <div className="modal-celeb no-shadow">
-        <button className="dismiss-button" onClick={handleDismiss}>✖️</button>
+        <button className="dismiss-button" onClick={handleDismiss}>
+          ✖️
+        </button>
         <h1>🎉 Guessing complete! 🎉</h1>
-        <p>Here are your results:</p>
+        <div className="results-container">
+          <div className="conversations-container">
+            <p><strong>Results:</strong></p>
+            <p>
+              {conversations.map((conversation, index) => (
+                <span key={index}>
+                  <em>
+                    {conversation.people[0].name} and{" "}
+                    {conversation.people[1].name}
+                  </em>
+                  : {resultText(conversation)}
+                  <br />
+                </span>
+              ))}
+            </p>
+          </div>
+          <div className="visualizer-container">
+            <p><strong>Accuracy:</strong> {Math.floor(getAccuracy() * 100)}%</p>
+            <TargetVisualizer numberOfRings={7} fillAmount={getAccuracy()} />
+          </div>
+        </div>
+        <hr />
         <p>
-          {conversations.map((conversation, index) => (
-            <span key={index}>
-              <em>{conversation.people[0].name} and {conversation.people[1].name}</em>:{" "}
-              {resultText(conversation)}
-              <br />
-            </span>
-          ))}
+          <strong>Tip for next time:</strong>
         </p>
-        <p><strong>Tip for next time:</strong></p>
         <p>{scoreHandler.tipForScores(mapDataForTip())}</p>
         <p>&nbsp;</p>
         <h5>
           But we're not done yet, now it's time to chat with the AI yourself!
         </h5>
-        <p><button className="done-button" onClick={handleDismiss}>Ready</button></p>
+        <p>
+          <button className="done-button" onClick={handleDismiss}>
+            Ready
+          </button>
+        </p>
       </div>
     </div>
   );

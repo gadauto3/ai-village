@@ -16,6 +16,7 @@
   padding: 20px;
   border-radius: 5px;
   width: 80%; 
+  max-width: 820px;
   height: 70%;
   color: #000;
   display: flex;
@@ -35,6 +36,24 @@
   margin-left: 30px;
   margin-right: 30px;
   text-align: center;
+}
+
+.results-container {
+  display: flex;               /* Use flexbox to align children side-by-side */
+  justify-content: center;     /* Horizontally center children */
+  width: 100%;                 /* Take full width of parent */
+  margin-top: 20px;            /* Add some spacing at the top */
+}
+
+.conversations-container {
+  margin-left: 20px;           /* Add some spacing between the visualizer and the conversations */
+}
+
+.visualizer-container {
+  margin-left: 20px;           /* Add some spacing between the conversations and the visualizer */
+  display: flex;
+  flex-direction: column;      /* Stack children vertically */
+  align-items: center;         /* Horizontally center the accuracy text and the visualizer */
 }
 
 .dismiss-button {

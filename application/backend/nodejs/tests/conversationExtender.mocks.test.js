@@ -13,9 +13,9 @@ jest.mock("openai", () => {
                 message: {
                   content: JSON.stringify({ 
                     lines: [
-                      { name: 'MockedName1', text: 'Mocked response 1' },
-                      { name: 'MockedName2', text: 'Mocked response 2' },
-                      { name: 'MockedName3', text: 'Mocked response 3' }
+                      { name: 'Sivan', text: 'Mocked response 1' },
+                      { name: 'Violet', text: 'Mocked response 2' },
+                      { name: 'Sivan', text: 'Mocked response 3' }
                     ] 
                   })
                 }
@@ -46,20 +46,21 @@ describe("ConversationExtender", () => {
     };
 
     const callback = (error, result) => {
-      expect(error).toBeNull();expect(result).toEqual([
+      expect(error).toBeNull();
+      expect(result).toEqual([
         {
           message: null,
-          name: "MockedName1",
+          name: "Sivan",
           text: "Mocked response 1"
         },
         {
           message: null,
-          name: "MockedName2",
+          name: "Violet",
           text: "Mocked response 2"
         },
         {
           message: null,
-          name: "MockedName3",
+          name: "Sivan",
           text: "Mocked response 3"
         }
       ]);      
