@@ -28,12 +28,6 @@
   border-right: 1px solid #C0BCBB;
 }
 
-.conversation-driver {
-  flex: 1 1 73%; /* grow, shrink, basis */
-  overflow-y: auto; /* Add scrolling if content exceeds pane height */
-  height: 600px; /* TODO: Try again to wrangle the css to make it work as desired */
-}
-
 .instructions {
   width: 100%; /* Take the full width of the viewport */
   padding: 20px; /* Some padding for inner content */
