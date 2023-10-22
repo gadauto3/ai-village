@@ -53,26 +53,45 @@ const ModalPopupCelebrate = ({ closeModal, conversations }) => {
   return (
     <div className="modal-celeb-overlay">
       <div className="modal-celeb no-shadow">
-        <button className="dismiss-button" onClick={handleDismiss}>✖️</button>
+        <button className="dismiss-button" onClick={handleDismiss}>
+          ✖️
+        </button>
         <h1>🎉 Guessing complete! 🎉</h1>
-        <p>Here are your results:</p>
+        <div className="results-container">
+          <div className="conversations-container">
+            <p><strong>Results:</strong></p>
+            <p>
+              {conversations.map((conversation, index) => (
+                <span key={index}>
+                  <em>
+                    {conversation.people[0].name} and{" "}
+                    {conversation.people[1].name}
+                  </em>
+                  : {resultText(conversation)}
+                  <br />
+                </span>
+              ))}
+            </p>
+          </div>
+          <div className="visualizer-container">
+            <p><strong>Accuracy:</strong> {Math.floor(getAccuracy() * 100)}%</p>
+            <TargetVisualizer numberOfRings={7} fillAmount={getAccuracy()} />
+          </div>
+        </div>
+        <hr />
         <p>
-          {conversations.map((conversation, index) => (
-            <span key={index}>
-              <em>{conversation.people[0].name} and {conversation.people[1].name}</em>:{" "}
-              {resultText(conversation)}
-              <br />
-            </span>
-          ))}
+          <strong>Tip for next time:</strong>
         </p>
-        <TargetVisualizer numberOfRings={7} fillAmount={getAccuracy()}/><br />
-        <p><strong>Tip for next time:</strong></p>
         <p>{scoreHandler.tipForScores(mapDataForTip())}</p>
         <p>&nbsp;</p>
         <h5>
           But we're not done yet, now it's time to chat with the AI yourself!
         </h5>
-        <p><button className="done-button" onClick={handleDismiss}>Ready</button></p>
+        <p>
+          <button className="done-button" onClick={handleDismiss}>
+            Ready
+          </button>
+        </p>
       </div>
     </div>
   );

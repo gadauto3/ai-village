@@ -38,6 +38,24 @@
   text-align: center;
 }
 
+.results-container {
+  display: flex;               /* Use flexbox to align children side-by-side */
+  justify-content: center;     /* Horizontally center children */
+  width: 100%;                 /* Take full width of parent */
+  margin-top: 20px;            /* Add some spacing at the top */
+}
+
+.conversations-container {
+  margin-left: 20px;           /* Add some spacing between the visualizer and the conversations */
+}
+
+.visualizer-container {
+  margin-left: 20px;           /* Add some spacing between the conversations and the visualizer */
+  display: flex;
+  flex-direction: column;      /* Stack children vertically */
+  align-items: center;         /* Horizontally center the accuracy text and the visualizer */
+}
+
 .dismiss-button {
   position: absolute; /* Absolute positioning */
   top: 10px;          /* Adjust these values as needed */
