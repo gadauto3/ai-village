@@ -4,6 +4,7 @@ import { getConversations } from "./APIService";
 import AnimatedCircles from "./AnimatedCircles";
 
 import conversationData from "./conversationSeeds.json";
+import tutorialData from "../../../backend/nodejs/tutorialSeed.json";
 import searchBarImg from "../assets/images/searchBar.png";
 
 import "../css/ConversationChooser.css";
@@ -15,6 +16,7 @@ const ConversationChooser = ({
   gameState,
   selectedConversation,
   setSelectedConversation,
+  isTutorial
 }) => {
   const [areConversationsSet, setAreConversationsSet] = useState(false);
   const [isConvosMax, setIsConvosMax] = useState(false);
@@ -67,7 +69,10 @@ const ConversationChooser = ({
   };
 
   const makeMockLines = () => {
-    return conversationData.slice(0, preInitConvos.length);
+    const convos = [ tutorialData ];
+    convos.push(...conversationData.slice(0, preInitConvos.length - 1));
+    console.log("convos", convos);
+    return convos;
   };
 
   const safeSetConversation = (convo) => {
@@ -78,7 +83,9 @@ const ConversationChooser = ({
 
   const isDivDisabled = () => {
     return (
-      gameState == GameState.SELECT_AI || gameState == GameState.JOIN_CONVO
+      gameState == GameState.SELECT_AI ||
+      gameState == GameState.JOIN_CONVO ||
+      isTutorial()
     );
   };
 

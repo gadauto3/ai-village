@@ -1,10 +1,20 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { GameState, deepCopy, iconsPath, makeMockLines, isLocalHost } from "./utils";
-import AnimatedCircles from './AnimatedCircles';
-import ScoreHandler from './ScoreHandler';
+import React, { useState, useRef, useEffect } from "react";
+import {
+  GameState,
+  deepCopy,
+  iconsPath,
+  makeMockLines,
+  isLocalHost,
+} from "./utils";
+import AnimatedCircles from "./AnimatedCircles";
+import ScoreHandler from "./ScoreHandler";
 
 import "../css/ConversationDriver.css";
-import { retrieveAdditionalConversation, retrieveAdditionalConversationWithUserInput } from './APIService';
+import {
+  retrieveAdditionalConversation,
+  retrieveAdditionalConversationWithUserInput,
+} from "./APIService";
+import { AI_CONVO_INDEX, IM_NOTICING_INDEX, TutorialState } from "./Tutorial";
 
 const ConversationDriver = ({
   conversation,
@@ -12,7 +22,10 @@ const ConversationDriver = ({
   gameState,
   setGameState,
   userName,
-  getUserName
+  getUserName,
+  isTutorial,
+  tutorialState,
+  setTutorialState,
 }) => {
   const [showCheckboxes, setShowCheckboxes] = useState(false); // To show/hide checkboxes
   const [checkedIndex, setCheckedIndex] = useState(null); // Index of the checked checkbox
@@ -29,9 +42,9 @@ const ConversationDriver = ({
   const isFetchingForGuessRef = useRef(isFetchingForGuess);
   const currentLineIndexRef = useRef(0);
   const conversationRef = useRef(conversation);
-  
+
   const scoreHandler = ScoreHandler();
-  const NOTICE_INDEX = 0;
+  const NOTICE_INDEX = 2;
   const NUM_BEFORE_API_CALL = 4;
   const NUM_TALK_TOKENS = 3;
   const AI_STARTS_HERE_MSG = "AI-created conversation starts here";
@@ -57,14 +70,48 @@ const ConversationDriver = ({
     return "";
   };
 
+  const handleTutorialNext = () => {
+    switch (tutorialState) {
+      case TutorialState.WAITING:
+        setTutorialState(TutorialState.NEXT_BTN);
+        break;
+      case TutorialState.NEXT_BTN:
+        if (conversation.currentLineIndex === IM_NOTICING_INDEX) {
+          setTutorialState(TutorialState.NOTICE_BTN);
+          setGameState(GameState.NOTICE_AI);
+        }
+      case TutorialState.INTERACT_NEXT:
+        if (conversation.currentLineIndex === AI_CONVO_INDEX - 1) {
+          setTutorialState(TutorialState.SEE_AI);
+        }
+      default:
+        break;
+    }
+
+    incrementIndex();
+  };
+
+  const isNextBtnDisabled = () => {
+    return showCheckboxes || isFetching ||
+      (isTutorial() && tutorialState === TutorialState.NOTICE_BTN);
+  };
+
   const handleNextClick = () => {
     const nextIndex = conversation.currentLineIndex;
+
+    if (isTutorial()) {
+      handleTutorialNext();
+      return;
+    }
 
     if (nextIndex > NOTICE_INDEX) {
       setGameState(GameState.NOTICE_AI);
     }
 
-    if (nextIndex === conversation.lines.length - NUM_BEFORE_API_CALL) {
+    if (
+      nextIndex === conversation.lines.length - NUM_BEFORE_API_CALL &&
+      !isTutorial()
+    ) {
       setIsFetchingForGuess(true);
       isFetchingForGuessRef.current = true;
       conversationRef.current = conversation;
@@ -94,9 +141,13 @@ const ConversationDriver = ({
   };
 
   const handleNoticeClick = () => {
-    if (gameState == GameState.NOTICE_AI) {
+    if (gameState == GameState.NOTICE_AI || gameState == GameState.MOVE_CONVOS) {
       setGameState(GameState.SELECT_AI);
       setShowCheckboxes(true);
+
+      if (isTutorial()) {
+        incrementIndex();
+      }
     } else {
       // Deep clone the current conversation to avoid direct state mutation
       const updatedConvo = deepCopy(conversation);
@@ -107,10 +158,22 @@ const ConversationDriver = ({
         conversation.initialLength
       );
       updatedConvo.lines[checkedIndex] = updatedLine;
-      if (conversation.lines.length > conversation.initialLength && checkedIndex != conversation.initialLength) {
-        updatedConvo.lines[conversation.initialLength].message = AI_STARTS_HERE_MSG;
+      
+      if (
+        conversation.lines.length > conversation.initialLength &&
+        checkedIndex != conversation.initialLength
+      ) {
+        updatedConvo.lines[conversation.initialLength].message =
+          AI_STARTS_HERE_MSG;
       }
-      updateConversation(updatedConvo);
+
+      if (isTutorial()) {
+        updatedLine.message = "You did it!";
+        incrementIndex(updatedConvo);
+        setTutorialState(TutorialState.MOVE_ON);
+      } else {
+        updateConversation(updatedConvo);
+      }
 
       setCheckedIndex(null);
       setShowCheckboxes(false);
@@ -122,7 +185,9 @@ const ConversationDriver = ({
     return (
       (gameState == GameState.SELECT_AI && checkedIndex == null) ||
       //TODO: update when change INDEX
-      conversation.currentLineIndex < NOTICE_INDEX + 2 || isFetching
+      conversation.currentLineIndex < NOTICE_INDEX ||
+      isFetching ||
+      (isTutorial() && tutorialState === TutorialState.NEXT_BTN)
     );
   };
 
@@ -131,6 +196,35 @@ const ConversationDriver = ({
   };
 
   // Handle API calls
+  const handleTutorialAPISuccess = (moreLines) => {
+    
+    const convo = deepCopy(conversationRef.current);
+    // This async call is holding onto state from when retrieve was called
+    convo.currentLineIndex = currentLineIndexRef.current;
+    convo.lines.push(...moreLines);
+    updateConversation(convo);
+
+    setIsFetchingForGuess(false);
+    setIsFetching(false);
+  };
+
+  const handleTutorialAPIFailure = (err) => {
+    if (isLocalHost()) {
+      const convoLines = conversationRef.current.lines;
+      const tutorialSoFarLines = convoLines.splice(0, AI_CONVO_INDEX);
+      const tutorialEndLines = convoLines.splice(AI_CONVO_INDEX);
+      console.log("endTutorialLines", tutorialEndLines);
+
+      const moreLines = makeMockLines(tutorialSoFarLines, "tutorial");
+      moreLines.push(...tutorialEndLines);
+      tutorialSoFarLines.push(...moreLines);
+      const newConvo = deepCopy(conversationRef.current);
+      newConvo.lines = tutorialSoFarLines;
+      conversationRef.current = newConvo;
+      updateConversation(newConvo);
+    }
+  };
+
   const handleAPISuccess = (moreLines) => {
     const convo = deepCopy(conversationRef.current);
     // This async call is holding onto state from when retrieve was called
@@ -148,20 +242,22 @@ const ConversationDriver = ({
 
   const handleErrorWithLabel = (err, addLines, label = "") => {
     if (isLocalHost()) {
-      const moreLines = makeMockLines(filterLinesByName(conversationRef.current.lines, userName), label);
+      const moreLines = makeMockLines(
+        filterLinesByName(conversationRef.current.lines, userName),
+        label
+      );
       addLines(moreLines);
     } else {
       console.log("retrieveConversations api error\n", err);
       alert(
         "Sorry, failed to retrieve conversations due to an error, \
-        try pressing again or if that fails, refresh the page.\n" +
-        err
+        try pressing again or if that fails, refresh the page.\n" + err
       );
     }
-    
+
     setIsFetchingForGuess(false);
     setIsFetching(false);
-  }
+  };
 
   // INTERACT Stage functions
 
@@ -217,7 +313,9 @@ const ConversationDriver = ({
 
   const handleInteractAPIError = (err) => {
     if (isLocalHost()) {
-      const moreLines = makeMockLines(filterLinesByName(conversation.lines, userName));
+      const moreLines = makeMockLines(
+        filterLinesByName(conversation.lines, userName)
+      );
       handleInteractAPISuccess(moreLines);
     } else {
       handleErrorWithLabel(err, null, "fromInteract");
@@ -247,7 +345,7 @@ const ConversationDriver = ({
         buttonText: "Done",
         entryLengthMin: 3,
         entryLengthMax: 20,
-        onClose: () => {}
+        onClose: () => {},
       });
     }
 
@@ -261,7 +359,7 @@ const ConversationDriver = ({
 
     // Add lines to the conversation
     const newConvo = deepCopy(conversation);
-    newConvo.lines.push({"name":userName, "message":null, "text":userInput});
+    newConvo.lines.push({ name: userName, message: null, text: userInput });
     incrementIndex(newConvo);
     conversationRef.current = newConvo;
     setHasUserJoined(true);
@@ -279,13 +377,13 @@ const ConversationDriver = ({
   };
 
   const filterLinesByName = (lines, name) => {
-    return lines.filter(line => line.name !== name);
-}
+    return lines.filter((line) => line.name !== name);
+  };
 
   const handleInteractWithUserAPISuccess = (moreLines) => {
     handleInteractAPISuccess(moreLines);
     cleanupUserInteraction();
-  }
+  };
 
   const handleInteractWithUserAPIError = (err) => {
     handleErrorWithLabel(err, handleInteractWithUserAPISuccess, "withUser");
@@ -382,7 +480,7 @@ const ConversationDriver = ({
             <button
               className="next-button"
               onClick={handleNextClick}
-              disabled={showCheckboxes || isFetching}
+              disabled={isNextBtnDisabled()}
             >
               Next
             </button>
@@ -410,7 +508,11 @@ const ConversationDriver = ({
           </button>
 
           {gameState !== GameState.JOIN_CONVO && (
-            <button className="notice-button" onClick={handleJoinConvo}>
+            <button
+              className="notice-button"
+              onClick={handleJoinConvo}
+              disabled={isTutorial() && gameState !== GameState.JOIN_CONVO}
+            >
               Join conversation
             </button>
           )}

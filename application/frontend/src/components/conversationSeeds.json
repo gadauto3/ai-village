@@ -1,6 +1,5 @@
 [
     {
-        "color": "#A8DADC",
         "key": 1,
         "currentLineIndex": 0,
         "initialLength": 6,
@@ -51,7 +50,6 @@
         ]
     },
     {
-        "color": "#F4A261",
         "key": 2,
         "currentLineIndex": 0,
         "initialLength": 9,
@@ -117,7 +115,6 @@
         ]
     },
     {
-        "color": "#2A9D8F",
         "key": 3,
         "currentLineIndex": 0,
         "initialLength": 7,
