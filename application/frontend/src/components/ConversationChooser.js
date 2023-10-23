@@ -9,6 +9,7 @@ import searchBarImg from "../assets/images/searchBar.png";
 
 import "../css/ConversationChooser.css";
 import "../css/utils.css";
+import { TutorialState } from "./Tutorial";
 
 const ConversationChooser = ({
   conversations,
@@ -16,7 +17,8 @@ const ConversationChooser = ({
   gameState,
   selectedConversation,
   setSelectedConversation,
-  isTutorial
+  isTutorial,
+  tutorialState
 }) => {
   const [areConversationsSet, setAreConversationsSet] = useState(false);
   const [isConvosMax, setIsConvosMax] = useState(false);
@@ -81,11 +83,12 @@ const ConversationChooser = ({
     }
   };
 
-  const isDivDisabled = () => {
+  const isDivDisabled = (convo) => {
     return (
       gameState == GameState.SELECT_AI ||
       gameState == GameState.JOIN_CONVO ||
-      isTutorial()
+      isTutorial() ||
+      (convo && convo.key === 0 && tutorialState === TutorialState.DONE)
     );
   };
 
@@ -98,7 +101,7 @@ const ConversationChooser = ({
             key={index}
             className={`conversation-item ${
               conversation === selectedConversation ? "selected" : ""
-            } ${isDivDisabled() ? "div-disabled" : ""}`}
+            } ${isDivDisabled(conversation) ? "div-disabled" : ""}`}
             onClick={() => safeSetConversation(conversation)}
           >
             <div className="image-container">

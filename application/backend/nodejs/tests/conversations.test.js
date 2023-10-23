@@ -66,8 +66,8 @@ describe('Conversations - Tests using the seeds file', () => {
         const coloredConvos1 = conversations.getConversations(count, "seed1");
         const coloredConvos2 = conversations.getConversations(count, "seed2");
 
-        expect(coloredConvos1[0]).not.toEqual(coloredConvos2[0]);
         expect(coloredConvos1[1]).not.toEqual(coloredConvos2[1]);
+        expect(coloredConvos1[2]).not.toEqual(coloredConvos2[2]);
     });
 
     it('ensures the conversations array returned is the same when using the same seed', () => {

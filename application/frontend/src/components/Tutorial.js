@@ -6,6 +6,7 @@ export const TutorialState = Object.freeze({
   MOVE_ON: 3,
   INTERACT_NEXT: 4,
   SEE_AI: 5,
+  DONE: 8,
   JOIN_CONVO: 8,
   SHOW_CREDITS: 9,
 }); 

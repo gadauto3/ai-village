@@ -71,21 +71,14 @@ const ConversationDriver = ({
   };
 
   const handleTutorialNext = () => {
-    switch (tutorialState) {
-      case TutorialState.WAITING:
-        setTutorialState(TutorialState.NEXT_BTN);
-        break;
-      case TutorialState.NEXT_BTN:
-        if (conversation.currentLineIndex === IM_NOTICING_INDEX) {
-          setTutorialState(TutorialState.NOTICE_BTN);
-          setGameState(GameState.NOTICE_AI);
-        }
-      case TutorialState.INTERACT_NEXT:
-        if (conversation.currentLineIndex === AI_CONVO_INDEX - 1) {
-          setTutorialState(TutorialState.SEE_AI);
-        }
-      default:
-        break;
+    if (tutorialState === TutorialState.WAITING) {
+      setTutorialState(TutorialState.NEXT_BTN);
+    } else if (
+      tutorialState === TutorialState.NEXT_BTN &&
+      conversation.currentLineIndex === IM_NOTICING_INDEX
+    ) {
+      setTutorialState(TutorialState.NOTICE_BTN);
+      setGameState(GameState.NOTICE_AI);
     }
 
     incrementIndex();
@@ -110,7 +103,7 @@ const ConversationDriver = ({
 
     if (
       nextIndex === conversation.lines.length - NUM_BEFORE_API_CALL &&
-      !isTutorial()
+      !isTutorial() // REDUNDANT? ^^^
     ) {
       setIsFetchingForGuess(true);
       isFetchingForGuessRef.current = true;
@@ -196,35 +189,6 @@ const ConversationDriver = ({
   };
 
   // Handle API calls
-  const handleTutorialAPISuccess = (moreLines) => {
-    
-    const convo = deepCopy(conversationRef.current);
-    // This async call is holding onto state from when retrieve was called
-    convo.currentLineIndex = currentLineIndexRef.current;
-    convo.lines.push(...moreLines);
-    updateConversation(convo);
-
-    setIsFetchingForGuess(false);
-    setIsFetching(false);
-  };
-
-  const handleTutorialAPIFailure = (err) => {
-    if (isLocalHost()) {
-      const convoLines = conversationRef.current.lines;
-      const tutorialSoFarLines = convoLines.splice(0, AI_CONVO_INDEX);
-      const tutorialEndLines = convoLines.splice(AI_CONVO_INDEX);
-      console.log("endTutorialLines", tutorialEndLines);
-
-      const moreLines = makeMockLines(tutorialSoFarLines, "tutorial");
-      moreLines.push(...tutorialEndLines);
-      tutorialSoFarLines.push(...moreLines);
-      const newConvo = deepCopy(conversationRef.current);
-      newConvo.lines = tutorialSoFarLines;
-      conversationRef.current = newConvo;
-      updateConversation(newConvo);
-    }
-  };
-
   const handleAPISuccess = (moreLines) => {
     const convo = deepCopy(conversationRef.current);
     // This async call is holding onto state from when retrieve was called
@@ -260,9 +224,63 @@ const ConversationDriver = ({
   };
 
   // INTERACT Stage functions
+  const handleTutorialAPISuccess = (moreLines) => {
+    
+    const convo = deepCopy(conversationRef.current);
+    // This async call is holding onto state from when retrieve was called
+    convo.currentLineIndex = currentLineIndexRef.current;
+    convo.lines.push(...moreLines);
+    updateConversation(convo);
+
+    setIsFetching(false);
+  };
+
+  const handleTutorialAPIFailure = (err) => {
+    if (isLocalHost()) {
+      const convoLines = conversationRef.current.lines;
+      const tutorialEndLines = convoLines.splice(AI_CONVO_INDEX + 1);
+      const tutorialSoFarLines = convoLines.splice(0, AI_CONVO_INDEX + 1);
+      console.log("endTutorialLines", tutorialEndLines);
+
+      const moreLines = makeMockLines(tutorialSoFarLines, "tutorial");
+      moreLines.push(...tutorialEndLines);
+      tutorialSoFarLines.push(...moreLines);
+      const newConvo = deepCopy(conversationRef.current);
+      newConvo.lines = tutorialSoFarLines;
+      conversationRef.current = newConvo;
+      incrementIndex(newConvo);
+
+      setIsFetching(false);
+    }
+  };
+
+  const handleNextInteractTutorialClick = () => {
+    
+    if (conversation.currentLineIndex === AI_CONVO_INDEX - 1) {
+      setTutorialState(TutorialState.SEE_AI);
+
+      setIsFetching(true);
+      isFetchingRef.current = true;
+      conversationRef.current = conversation;
+      retrieveAdditionalConversation(
+        conversation.lines,
+        handleTutorialAPISuccess,
+        handleTutorialAPIFailure
+      );
+    } else if (conversation.currentLineIndex === conversation.lines.length - 1) {
+      setTutorialState(TutorialState.DONE);
+    }
+
+    incrementIndex();
+  };
 
   const handleNextInteractClick = () => {
     const nextIndex = conversation.currentLineIndex;
+
+    if (isTutorial()) {
+      handleNextInteractTutorialClick();
+      return;
+    }
 
     if (nextIndex == conversation.lines.length - 1) {
       if (gameState === GameState.JOIN_CONVO) {
@@ -511,7 +529,7 @@ const ConversationDriver = ({
             <button
               className="notice-button"
               onClick={handleJoinConvo}
-              disabled={isTutorial() && gameState !== GameState.JOIN_CONVO}
+              disabled={isTutorial() || conversation.key == 0} // TODO: more tutorial needed
             >
               Join conversation
             </button>
