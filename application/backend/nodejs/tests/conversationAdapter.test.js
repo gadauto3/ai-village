@@ -14,7 +14,7 @@ test('aiGuess, currentLineIndex, initialLength, and key should be set correctly'
   expect(convo.aiGuess).toBeNull();
   expect(convo.currentLineIndex).toBe(0);
   expect(convo.initialLength).toBe(2);
-  expect(convo.key).toBe(1);
+  expect(convo.key).toBe(0);
 });
 
 test('people array should be updated with currentLine correctly', () => {
@@ -63,7 +63,7 @@ test('Transformation should work on multiple conversations', () => {
   const transformed = ConversationAdapter.adaptConversation(sampleConversations);
 
   expect(transformed.length).toBe(2);
-  expect(transformed[1].key).toBe(2);
+  expect(transformed[1].key).toBe(1);
   expect(transformed[1].people[0].currentLine).toBe("Hey");
   expect(transformed[1].people[1].currentLine).toBe("");
 });

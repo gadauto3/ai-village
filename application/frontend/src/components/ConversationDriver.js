@@ -225,32 +225,25 @@ const ConversationDriver = ({
 
   // INTERACT Stage functions
   const handleTutorialAPISuccess = (moreLines) => {
-    
-    const convo = deepCopy(conversationRef.current);
-    // This async call is holding onto state from when retrieve was called
-    convo.currentLineIndex = currentLineIndexRef.current;
-    convo.lines.push(...moreLines);
-    updateConversation(convo);
+    // Split the lines before and after the AI index
+    const convoLines = conversationRef.current.lines;
+    const tutorialEndLines = convoLines.splice(AI_CONVO_INDEX + 1);
+    const tutorialSoFarLines = convoLines.splice(0, AI_CONVO_INDEX + 1);
+
+    moreLines.push(...tutorialEndLines);
+    tutorialSoFarLines.push(...moreLines);
+    const newConvo = deepCopy(conversationRef.current);
+    newConvo.lines = tutorialSoFarLines;
+    conversationRef.current = newConvo;
+    incrementIndex(newConvo);
 
     setIsFetching(false);
   };
 
   const handleTutorialAPIFailure = (err) => {
     if (isLocalHost()) {
-      const convoLines = conversationRef.current.lines;
-      const tutorialEndLines = convoLines.splice(AI_CONVO_INDEX + 1);
-      const tutorialSoFarLines = convoLines.splice(0, AI_CONVO_INDEX + 1);
-      console.log("endTutorialLines", tutorialEndLines);
-
       const moreLines = makeMockLines(tutorialSoFarLines, "tutorial");
-      moreLines.push(...tutorialEndLines);
-      tutorialSoFarLines.push(...moreLines);
-      const newConvo = deepCopy(conversationRef.current);
-      newConvo.lines = tutorialSoFarLines;
-      conversationRef.current = newConvo;
-      incrementIndex(newConvo);
-
-      setIsFetching(false);
+      handleTutorialAPISuccess(moreLines);
     }
   };
 
@@ -320,7 +313,7 @@ const ConversationDriver = ({
       if (convoLines[firstAILine].name === userName) {
         msgIndex++;
       }
-      convoLines[msgIndex].message = AI_STARTS_HERE_MSG;
+      convoLines[msgIndex].message = AI_STARTS_HERE_MSG + `, added ${moreLines.length} lines.`;
     }
 
     newConvo.lines = convoLines;
