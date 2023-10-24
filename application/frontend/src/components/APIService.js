@@ -38,6 +38,7 @@ export const getConversations = (numConvos, onSuccess, onError) => {
 
 export const retrieveAdditionalConversation = (lines, onSuccess, onError) => {
     const endPoint = "/api/addToConversation";
+    console.log("endPoint", endPoint);
 
     const startTime = new Date();
     fetch(config.apiPrefix + endPoint, {
@@ -65,6 +66,7 @@ export const retrieveAdditionalConversation = (lines, onSuccess, onError) => {
 
   export const retrieveAdditionalConversationWithUserInput = (userName, userInput, lines, onSuccess, onError) => {
     const endPoint = "/api/addPlayerToConversation";
+    console.log("endPoint", endPoint);
 
     const startTime = new Date();
     fetch(config.apiPrefix + endPoint, {

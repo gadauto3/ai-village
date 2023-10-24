@@ -1,7 +1,6 @@
 class ConversationAdapter {
   static adaptConversation(parsedJson) {
     return parsedJson.map((conversation, index) => {
-      console.log("conversation", conversation);
       return {
         aiGuess: null,
         currentLineIndex: 0,

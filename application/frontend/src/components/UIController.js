@@ -40,7 +40,6 @@ const UIController = () => {
       gameState >= GameState.INTERACT &&
       tutorialState === TutorialState.MOVE_ON
     ) {
-      console.log("useFX to InterNxt");
       setTutorialState(TutorialState.INTERACT_NEXT);
     }
   }, [selectedConversation]);

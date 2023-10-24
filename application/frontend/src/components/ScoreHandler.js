@@ -19,8 +19,6 @@ const ScoreHandler = () => {
   };
 
   const tipForScores = (convoData) => {
-    console.log("conversationData", convoData);
-
     if (convoData.some((item) => item.guessIndex < item.answerIndex - 1)) {
       return (
         "It looks like you're guessing a bit too early. For example, in the conversation between " +

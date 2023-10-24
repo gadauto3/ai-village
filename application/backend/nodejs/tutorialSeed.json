@@ -58,11 +58,15 @@
     },
     {
       "name": "Maria",
-      "text": "First, we'll ask it to make 3 lines of dialogue between us about a random topic."
+      "text": "Now, Leona and I will briefly try to discuss a random topic about Art."
     },
     {
       "name": "Leona",
-      "text": "Hooray, the tutorial is over, choose a different message thread to have a chance to join other conversations. Enjoy!"
+      "text": "Ok, that's it, the tutorial is over. Press Next."
+    },
+    {
+      "name": "Maria",
+      "text": "Choose a different message thread and enjoy the other conversations! You don't have to do this tutorial next time unless you want to."
     }
   ]
 }

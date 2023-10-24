@@ -97,7 +97,7 @@ const ConversationDriver = ({
       return;
     }
 
-    if (nextIndex > NOTICE_INDEX) {
+    if (nextIndex >= NOTICE_INDEX) {
       setGameState(GameState.NOTICE_AI);
     }
 
@@ -176,9 +176,9 @@ const ConversationDriver = ({
 
   const isNoticeDisabled = () => {
     return (
-      (gameState == GameState.SELECT_AI && checkedIndex == null) ||
-      //TODO: update when change INDEX
+      gameState < GameState.NOTICE_AI ||
       conversation.currentLineIndex < NOTICE_INDEX ||
+      (gameState == GameState.SELECT_AI && checkedIndex == null) ||
       isFetching ||
       (isTutorial() && tutorialState === TutorialState.NEXT_BTN)
     );
@@ -229,11 +229,15 @@ const ConversationDriver = ({
     const convoLines = conversationRef.current.lines;
     const tutorialEndLines = convoLines.splice(AI_CONVO_INDEX + 1);
     const tutorialSoFarLines = convoLines.splice(0, AI_CONVO_INDEX + 1);
+    const aiAdded = moreLines.length;
+    const aiIndex = tutorialSoFarLines.length;
 
     moreLines.push(...tutorialEndLines);
     tutorialSoFarLines.push(...moreLines);
+    tutorialSoFarLines[aiIndex].message = AI_STARTS_HERE_MSG + `, added ${aiAdded} lines.`;
     const newConvo = deepCopy(conversationRef.current);
     newConvo.lines = tutorialSoFarLines;
+    newConvo.currentLineIndex++; // Increment twice with the function below
     conversationRef.current = newConvo;
     incrementIndex(newConvo);
 
@@ -242,7 +246,7 @@ const ConversationDriver = ({
 
   const handleTutorialAPIFailure = (err) => {
     if (isLocalHost()) {
-      const moreLines = makeMockLines(tutorialSoFarLines, "tutorial");
+      const moreLines = makeMockLines(conversation.lines, "tutorial");
       handleTutorialAPISuccess(moreLines);
     }
   };
@@ -262,6 +266,7 @@ const ConversationDriver = ({
       );
     } else if (conversation.currentLineIndex === conversation.lines.length - 1) {
       setTutorialState(TutorialState.DONE);
+      return;
     }
 
     incrementIndex();
@@ -356,7 +361,7 @@ const ConversationDriver = ({
         buttonText: "Done",
         entryLengthMin: 3,
         entryLengthMax: 20,
-        onClose: () => {},
+        onClose: () => {console.log("handleMessageSubmit");},
       });
     }
 
@@ -513,7 +518,7 @@ const ConversationDriver = ({
           <button
             className="next-button"
             onClick={handleNextInteractClick}
-            disabled={isReadyToJoin || isFetching}
+            disabled={isReadyToJoin || isFetching || (conversation.key === 0 && tutorialState === TutorialState.DONE)}
           >
             Next
           </button>

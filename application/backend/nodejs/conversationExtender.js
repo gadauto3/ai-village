@@ -169,6 +169,8 @@ class ConversationExtender {
         responseCapture = message;
         let responseJson = JSON.parse(message.content);
 
+        // Sometimes I just get back an array of lines which is reasonable
+        responseJson = Array.isArray(responseJson) ? {"lines":responseJson} : responseJson;
         // TODO: remove this debugging, but it's helpful right now.
         const len1 = responseJson.lines.length;
         let responseLines = this.removeMatchingElements(originalLines, responseJson.lines);
