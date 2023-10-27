@@ -153,7 +153,7 @@ class ConversationExtender {
         { "role": "system", "content": systemPromptTextFromFile },
         { "role": "user",   "content": fullContext }
       ],
-      temperature: 1,
+      temperature: 1.2,
       max_tokens: 768,
       top_p: 1,
       frequency_penalty: 0,

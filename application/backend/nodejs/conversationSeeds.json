@@ -6,213 +6,72 @@
                 "icon": "icons8-old-woman-medium-light-skin-tone-48.png"
             },
             {
-                "name": "Leo",
+                "name": "Amani",
                 "icon": "icons8-man-medium-skin-tone-48.png"
             }
         ],
         "lines": [
             {
                 "name": "Maria",
-                "text": "Hey Leo 🐜🦋"
+                "text": "You won't believe what I overheard last night at the terrace cafe!"
             },
             {
-                "name": "Leo",
-                "text": "Hey M, what's up with the bugs?"
-            },
-            {
-                "name": "Maria",
-                "text": "Did you ever hear about those moths that have a sneaky relationship with ants?"
-            },
-            {
-                "name": "Leo",
-                "text": "Maybe? More contxt plz"
+                "name": "Amani",
+                "text": "???"
             },
             {
                 "name": "Maria",
-                "text": "So they produce a sweet milk that ants love, right?"
+                "text": "I heard Sameer and Fatima talking. They mentioned an old debt, some deal gone wrong, and someone named \"Giovanni\""
             },
             {
-                "name": "Leo",
-                "text": "Ok..."
-            },
-            {
-                "name": "Maria",
-                "text": "Then caterpillars bribe the ants with this treat, and the ants protect them from predators. Some ants even bring them into their nests."
-            },
-            {
-                "name": "Leo",
-                "text": "Win-win! Wait a minute, what do the caterpillars eat in the nest to make this milky stuff?"
+                "name": "Amani",
+                "text": "Giovanni? That sounds familiar. But why would Sameer and Fatima be involved in such things?"
             },
             {
                 "name": "Maria",
-                "text": "That's where it gets a little dark... some caterpillars eat the ant babies, the ones that are supposedly their \"siblings\" o_O!"
+                "text": "The way they spoke scared me. They mentioned repaying 'with interest'. I'm worried about what they're caught up in"
             },
             {
-                "name": "Leo",
-                "text": "😵 That's kinda messed up, is that why you wanted to tell me? To gross me out?"
+                "name": "Amani",
+                "text": "This sounds serious. We should find out more before jumping to conclusions."
             },
             {
                 "name": "Maria",
-                "text": "Lol, pretty much 😁. Don't worry, not all do that, some eat ant food or get fed like ant babies."
-            },
-            {
-                "name": "Leo",
-                "text": "I feel better I guess? Anyways, what else is up with you?"
+                "text": "What have you heard about Giovanni?"
             }
         ]
     },
     {
         "people": [
             {
-                "name": "Mika",
-                "icon": "icons8-woman-with-beard-light-skin-tone-48.png"
-            },
-            {
-                "name": "Helen",
-                "icon": "icons8-old-woman-medium-dark-skin-tone-48.png"
-            }
-        ],
-        "lines": [
-            {
-                "name": "Mika",
-                "text": "It was a real pleasure to meet you two at the museum today, thx SOOO much for helping me find my bag! 🙏👜"
-            },
-            {
-                "name": "Helen",
-                "text": "no worries at all, glad you got it, fun to meet a fellow art aficionado"
-            },
-            {
-                "name": "Mika",
-                "text": "It cracked me up when you looked behind that installation, I felt like we were doing something illegal"
-            },
-            {
-                "name": "Helen",
-                "text": "I swear I saw a strap hanging out! No harm done 😬"
-            },
-            {
-                "name": "Mika",
-                "text": "If the bag had been there, it would've been like that crazy stunt the artist Banksy pulled off a while ago, sneaking his own art into world-famous museums"
-            },
-            {
-                "name": "Helen",
-                "text": "You mean when he slipped those real-looking paintings into the big art museums in San Francisco and New York? Brilliant and hilarious!"
-            },
-            {
-                "name": "Mika",
-                "text": "Didn't he also place that insect with fighter jet wings in the american museum of nat history? Imagine visitors walking by, thinking it's genuine."
-            },
-            {
-                "name": "Helen",
-                "text": "like he was playfully mocking the institutions of art. I wonder if some folks that walked by your bag thought it was a piece? 😆🖼️"
-            },
-            {
-                "name": "Mika",
-                "text": "🤣🤣🤣"
-            },
-            {
-                "name": "Helen",
-                "text": "hey, did you hear why banksy did it? apparently his sister once teased him: It's not like any of your pieces will actually end up in the Louvre..."
-            },
-            {
-                "name": "Mika",
-                "text": "What a Banksy response right?!? Taking a playful jab and turning it into a powerful statement about art and who gets to decide what is Art."
-            },
-            {
-                "name": "Helen",
-                "text": "Banksy really knows how to leave an impression, both on the canvas and in our minds 😛"
-            },
-            {
-                "name": "Mika",
-                "text": "Good one!! know of any other clever stunts pulled by famous artists?"
-            }
-        ]
-    },
-    {
-        "color": "#2A9D8F",
-        "people": [
-            {
-                "name": "Sivan",
+                "name": "Shivan",
                 "icon": "icons8-older-person-medium-dark-skin-tone-48.png"
             },
             {
-                "name": "Violet",
+                "name": "Violeta",
                 "icon": "icons8-girl-medium-skin-tone-48.png"
             }
         ],
         "lines": [
             {
-                "name": "Violet",
-                "text": "So, to continue the unusual work conversation on this thread... did you know the Earth's magnetic poles flip, weakening the field?"
+                "name": "Violeta",
+                "text": "We're supposed to meet at the movie, where are you?"
             },
             {
-                "name": "Sivan",
-                "text": "I vaguely remember that, when does it heppen and would be noticeable at all?"
+                "name": "Shivan",
+                "text": "OMG, this is crazy"
             },
             {
-                "name": "Violet",
-                "text": "Over thousands of years. During those times, more cosmic and solar radiation would get down to us here on Earth."
+                "name": "Violeta",
+                "text": "What's crazy and are you going to make it?"
             },
             {
-                "name": "Sivan",
-                "text": "Sounds concerning. Would it harm us or our tech?"
+                "name": "Shivan",
+                "text": "So I left my place early and, oh geez, one minute"
             },
             {
-                "name": "Violet",
-                "text": "Our atmosphere protects us to an extent, but satellites could be affected. And we might see more auroras, even in places like New York!"
-            },
-            {
-                "name": "Sivan",
-                "text": "Ok, auroras in my backyard cood be cool. But what about animals, don't some need 'em?"
-            },
-            {
-                "name": "Violet",
-                "text": "Animals that migrate like birds could get confused. But remember, these changes happen slowly, giving time for adaptation."
-            },
-            {
-                "name": "Sivan",
-                "text": "Crazy, what other strange facts do you know about the Earth?"
-            }
-        ]
-    },
-    {
-        "people": [
-            {
-                "name": "Vanessa",
-                "icon": "icons8-woman-medium-skin-tone-48.png"
-            },
-            {
-                "name": "Diego",
-                "icon": "icons8-man-curly-hair-medium-skin-tone-48.png"
-            }
-        ],
-        "lines": [
-            {
-                "name": "Vanessa",
-                "text": "Hey Diego and friend, I thought of y'all watching this cool show about sharks today. Did you know some can live for hundreds of years?"
-            },
-            {
-                "name": "Diego",
-                "text": "Really, mom? That's so cool! Which one?"
-            },
-            {
-                "name": "Vanessa",
-                "text": "There's this shark called the Greenland shark, and some living today might have been born before America was settled by europans. Can you imagine being that old?"
-            },
-            {
-                "name": "Diego",
-                "text": "!?!?! Reminds me of something I learned last week about bristalcone pines. Some are super old, like even older than castles!"
-            },
-            {
-                "name": "Vanessa",
-                "text": "That's amazing son!"
-            },
-            {
-                "name": "Diego",
-                "text": "Yeah! I think one tree is like thousands of years old. Its been around for soooo long, before people had computers or even phones."
-            },
-            {
-                "name": "Vanessa",
-                "text": "I'm sure it's older than phones 🤣🤣🤣. Makes you wonder what stories they could tell if they could talk, right?"
+                "name": "Violeta",
+                "text": "Shivan, are you ok?"
             }
         ]
     },
@@ -230,50 +89,38 @@
         "lines": [
             {
                 "name": "Preeta",
-                "text": "Related to that happy accident earlier today, can I tell you two about an accidental discovery?"
+                "text": "Did you two notice who walked in the party last night after the toast?"
             },
             {
                 "name": "Adisu",
-                "text": "Sure! Whatcha got Preeta?"
+                "text": "I heard Jordan came unexpectedly…"
             },
             {
                 "name": "Preeta",
-                "text": "Back in 1928, there was this English scientist named Alexander Fleming. Upon returning from a two-week vacation, he found a messy lab with one of his bacteria experiments contaminated by mold."
+                "text": "I mean Riley"
             },
             {
                 "name": "Adisu",
-                "text": "Ugh, sounds like one of those evil science experiments I find in the back of the fridge sometimes!"
+                "text": "😳😳😱 how gone was I?!?!?"
             },
             {
                 "name": "Preeta",
-                "text": "Ha! But instead of evil, it turned into something amazing! Fleming noticed that no bacteria grew around the mold, something was stopping them."
+                "text": "no kidding, you should've seen Kamir's face 😒"
             },
             {
                 "name": "Adisu",
-                "text": "Wait, so the mold was hurting the bacteria?"
+                "text": "is that a shock reaction or a Kamir-style attempt at playing it cool?"
             },
             {
                 "name": "Preeta",
-                "text": "Exactly! He realized this could be big, so he grew more mold. After several experiments, he found out it was effective against a wide range of bacteria, more than he initially expected."
-            },
-            {
-                "name": "Adisu",
-                "text": "Some people come back from vacation with souvenirs, he comes back with a medical revolution o_O. What did he do next?"
-            },
-            {
-                "name": "Preeta",
-                "text": "He went on to isolate the substance in the mold, named it penicillin, and birthed antibiotics as we know them today, fundamentally changing medicine and saving countless lives."
-            },
-            {
-                "name": "Adisu",
-                "text": "It's amazing to think that returning to a messy lab could lead to such a groundbreaking discovery. It's like finding a diamond ring in a dumpster."
+                "text": "Ha, ha, now can you guess who Riley left with?"
             }
         ]
     },
     {
         "people": [
             {
-                "name": "Lianna",
+                "name": "Liana",
                 "icon": "icons8-woman-medium-skin-tone-48.png"
             },
             {
@@ -283,7 +130,7 @@
         ],
         "lines": [
             {
-                "name": "Lianna",
+                "name": "Liana",
                 "text": "Hola K!"
             },
             {
@@ -291,7 +138,7 @@
                 "text": "Heyo Li!"
             },
             {
-                "name": "Lianna",
+                "name": "Liana",
                 "text": "So I was inspired the other day to write about famous women in history."
             },
             {
@@ -299,24 +146,16 @@
                 "text": "That's cool, ones that are still relevant today?"
             },
             {
-                "name": "Lianna",
-                "text": "For sure! I started with Ada Lovelace, the first programmer of what would become computers."
+                "name": "Liana",
+                "text": "For sure! I started with Ada Lovelace, the first programmer of what would become computers. She saw potential in using them to create Art and Music back in the 1800s!"
             },
             {
                 "name": "Kris",
-                "text": "That's totally relevant to the current AI 🤖 craze!"
+                "text": "I thought computers were created at the end of last century..."
             },
             {
-                "name": "Lianna",
-                "text": "Yes, exactly! In the 1800s, when the telegraph was just starting, Lovelace saw potential in Babbage's analytical engine far beyond math, into the realms of Art and Music."
-            },
-            {
-                "name": "Kris",
-                "text": "Extrordinary! 💃🏻"
-            },
-            {
-                "name": "Lianna",
-                "text": "Right?!?"
+                "name": "Liana",
+                "text": "Right?!? Anyways, what have you been up to?"
             }
         ]
     }
