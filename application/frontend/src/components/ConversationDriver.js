@@ -15,6 +15,7 @@ import {
   retrieveAdditionalConversationWithUserInput,
 } from "./APIService";
 import { AI_CONVO_INDEX, IM_NOTICING_INDEX, TutorialState } from "./Tutorial";
+import { retrieveConvoError, userNameError, validateMessage } from "./longStrings";
 
 const ConversationDriver = ({
   conversation,
@@ -213,10 +214,7 @@ const ConversationDriver = ({
       addLines(moreLines);
     } else {
       console.log("retrieveConversations api error\n", err);
-      alert(
-        "Sorry, failed to retrieve conversations due to an error, \
-        try pressing again or if that fails, refresh the page.\n" + err
-      );
+      alert(retrieveConvoError + err);
     }
 
     setIsFetchingForGuess(false);
@@ -343,31 +341,22 @@ const ConversationDriver = ({
   };
 
   const handleMessageSubmit = () => {
-    const maxChars = 140;
-    const entry = userInput.trim();
-    const regex = /^[a-zA-Z0-9-. ,()'!?]+$/;
-    let errorMessage = null;
-    if (entry.length < 20) {
-      errorMessage = `Please provide a longer sentence with more details, up to ${maxChars} characters.`;
-    } else if (entry.length > maxChars) {
-      errorMessage = `Sorry, please use less than ${maxChars} characters in your message. It is currently ${entry.length}.`;
-    } else if (!regex.test(entry)) {
-      errorMessage = `Please use only letters, numbers, .-,()'!? and space characters.`;
-    } else if (!userName) {
-      errorMessage = `Would you please provide a name?`;
-      const peeps = conversation.people;
-      getUserName({
-        textToDisplay: `Please provide your name to ${peeps[0].name} and ${peeps[1].name}. Note: your name will be used only for this round of the game.`,
-        buttonText: "Done",
-        entryLengthMin: 3,
-        entryLengthMax: 20,
-        onClose: () => {console.log("handleMessageSubmit");},
-      });
-    }
+    const errorMessage = validateMessage(userInput, userName);
 
     // Check for and handle errors
     if (errorMessage) {
       setUserInputError(errorMessage);
+
+      if (errorMessage === userNameError) {
+        const peeps = conversation.people;
+        getUserName({
+          textToDisplay: `Please provide your name to ${peeps[0].name} and ${peeps[1].name}. Note: your name will be used only for this round of the game.`,
+          buttonText: "Done",
+          entryLengthMin: 3,
+          entryLengthMax: 20,
+          onClose: () => {console.log("handleMessageSubmit");},
+        });
+      }
       return;
     } else if (userInputError) {
       setUserInputError(null);
