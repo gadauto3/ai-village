@@ -23,7 +23,7 @@ const ConversationChooser = ({
   const [areConversationsSet, setAreConversationsSet] = useState(false);
   const [isConvosMax, setIsConvosMax] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [preInitConvos, setPreInitConvos] = useState(["Conversation 1"]);
+  const [preInitConvos, setPreInitConvos] = useState(["Conversation 1", "Conversation 2"]);
 
   const defaultHeadIcon = "icons8-head-profile-50.png";
   const numPreviewChars = 25;
