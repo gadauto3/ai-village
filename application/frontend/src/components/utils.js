@@ -51,7 +51,7 @@ export function deepCopy(obj) {
   }
 }
 
-export const makeMockLines = (lines, label = "") => {
+export const makeMockLines = (lines, minNumLines, label = "") => {
   const mockTexts = [
       "Mind blown!",
       "Really? I didn't know that!",
@@ -64,7 +64,7 @@ export const makeMockLines = (lines, label = "") => {
 
   const getRandomText = () => mockTexts[Math.floor(Math.random() * mockTexts.length)];
 
-  const numberOfLines = Math.floor(Math.random() * 4) + 3;  // Generate random number between 3 and 6 inclusive
+  const numberOfLines = Math.floor(Math.random() * 4) + minNumLines;  // Generate random number between 3 and 6 inclusive
   const mockLines = [];
   const lastNames = [lines[lines.length - 2].name, lines[lines.length - 1].name];
   const append = (label == "" ? "" : " "+label);

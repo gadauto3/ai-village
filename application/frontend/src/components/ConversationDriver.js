@@ -15,7 +15,7 @@ import {
   retrieveAdditionalConversationWithUserInput,
 } from "./APIService";
 import { AI_CONVO_INDEX, IM_NOTICING_INDEX, TutorialState } from "./Tutorial";
-import { retrieveConvoError, userNameError, validateMessage } from "./longStrings";
+import { AiStartsHereMsg, retrieveConvoError, userNameError, validateMessage } from "./longStrings";
 
 const ConversationDriver = ({
   conversation,
@@ -33,7 +33,6 @@ const ConversationDriver = ({
   const [isReadyToJoin, setIsReadyToJoin] = useState(false); // Ready to join the conversation
   const [isFetchingForGuess, setIsFetchingForGuess] = useState(false); // Fetching from the API
   const [isFetching, setIsFetching] = useState(false); // Fetching from the API
-  const [numTalkTokens, setNumTalkTokens] = useState(NUM_TALK_TOKENS);
   const [userInput, setUserInput] = useState("");
   const [userInputError, setUserInputError] = useState(null);
   const [hasUserJoined, setHasUserJoined] = useState(false); // Whether user has joined the convo
@@ -47,8 +46,7 @@ const ConversationDriver = ({
   const scoreHandler = ScoreHandler();
   const NOTICE_INDEX = 2;
   const NUM_BEFORE_API_CALL = 4;
-  const NUM_TALK_TOKENS = 3;
-  const AI_STARTS_HERE_MSG = "AI-created conversation starts here";
+  const SIM_FETCH_MULTIPLIER = 10;
 
   useEffect(() => {
     if (linesContainerRef.current) {
@@ -102,10 +100,7 @@ const ConversationDriver = ({
       setGameState(GameState.NOTICE_AI);
     }
 
-    if (
-      nextIndex === conversation.lines.length - NUM_BEFORE_API_CALL &&
-      !isTutorial() // REDUNDANT? ^^^
-    ) {
+    if (nextIndex === conversation.lines.length - NUM_BEFORE_API_CALL) {
       setIsFetchingForGuess(true);
       isFetchingForGuessRef.current = true;
       conversationRef.current = conversation;
@@ -124,8 +119,23 @@ const ConversationDriver = ({
       return;
     }
 
-    incrementIndex();
+    // Start simulated fetch
+    startSimulatedFetch(nextIndex);
   };
+
+  const startSimulatedFetch = (nextIndex) => {
+    // Get the next line's text length
+    const nextLineText = conversation.lines[nextIndex].text;
+    const delayTime = nextLineText.length * SIM_FETCH_MULTIPLIER;
+    console.log("delayTime", delayTime, "nextLineText", nextLineText);
+
+    setIsFetching(true);
+
+    setTimeout(() => {
+      setIsFetching(false);
+      incrementIndex();
+    }, delayTime);
+};
 
   const incrementIndex = (convoCopy = null) => {
     const updatedConvo = convoCopy == null ? deepCopy(conversation) : convoCopy;
@@ -157,8 +167,7 @@ const ConversationDriver = ({
         conversation.lines.length > conversation.initialLength &&
         checkedIndex != conversation.initialLength
       ) {
-        updatedConvo.lines[conversation.initialLength].message =
-          AI_STARTS_HERE_MSG;
+        updatedConvo.lines[conversation.initialLength].message = AiStartsHereMsg;
       }
 
       if (isTutorial()) {
@@ -198,7 +207,9 @@ const ConversationDriver = ({
     updateConversation(convo);
 
     setIsFetchingForGuess(false);
+    isFetchingForGuessRef.current = false;
     setIsFetching(false);
+    isFetchingRef.current = false;
   };
 
   const handleAPIError = (err) => {
@@ -209,6 +220,7 @@ const ConversationDriver = ({
     if (isLocalHost()) {
       const moreLines = makeMockLines(
         filterLinesByName(conversationRef.current.lines, userName),
+        NUM_BEFORE_API_CALL,
         label
       );
       addLines(moreLines);
@@ -232,7 +244,7 @@ const ConversationDriver = ({
 
     moreLines.push(...tutorialEndLines);
     tutorialSoFarLines.push(...moreLines);
-    tutorialSoFarLines[aiIndex].message = AI_STARTS_HERE_MSG + `, added ${aiAdded} lines.`;
+    tutorialSoFarLines[aiIndex].message = AiStartsHereMsg + `, added ${aiAdded} lines.`;
     const newConvo = deepCopy(conversationRef.current);
     newConvo.lines = tutorialSoFarLines;
     newConvo.currentLineIndex++; // Increment twice with the function below
@@ -244,7 +256,7 @@ const ConversationDriver = ({
 
   const handleTutorialAPIFailure = (err) => {
     if (isLocalHost()) {
-      const moreLines = makeMockLines(conversation.lines, "tutorial");
+      const moreLines = makeMockLines(conversation.lines, NUM_BEFORE_API_CALL, "tutorial");
       handleTutorialAPISuccess(moreLines);
     }
   };
@@ -328,7 +340,8 @@ const ConversationDriver = ({
   const handleInteractAPIError = (err) => {
     if (isLocalHost()) {
       const moreLines = makeMockLines(
-        filterLinesByName(conversation.lines, userName)
+        filterLinesByName(conversation.lines, userName),
+        NUM_BEFORE_API_CALL
       );
       handleInteractAPISuccess(moreLines);
     } else {
@@ -402,6 +415,10 @@ const ConversationDriver = ({
   };
 
   const fetchingName = () => {
+    if (conversation.currentLineIndex + 1 < conversation.lines.length) {
+      return conversation.lines[conversation.currentLineIndex + 1].name;
+    }
+
     let penultimateLine = conversation.lines[conversation.lines.length - 2];
     if (penultimateLine.name === userName) {
       penultimateLine = conversation.lines[conversation.lines.length - 3];
