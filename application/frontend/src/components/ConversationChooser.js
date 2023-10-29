@@ -181,7 +181,7 @@ const ConversationChooser = ({
         <button
           className="start-button"
           onClick={clickStart}
-          disabled={preInitConvos.length <= 1}
+          disabled={preInitConvos.length <= 2}
         >
           Start
         </button>
