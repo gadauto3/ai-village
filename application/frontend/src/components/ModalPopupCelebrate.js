@@ -22,8 +22,13 @@ const ModalPopupCelebrate = ({ closeModal, conversations }) => {
     return result;
   };
 
+  const convos = () => {
+    // Ignore the first element because it's the tutorial level
+    return conversations.slice(1);
+  };
+
   const mapDataForTip = () => {
-    const mappedConvos = conversations.map((convo) => ({
+    const mappedConvos = convos().map((convo) => ({
       people: convo.people[0].name + " and " + convo.people[1].name,
       guessIndex: convo.aiGuess,
       answerIndex: convo.initialLength,
@@ -33,13 +38,13 @@ const ModalPopupCelebrate = ({ closeModal, conversations }) => {
 
   const getAccuracy = () => {
     // Get the sum of all answerIndexes
-    const totalPossible = conversations.reduce(
+    const totalPossible = convos().reduce(
       (sum, convo) => sum + convo.initialLength,
       0
     );
 
     // Get the sum of the absolute differences between guessIndexes and answerIndexes
-    const totalDelta = conversations.reduce(
+    const totalDelta = convos().reduce(
       (sum, convo) => sum + Math.abs(convo.aiGuess - convo.initialLength),
       0
     );
@@ -61,7 +66,7 @@ const ModalPopupCelebrate = ({ closeModal, conversations }) => {
           <div className="conversations-container">
             <p><strong>Results:</strong></p>
             <p>
-              {conversations.map((conversation, index) => (
+              {convos().map((conversation, index) => (
                 <span key={index}>
                   <em>
                     {conversation.people[0].name} and{" "}

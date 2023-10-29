@@ -6,6 +6,7 @@ import ConversationDriver from './ConversationDriver';
 import Instructions from './Instructions';
 import ModalPopup from "./ModalPopup";
 import ModalPopupCelebrate from './ModalPopupCelebrate';
+import { TutorialState } from './Tutorial';
 
 import "../css/UIController.css";
 
@@ -16,6 +17,7 @@ const UIController = () => {
   const [gameState, setGameState] = useState(GameState.INIT);
   const [conversations, setConversations] = useState([]);
   const [userName, setUserName] = useState(null);
+  const [tutorialState, setTutorialState] = useState(TutorialState.WAITING);
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [isCelebrateModalShowing, setIsCelebrateModalShowing] = useState(false);
   const [isNameModalShowing, setIsNameModalShowing] = useState(false);
@@ -30,11 +32,22 @@ const UIController = () => {
       setGameState(GameState.NEXT_CONVO);
     }
   }, [conversations]);
+
+  useEffect(() => {
+    if (
+      selectedConversation &&
+      selectedConversation.key === 0 &&
+      gameState >= GameState.INTERACT &&
+      tutorialState === TutorialState.MOVE_ON
+    ) {
+      setTutorialState(TutorialState.INTERACT_NEXT);
+    }
+  }, [selectedConversation]);
   
   useEffect(() => {
     if (gameState == GameState.MOVE_CONVOS) {
       const allConversationsHaveResults = conversations.every(
-        (conversation) => conversation.aiGuess !== null
+        (conversation) => conversation.aiGuess !== null || conversation.key === 0
       );
 
       if (allConversationsHaveResults) {
@@ -83,6 +96,11 @@ const UIController = () => {
     setIsNameModalShowing(false);
   }
 
+  const isTutorial = () => {
+    return selectedConversation && selectedConversation.key === 0 && 
+      tutorialState !== TutorialState.MOVE_ON && tutorialState !== TutorialState.DONE;
+  };
+
   return (
     <div className="outer-div">
       <h1 className="text-center title-noto-sans">WhatsAIpp or MessAIges</h1>
@@ -94,6 +112,7 @@ const UIController = () => {
             gameState={gameState}
             selectedConversation={selectedConversation}
             setSelectedConversation={setSelectedConversation}
+            isTutorial={isTutorial}
           />
           <ConversationDriver
             conversation={selectedConversation}
@@ -102,6 +121,9 @@ const UIController = () => {
             setGameState={setGameState}
             userName={userName}
             getUserName={getNameFromUser}
+            isTutorial={isTutorial}
+            tutorialState={tutorialState}
+            setTutorialState={setTutorialState}
           />
         </div>
         <Instructions gameState={gameState} />
@@ -110,6 +132,8 @@ const UIController = () => {
         <ModalPopupCelebrate
           closeModal={handleCloseCelebrateModal}
           conversations={conversations}
+          isTutorial={isTutorial}
+          tutorialState={tutorialState}
         />
       )}
       {isNameModalShowing && (

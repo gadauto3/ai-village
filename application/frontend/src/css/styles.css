@@ -18,6 +18,7 @@
         font-family: 'Noto Sans', sans-serif;
         color: #00D9FF;
         text-shadow: 0 0 10px #00D9FF;  /* Middle shadow */
+        text-align: center;
     }
 
     body {

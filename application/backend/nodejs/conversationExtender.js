@@ -153,7 +153,7 @@ class ConversationExtender {
         { "role": "system", "content": systemPromptTextFromFile },
         { "role": "user",   "content": fullContext }
       ],
-      temperature: 1,
+      temperature: 1.2,
       max_tokens: 768,
       top_p: 1,
       frequency_penalty: 0,
@@ -169,6 +169,8 @@ class ConversationExtender {
         responseCapture = message;
         let responseJson = JSON.parse(message.content);
 
+        // Sometimes I just get back an array of lines which is reasonable
+        responseJson = Array.isArray(responseJson) ? {"lines":responseJson} : responseJson;
         // TODO: remove this debugging, but it's helpful right now.
         const len1 = responseJson.lines.length;
         let responseLines = this.removeMatchingElements(originalLines, responseJson.lines);

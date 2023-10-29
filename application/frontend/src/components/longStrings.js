@@ -39,6 +39,28 @@ export const ramblingSentence = `I'm good. I'm going blab on a bit because\
   I need to test a rather long text where people will read what I say in my\
   words for the birds and I really don't like curds.`;
 
+export const userNameError = `Would you please provide a name?`;
+
+export const validateMessage = (userInput, userName, maxChars = 140) => {
+  const entry = userInput.trim();
+  const regex = /^[a-zA-Z0-9-. ,()\'!?]+$/;
+  
+  if (entry.length < 20) {
+    return `Please provide a longer sentence with more details, up to ${maxChars} characters.`;
+  } else if (entry.length > maxChars) {
+    return `Sorry, please use less than ${maxChars} characters in your message. It is currently ${entry.length}.`;
+  } else if (!regex.test(entry)) {
+    return `Please use only letters, numbers, .-,()\'!? and space characters.`;
+  } else if (!userName) {
+    return userNameError;
+  }
+  
+  return null;  // No error
+}
+
+export const retrieveConvoError =
+  "Sorry, failed to retrieve conversations due to an error, try pressing again or if that fails, refresh the page.\n";
+
 export const peopleNames = [
   "George",
   "Carlos",

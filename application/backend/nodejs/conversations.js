@@ -10,9 +10,16 @@ class Conversations {
 
     _loadData() {
         try {
-            const rawData = fs.readFileSync(path.join(__dirname, 'conversationSeeds.json'), 'utf-8');
-            const parsedJson = JSON.parse(rawData);
-            const transformedData = ConversationAdapter.adaptConversation(parsedJson);
+            const rawConvoSeeds = fs.readFileSync(path.join(__dirname, 'conversationSeeds.json'), 'utf-8');
+            const parsedConvos = JSON.parse(rawConvoSeeds);
+
+            const rawTutorialSeed = fs.readFileSync(path.join(__dirname, 'tutorialSeed.json'), 'utf-8');
+            const parsedTutorial = JSON.parse(rawTutorialSeed);
+            if (!Array.isArray(parsedTutorial)) { // Handle test issue
+              parsedConvos.unshift(parsedTutorial);
+            }
+
+            const transformedData = ConversationAdapter.adaptConversation(parsedConvos);
             return transformedData;
         } catch (error) {
             console.error("Error loading the conversations data", error);
@@ -26,8 +33,9 @@ class Conversations {
         let randGenerator = seedrandom(randomSeed);
 
         // Shuffle the convos array using the Fisher-Yates (aka Knuth) shuffle algorithm
-        for (let i = convos.length - 1; i > 0; i--) {
-            const j = Math.floor(randGenerator() * (i + 1));
+        // Skip the first element since it's the tutorial
+        for (let i = convos.length - 1; i > 1; i--) {
+            const j = Math.floor(randGenerator() * i) + 1;
             [convos[i], convos[j]] = [convos[j], convos[i]];
         }
         convos = convos.slice(0, count); // Now get the ones we need

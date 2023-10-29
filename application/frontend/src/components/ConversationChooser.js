@@ -4,10 +4,12 @@ import { getConversations } from "./APIService";
 import AnimatedCircles from "./AnimatedCircles";
 
 import conversationData from "./conversationSeeds.json";
+import tutorialData from "../../../backend/nodejs/tutorialSeed.json";
 import searchBarImg from "../assets/images/searchBar.png";
 
 import "../css/ConversationChooser.css";
 import "../css/utils.css";
+import { TutorialState } from "./Tutorial";
 
 const ConversationChooser = ({
   conversations,
@@ -15,11 +17,13 @@ const ConversationChooser = ({
   gameState,
   selectedConversation,
   setSelectedConversation,
+  isTutorial,
+  tutorialState
 }) => {
   const [areConversationsSet, setAreConversationsSet] = useState(false);
   const [isConvosMax, setIsConvosMax] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [preInitConvos, setPreInitConvos] = useState(["Conversation 1"]);
+  const [preInitConvos, setPreInitConvos] = useState(["Conversation 1", "Conversation 2"]);
 
   const defaultHeadIcon = "icons8-head-profile-50.png";
   const numPreviewChars = 25;
@@ -67,7 +71,10 @@ const ConversationChooser = ({
   };
 
   const makeMockLines = () => {
-    return conversationData.slice(0, preInitConvos.length);
+    const convos = [ tutorialData ];
+    convos.push(...conversationData.slice(0, preInitConvos.length - 1));
+    console.log("convos", convos);
+    return convos;
   };
 
   const safeSetConversation = (convo) => {
@@ -76,9 +83,12 @@ const ConversationChooser = ({
     }
   };
 
-  const isDivDisabled = () => {
+  const isDivDisabled = (convo) => {
     return (
-      gameState == GameState.SELECT_AI || gameState == GameState.JOIN_CONVO
+      gameState == GameState.SELECT_AI ||
+      gameState == GameState.JOIN_CONVO ||
+      isTutorial() ||
+      (convo && convo.key === 0 && tutorialState === TutorialState.DONE)
     );
   };
 
@@ -91,7 +101,7 @@ const ConversationChooser = ({
             key={index}
             className={`conversation-item ${
               conversation === selectedConversation ? "selected" : ""
-            } ${isDivDisabled() ? "div-disabled" : ""}`}
+            } ${isDivDisabled(conversation) ? "div-disabled" : ""}`}
             onClick={() => safeSetConversation(conversation)}
           >
             <div className="image-container">

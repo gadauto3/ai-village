@@ -12,8 +12,9 @@ ReactDOM.render(
       <UIController />
     </div>
     <div id="mobile-warning">
-      <p>Hello and thanks for your interest in playing!</p>
-      <p>Alas, I did not make the game interface suitable for mobile devices. 
+      <p>Hello and thanks for your interest in playing</p>
+      <h2>WhatsAIpp</h2><br />
+      <p>Alas, I did not make the game interface suitable for phones. 
         Would you try playing on a computer or tablet?</p>
       <p>Warm Regards,<br />Gabriel</p>
       <img src={screenshot} alt="WhatsAIpp screenshot" />

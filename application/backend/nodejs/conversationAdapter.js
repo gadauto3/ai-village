@@ -5,7 +5,7 @@ class ConversationAdapter {
         aiGuess: null,
         currentLineIndex: 0,
         initialLength: conversation.lines.length,
-        key: index + 1,
+        key: index,
         people: [
           {
             name: conversation.people[0].name,
