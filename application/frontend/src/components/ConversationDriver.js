@@ -49,6 +49,7 @@ const ConversationDriver = ({
   const NUM_BEFORE_API_CALL = 4;
   const NUM_TALK_TOKENS = 3;
   const AI_STARTS_HERE_MSG = "AI-created conversation starts here";
+  const NUM_MOCK_LINES = 15; // Max # lines to be mocked out
 
   useEffect(() => {
     if (linesContainerRef.current) {

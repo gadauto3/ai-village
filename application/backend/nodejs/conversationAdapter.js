@@ -6,6 +6,7 @@ class ConversationAdapter {
         currentLineIndex: 0,
         initialLength: conversation.lines.length,
         key: index,
+        isDone: false,
         people: [
           {
             name: conversation.people[0].name,
