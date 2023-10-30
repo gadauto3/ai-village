@@ -33,7 +33,6 @@ const ConversationDriver = ({
   const [isReadyToJoin, setIsReadyToJoin] = useState(false); // Ready to join the conversation
   const [isFetchingForGuess, setIsFetchingForGuess] = useState(false); // Fetching from the API
   const [isFetching, setIsFetching] = useState(false); // Fetching from the API
-  const [numTalkTokens, setNumTalkTokens] = useState(NUM_TALK_TOKENS);
   const [userInput, setUserInput] = useState("");
   const [userInputError, setUserInputError] = useState(null);
   const [hasUserJoined, setHasUserJoined] = useState(false); // Whether user has joined the convo
@@ -47,7 +46,6 @@ const ConversationDriver = ({
   const scoreHandler = ScoreHandler();
   const NOTICE_INDEX = 2;
   const NUM_BEFORE_API_CALL = 4;
-  const NUM_TALK_TOKENS = 3;
   const AI_STARTS_HERE_MSG = "AI-created conversation starts here";
 
   useEffect(() => {
