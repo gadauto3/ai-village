@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
+import { GameState, deepCopy, isLocalHost, makeMockLines } from "./utils";
+import { retrieveAdditionalConversation, retrieveAdditionalConversationWithUserInput } from "./APIService";
 
 import AnimatedCircles from "./AnimatedCircles";
 import { AI_CONVO_INDEX, TutorialState } from "./Tutorial";
@@ -9,8 +11,30 @@ import {
 } from "./longStrings";
 
 const DriverInteractWithAI = ({
-  
+  conversation,
+  updateConversation,
+  gameState,
+  setGameState,
+  isFetching,
+  setIsFetching,
+  userName,
+  getUserName,
+  isTutorial,
+  tutorialState,
+  setTutorialState,
+  updateConversationLines,
+  incrementIndex,
+  getIconPath,
+  fetchingName,
 }) => {
+  const [isReadyToJoin, setIsReadyToJoin] = useState(false); // Ready to join the conversation
+  const [userInput, setUserInput] = useState("");
+  const [userInputError, setUserInputError] = useState(null);
+  const [hasUserJoined, setHasUserJoined] = useState(false); // Whether user has joined the convo
+
+  const isFetchingRef = useRef(isFetching);
+  const linesContainerRef = useRef(null);
+  const conversationRef = useRef(conversation);
 
   useEffect(() => {
     if (linesContainerRef.current) {
@@ -20,24 +44,25 @@ const DriverInteractWithAI = ({
   }, [conversation, isFetching]);
 
   const handleNextInteractTutorialClick = () => {
-    
     if (conversation.currentLineIndex === AI_CONVO_INDEX - 1) {
       setTutorialState(TutorialState.SEE_AI);
 
       setIsFetching(true);
       isFetchingRef.current = true;
-      conversationRef.current = conversation;
       retrieveAdditionalConversation(
         conversation.lines,
         handleTutorialAPISuccess,
         handleTutorialAPIFailure
       );
-    } else if (conversation.currentLineIndex === conversation.lines.length - 1) {
+    } else if (
+      conversation.currentLineIndex ===
+      conversation.lines.length - 1
+    ) {
       setTutorialState(TutorialState.DONE);
       return;
     }
 
-    incrementIndex();
+    conversationRef.current = incrementIndex();
   };
 
   const handleNextInteractClick = () => {
@@ -54,7 +79,6 @@ const DriverInteractWithAI = ({
       } else {
         setIsFetching(true);
         isFetchingRef.current = true;
-        conversationRef.current = conversation;
         retrieveAdditionalConversation(
           filterLinesByName(conversation.lines, userName),
           handleInteractAPISuccess,
@@ -63,7 +87,7 @@ const DriverInteractWithAI = ({
       }
     }
 
-    incrementIndex();
+    conversationRef.current = incrementIndex();
   };
 
   const handleInteractAPISuccess = (moreLines) => {
@@ -74,23 +98,23 @@ const DriverInteractWithAI = ({
 
     const newConvo = deepCopy(conversationRef.current);
     // This async call is holding onto state from when retrieve was called
-    newConvo.currentLineIndex = currentLineIndexRef.current;
     const convoLines = newConvo.lines;
     moreLines[0].message = `AI provided ${moreLines.length} more lines.`;
     convoLines.push(...moreLines);
 
     // Find the first AI line that may be after the user's line
     const firstAILine = newConvo.initialLength;
-    if (convoLines.length > firstAILine && checkedIndex != firstAILine) {
+    if (convoLines.length > firstAILine && newConvo.aiGuess != firstAILine) {
       let msgIndex = firstAILine;
       if (convoLines[firstAILine].name === userName) {
         msgIndex++;
       }
-      convoLines[msgIndex].message = aiStartsHereMsg + `, added ${moreLines.length} lines.`;
+      convoLines[msgIndex].message =
+        aiStartsHereMsg + `, added ${moreLines.length} lines.`;
     }
 
     newConvo.lines = convoLines;
-    updateConversation(newConvo);
+    conversationRef.current = updateConversation(newConvo);
 
     setIsFetching(false);
   };
@@ -102,7 +126,7 @@ const DriverInteractWithAI = ({
       );
       handleInteractAPISuccess(moreLines);
     } else {
-      handleErrorWithLabel(err, null, "fromInteract");
+      handleErrorWithLabel(err, "fromInteract");
     }
   };
 
@@ -124,7 +148,9 @@ const DriverInteractWithAI = ({
           buttonText: "Done",
           entryLengthMin: 3,
           entryLengthMax: 20,
-          onClose: () => {console.log("handleMessageSubmit");},
+          onClose: () => {
+            console.log("handleMessageSubmit");
+          },
         });
       }
       return;
@@ -135,8 +161,7 @@ const DriverInteractWithAI = ({
     // Add lines to the conversation
     const newConvo = deepCopy(conversation);
     newConvo.lines.push({ name: userName, message: null, text: userInput });
-    incrementIndex(newConvo);
-    conversationRef.current = newConvo;
+    conversationRef.current = incrementIndex(newConvo);
     setHasUserJoined(true);
 
     // Set fetching state and make the api call
@@ -161,7 +186,7 @@ const DriverInteractWithAI = ({
   };
 
   const handleInteractWithUserAPIError = (err) => {
-    handleErrorWithLabel(err, handleInteractWithUserAPISuccess, "withUser");
+    handleErrorWithLabel(err, "withUser");
     cleanupUserInteraction();
   };
 
@@ -169,6 +194,21 @@ const DriverInteractWithAI = ({
     setGameState(GameState.INTERACT);
     setIsReadyToJoin(false);
     setUserInput("");
+  };
+
+  const handleErrorWithLabel = (err, label) => {
+    if (isLocalHost()) {
+      const moreLines = makeMockLines(
+        filterLinesByName(conversationRef.current.lines, userName),
+        label
+      );
+      const latestConvo = deepCopy(conversationRef.current);
+      conversationRef.current = updateConversationLines(moreLines, latestConvo);
+    } else {
+      console.log(`retrieveConversations ${label} api error\n`, err);
+      alert(retrieveConvoError + err);
+    }
+    setIsFetching(false);
   };
 
   const getClassForPlayerState = (nameForLine) => {
@@ -181,7 +221,7 @@ const DriverInteractWithAI = ({
     }
     return "";
   };
-  
+
   // INTERACT Stage functions
   const handleTutorialAPISuccess = (moreLines) => {
     // Split the lines before and after the AI index
@@ -198,8 +238,7 @@ const DriverInteractWithAI = ({
     const newConvo = deepCopy(conversationRef.current);
     newConvo.lines = tutorialSoFarLines;
     newConvo.currentLineIndex++; // Increment twice with the function below
-    conversationRef.current = newConvo;
-    incrementIndex(newConvo);
+    conversationRef.current = incrementIndex(newConvo);
 
     setIsFetching(false);
   };
@@ -236,16 +275,16 @@ const DriverInteractWithAI = ({
             </div>
           ))}
 
-          {isFetching && (
-            <div className="line-content">
-              <img
-                className="margin-left"
-                src={getIconPath(fetchingName())}
-                alt={fetchingName()}
-              />
-              <AnimatedCircles />
-            </div>
-          )}
+        {isFetching && (
+          <div className="line-content">
+            <img
+              className="margin-left"
+              src={getIconPath(fetchingName())}
+              alt={fetchingName()}
+            />
+            <AnimatedCircles />
+          </div>
+        )}
       </div>
 
       {gameState >= GameState.INTERACT && (
@@ -253,7 +292,11 @@ const DriverInteractWithAI = ({
           <button
             className="next-button"
             onClick={handleNextInteractClick}
-            disabled={isReadyToJoin || isFetching || (conversation.key === 0 && tutorialState === TutorialState.DONE)}
+            disabled={
+              isReadyToJoin ||
+              isFetching ||
+              (conversation.key === 0 && tutorialState === TutorialState.DONE)
+            }
           >
             Next
           </button>
@@ -297,6 +340,7 @@ const DriverInteractWithAI = ({
       )}
       {userInputError && <div className="error-message">{userInputError}</div>}
     </div>
-)};
+  );
+};
 
 export default DriverInteractWithAI;

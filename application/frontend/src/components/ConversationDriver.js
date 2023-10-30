@@ -21,38 +21,29 @@ const ConversationDriver = ({
   tutorialState,
   setTutorialState,
 }) => {
-  const [isReadyToJoin, setIsReadyToJoin] = useState(false); // Ready to join the conversation
   const [isFetching, setIsFetching] = useState(false); // Fetching from the API
-  const [userInput, setUserInput] = useState("");
-  const [userInputError, setUserInputError] = useState(null);
-  const [hasUserJoined, setHasUserJoined] = useState(false); // Whether user has joined the convo
-
-  const isFetchingRef = useRef(isFetching);
-  const currentLineIndexRef = useRef(0);
-  const conversationRef = useRef(conversation);
-
+  
   if (!conversation) {
     return <div className="conversation-driver"></div>;
-  } else {
-    currentLineIndexRef.current = conversation.currentLineIndex;
   }
 
   /** Update Conversation parameters */
   const safeUpdateConversation = (updatedConvo) => {
-    console.log("Update conv", updatedConvo.lines.length, updatedConvo.people[0].name);
     updateConversation(updatedConvo);
   };
 
   const updateConversationLines = (moreLines, currConvo = null) => {
-    const convo = currConvo ?? deepCopy(conversation);
-    convo.lines.push(...moreLines);
-    safeUpdateConversation(convo);
+    const updatedConvo = currConvo ?? deepCopy(conversation);
+    updatedConvo.lines.push(...moreLines);
+    safeUpdateConversation(updatedConvo);
+    return updatedConvo;
   };
 
   const incrementIndex = (convoCopy = null) => {
     const updatedConvo = convoCopy ?? deepCopy(conversation);
     updatedConvo.currentLineIndex = updatedConvo.currentLineIndex + 1;
     safeUpdateConversation(updatedConvo);
+    return updatedConvo;
   };
 
   const getIconPath = (name) => {
@@ -97,17 +88,33 @@ const ConversationDriver = ({
             isTutorial,
             tutorialState,
             setTutorialState,
-            incrementIndex,
             updateConversationLines,
             incrementIndex,
             getIconPath,
             fetchingName,
-          }
-        }
-        updateConversation={safeUpdateConversation}
+          }}
+          updateConversation={safeUpdateConversation}
         />
       ) : (
-        <DriverInteractWithAI {...{ isFetching, gameState, conversation }} />
+        <DriverInteractWithAI
+          {...{
+            conversation,
+            gameState,
+            setGameState,
+            isFetching,
+            setIsFetching,
+            userName,
+            getUserName,
+            isTutorial,
+            tutorialState,
+            setTutorialState,
+            updateConversationLines,
+            incrementIndex,
+            getIconPath,
+            fetchingName,
+          }}
+          updateConversation={safeUpdateConversation}
+        />
       )}
     </div>
   );

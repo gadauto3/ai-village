@@ -48,19 +48,23 @@ const DriverIdentifyAI = ({
     if (tutorialState === TutorialState.WAITING) {
       setTutorialState(TutorialState.NEXT_BTN);
     } else if (
-      tutorialState === TutorialState.NEXT_BTN && conversation &&
+      tutorialState === TutorialState.NEXT_BTN &&
+      conversation &&
       conversation.currentLineIndex === IM_NOTICING_INDEX
     ) {
       setTutorialState(TutorialState.NOTICE_BTN);
       setGameState(GameState.NOTICE_AI);
     }
 
-    incrementIndex();
+    conversationRef.current = incrementIndex();
   };
 
   const isNextBtnDisabled = () => {
-    return showCheckboxes || isFetching ||
-      (isTutorial() && tutorialState === TutorialState.NOTICE_BTN);
+    return (
+      showCheckboxes ||
+      isFetching ||
+      (isTutorial() && tutorialState === TutorialState.NOTICE_BTN)
+    );
   };
 
   const handleNextClick = () => {
@@ -89,21 +93,23 @@ const DriverIdentifyAI = ({
     if (nextIndex === conversation.lines.length) {
       if (isFetchingForIdentify) {
         setIsFetching(true);
-        isFetchingRef.current = true;
       }
       return;
     }
 
-    incrementIndex();
+    conversationRef.current = incrementIndex();
   };
 
   const handleNoticeClick = () => {
-    if (gameState == GameState.NOTICE_AI || gameState == GameState.MOVE_CONVOS) {
+    if (
+      gameState == GameState.NOTICE_AI ||
+      gameState == GameState.MOVE_CONVOS
+    ) {
       setGameState(GameState.SELECT_AI);
       setShowCheckboxes(true);
 
       if (isTutorial()) {
-        incrementIndex();
+        conversationRef.current = incrementIndex();
       }
     } else {
       // Deep clone the current conversation to avoid direct state mutation
@@ -115,7 +121,7 @@ const DriverIdentifyAI = ({
         conversation.initialLength
       );
       updatedConvo.lines[checkedIndex] = updatedLine;
-      
+
       if (
         conversation.lines.length > conversation.initialLength &&
         checkedIndex != conversation.initialLength
@@ -126,9 +132,10 @@ const DriverIdentifyAI = ({
 
       if (isTutorial()) {
         updatedLine.message = "You did it!";
-        incrementIndex(updatedConvo);
+        conversationRef.current = incrementIndex(updatedConvo);
         setTutorialState(TutorialState.MOVE_ON);
       } else {
+        conversationRef.current = updatedConvo;
         updateConversation(updatedConvo);
       }
 
@@ -154,14 +161,17 @@ const DriverIdentifyAI = ({
 
   // Handle API calls
   const handleAPISuccess = (moreLines) => {
-    updateConversationLines(moreLines, conversationRef.current);
+    conversationRef.current = updateConversationLines(moreLines, conversationRef.current);
     cleanupFetchingBools();
   };
 
   const handleAPIError = (err) => {
     if (isLocalHost()) {
-      const moreLines = makeMockLines(conversationRef.current.lines, "identify");
-      updateConversationLines(moreLines);
+      const moreLines = makeMockLines(
+        conversationRef.current.lines,
+        "identify"
+      );
+      conversationRef.current = updateConversationLines(moreLines);
     } else {
       console.log("retrieveConversations api error\n", err);
       alert(retrieveConvoError + err);
@@ -207,16 +217,16 @@ const DriverIdentifyAI = ({
             </div>
           ))}
 
-          {isFetching && (
-            <div className="line-content">
-              <img
-                className="margin-left"
-                src={getIconPath(fetchingName())}
-                alt={fetchingName()}
-              />
-              <AnimatedCircles />
-            </div>
-          )}
+        {isFetching && (
+          <div className="line-content">
+            <img
+              className="margin-left"
+              src={getIconPath(fetchingName())}
+              alt={fetchingName()}
+            />
+            <AnimatedCircles />
+          </div>
+        )}
       </div>
 
       {gameState >= GameState.NEXT_CONVO &&
@@ -242,8 +252,8 @@ const DriverIdentifyAI = ({
             </button>
           </div>
         )}
-
     </div>
-)};
+  );
+};
 
 export default DriverIdentifyAI;
