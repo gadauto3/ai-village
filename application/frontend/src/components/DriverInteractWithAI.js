@@ -1,14 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import { GameState, deepCopy, isLocalHost, makeMockLines } from "./utils";
-import { retrieveAdditionalConversation, retrieveAdditionalConversationWithUserInput } from "./APIService";
+import {
+  retrieveAdditionalConversation,
+  retrieveAdditionalConversationWithUserInput,
+} from "./APIService";
 
 import AnimatedCircles from "./AnimatedCircles";
 import { AI_CONVO_INDEX, TutorialState } from "./Tutorial";
-import {
-  aiStartsHereMsg,
-  userNameError,
-  validateMessage,
-} from "./longStrings";
+import { aiStartsHereMsg, userNameError, validateMessage } from "./longStrings";
 
 const DriverInteractWithAI = ({
   conversation,
