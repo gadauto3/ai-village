@@ -1,5 +1,7 @@
 import React from "react";
 
+export const aiStartsHereMsg = "AI-created conversation starts here";
+
 export const InstructionsInit =
   'Use "Add conversation" to add more conversations to the game. The more you\
   add, the higher the possible score, but it may make the game more difficult.';
