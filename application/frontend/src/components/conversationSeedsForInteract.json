@@ -1,7 +1,7 @@
 [
   {
     "color": "#A8DADC",
-    "key": 1,
+    "key": 0,
     "currentLineIndex": 3,
     "initialLength": 6,
     "aiGuess": 3,
@@ -73,7 +73,7 @@
   },
   {
     "color": "#F4A261",
-    "key": 2,
+    "key": 1,
     "currentLineIndex": 4,
     "initialLength": 9,
     "aiGuess": 7,

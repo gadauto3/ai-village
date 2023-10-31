@@ -7,7 +7,7 @@ import {
 
 import AnimatedCircles from "./AnimatedCircles";
 import { AI_CONVO_INDEX, TutorialState } from "./Tutorial";
-import { aiStartsHereMsg, userNameError, validateMessage } from "./longStrings";
+import { aiStartsHereMsg, userNameError, validateMessage, retrieveConvoError } from "./longStrings";
 
 const DriverInteractWithAI = ({
   conversation,
@@ -34,6 +34,8 @@ const DriverInteractWithAI = ({
   const isFetchingRef = useRef(isFetching);
   const linesContainerRef = useRef(null);
   const conversationRef = useRef(conversation);
+
+  const MAX_MOCK_CONVOS = 10;
 
   useEffect(() => {
     if (linesContainerRef.current) {
@@ -119,14 +121,7 @@ const DriverInteractWithAI = ({
   };
 
   const handleInteractAPIError = (err) => {
-    if (isLocalHost()) {
-      const moreLines = makeMockLines(
-        filterLinesByName(conversation.lines, userName)
-      );
-      handleInteractAPISuccess(moreLines);
-    } else {
-      handleErrorWithLabel(err, "fromInteract");
-    }
+    handleErrorWithLabel(err, "fromInteract");
   };
 
   const handleJoinConvo = () => {
@@ -195,17 +190,26 @@ const DriverInteractWithAI = ({
     setUserInput("");
   };
 
+  const endConversation = () => {
+    const endConvo = deepCopy(conversationRef.current);
+    endConvo.isDone = true;
+    const lastLine = { "name": fetchingName(), "text": "Oops, I'm out of ideas."};
+    conversationRef.current = updateConversationLines([lastLine], endConvo);
+    setGameState(GameState.ERROR);
+  };
+
   const handleErrorWithLabel = (err, label) => {
-    if (isLocalHost()) {
+    const numLines = conversationRef.current.lines.length;
+    if (isLocalHost() && numLines < MAX_MOCK_CONVOS) {
       const moreLines = makeMockLines(
-        filterLinesByName(conversationRef.current.lines, userName),
+        filterLinesByName([...conversationRef.current.lines], userName),
         label
       );
       const latestConvo = deepCopy(conversationRef.current);
       conversationRef.current = updateConversationLines(moreLines, latestConvo);
     } else {
       console.log(`retrieveConversations ${label} api error\n`, err);
-      alert(retrieveConvoError + err);
+      endConversation();
     }
     setIsFetching(false);
   };
@@ -294,6 +298,7 @@ const DriverInteractWithAI = ({
             disabled={
               isReadyToJoin ||
               isFetching ||
+              conversation.isDone ||
               (conversation.key === 0 && tutorialState === TutorialState.DONE)
             }
           >
@@ -304,7 +309,9 @@ const DriverInteractWithAI = ({
             <button
               className="notice-button"
               onClick={handleJoinConvo}
-              disabled={isTutorial() || conversation.key == 0} // TODO: more tutorial needed
+              disabled={
+                isTutorial() || conversation.isDone || conversation.key == 0
+              } // TODO: more tutorial needed
             >
               Join conversation
             </button>

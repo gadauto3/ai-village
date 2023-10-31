@@ -54,6 +54,15 @@ const UIController = () => {
         setGameState(GameState.CELEBRATE);
         setIsCelebrateModalShowing(true);
       }
+    } else if (gameState == GameState.ERROR) {
+      const allConversationsAreDone = conversations.every(
+        (conversation) => conversation.isDone || conversation.key === 0
+      );
+      
+      console.log("allConversationsAreDone", allConversationsAreDone, conversations[0].key, conversations[1].isDone);
+      if (allConversationsAreDone) {
+        alert("Game over!");
+      }
     }
   }, [gameState]);
   
