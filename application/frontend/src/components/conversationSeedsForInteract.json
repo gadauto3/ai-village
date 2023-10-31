@@ -5,6 +5,7 @@
     "currentLineIndex": 3,
     "initialLength": 6,
     "aiGuess": 3,
+    "isDone": false,
     "people": [
       {
         "name": "Maria",
@@ -76,6 +77,7 @@
     "currentLineIndex": 4,
     "initialLength": 9,
     "aiGuess": 7,
+    "isDone": false,
     "people": [
       {
         "name": "Mika",
