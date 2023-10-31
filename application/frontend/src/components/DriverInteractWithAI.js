@@ -225,7 +225,7 @@ const DriverInteractWithAI = ({
   // INTERACT Stage functions
   const handleTutorialAPISuccess = (moreLines) => {
     // Split the lines before and after the AI index
-    const convoLines = conversationRef.current.lines;
+    const convoLines = [...conversationRef.current.lines];
     const tutorialEndLines = convoLines.splice(AI_CONVO_INDEX + 1);
     const tutorialSoFarLines = convoLines.splice(0, AI_CONVO_INDEX + 1);
     const aiAdded = moreLines.length;

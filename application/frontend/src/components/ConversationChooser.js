@@ -73,7 +73,6 @@ const ConversationChooser = ({
   const makeMockLines = () => {
     const convos = [ tutorialData ];
     convos.push(...conversationData.slice(0, preInitConvos.length - 1));
-    console.log("convos", convos);
     return convos;
   };
 
