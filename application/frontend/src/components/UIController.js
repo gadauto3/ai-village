@@ -6,6 +6,7 @@ import ConversationDriver from './ConversationDriver';
 import Instructions from './Instructions';
 import ModalPopup from "./ModalPopup";
 import ModalPopupCelebrate from './ModalPopupCelebrate';
+import ModalPopupEndGame from './ModalPopupEndGame';
 import { TutorialState } from './Tutorial';
 
 import "../css/UIController.css";
@@ -20,6 +21,7 @@ const UIController = () => {
   const [tutorialState, setTutorialState] = useState(TutorialState.WAITING);
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [isCelebrateModalShowing, setIsCelebrateModalShowing] = useState(false);
+  const [isEndGameModalShowing, setIsEndGameModalShowing] = useState(false);
   const [isNameModalShowing, setIsNameModalShowing] = useState(false);
   const [nameModalConfig, setNameModalConfig] = useState({
     textToDisplay: "Default message",
@@ -61,7 +63,7 @@ const UIController = () => {
       
       console.log("allConversationsAreDone", allConversationsAreDone, conversations[0].key, conversations[1].isDone);
       if (allConversationsAreDone) {
-        alert("Game over!");
+        setIsEndGameModalShowing(true);
       }
     }
   }, [gameState]);
@@ -88,11 +90,23 @@ const UIController = () => {
     setGameState(GameState.INTERACT);
   }
 
+  const handleCloseEndGameModal = () => {
+    setIsEndGameModalShowing(false);
+    setGameState(GameState.INTERACT); // TODO???
+  }
+
   const jumpToInteract = () => {
     setGameState(GameState.CELEBRATE);
     setConversations(conversationDataInteract);
     setSelectedConversation(conversations[1]);
     setIsCelebrateModalShowing(true);
+  }
+
+  const jumpToEndGame = () => {
+    setGameState(GameState.END_GAME);
+    setConversations(conversationDataInteract);
+    setSelectedConversation(conversations[1]);
+    setIsEndGameModalShowing(true);
   }
 
   const getNameFromUser = (modalConfig) => {
@@ -152,9 +166,16 @@ const UIController = () => {
           config={nameModalConfig}
         />
       )}
+      {isEndGameModalShowing && (
+        <ModalPopupEndGame
+          {...{conversations, userName}}
+          closeModal={handleCloseEndGameModal}
+        />
+      )}
       {isLocalHost() && (
         <div>
           <button onClick={jumpToInteract}>Interact</button>
+          <button onClick={jumpToEndGame}>EndGame</button>
         </div>
       )}
     </div>
