@@ -1,12 +1,7 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import { GameState, deepCopy, iconsPath } from "./utils";
 
 import "../css/ConversationDriver.css";
-import {
-  retrieveAdditionalConversation,
-  retrieveAdditionalConversationWithUserInput,
-} from "./APIService";
-import { retrieveConvoError, aiStartsHereMsg } from "./longStrings";
 import DriverIdentifyAI from "./DriverIdentifyAI";
 import DriverInteractWithAI from "./DriverInteractWithAI";
 
