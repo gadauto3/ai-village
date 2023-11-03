@@ -7,7 +7,7 @@ import {
 
 import AnimatedCircles from "./AnimatedCircles";
 import { AI_CONVO_INDEX, TutorialState } from "./Tutorial";
-import { aiStartsHereMsg, userNameError, validateMessage } from "./longStrings";
+import { aiStartsHereMsg, errorLineText, userNameError, validateMessage } from "./longStrings";
 
 const DriverInteractWithAI = ({
   conversation,
@@ -193,7 +193,7 @@ const DriverInteractWithAI = ({
   const endConversation = () => {
     const endConvo = deepCopy(conversationRef.current);
     endConvo.isDone = true;
-    const lastLine = { "name": fetchingName(), "text": "Oops, I'm out of ideas."};
+    const lastLine = { "name": fetchingName(), "text": errorLineText};
     conversationRef.current = updateConversationLines([lastLine], endConvo);
     setGameState(GameState.ERROR);
   };
