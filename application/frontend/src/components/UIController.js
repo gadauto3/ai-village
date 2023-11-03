@@ -129,7 +129,9 @@ const UIController = () => {
 
   return (
     <div className="outer-div">
-      <h1 className="text-center title-noto-sans">WhatsAIpp or MessAIges</h1>
+      <h1 className="text-center title-quicksand">
+        <span className="smaller-font">A</span>iMessage
+      </h1>
       <div className="ui-controller">
         <div className="top-section">
           <ConversationChooser
@@ -171,7 +173,7 @@ const UIController = () => {
       )}
       {isEndGameModalShowing && (
         <ModalPopupEndGame
-          {...{conversations, userName}}
+          {...{ conversations, userName }}
           closeModal={handleCloseEndGameModal}
         />
       )}
