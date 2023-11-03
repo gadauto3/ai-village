@@ -18,7 +18,8 @@ export const GameState = Object.freeze({
   CELEBRATE: 6,
   INTERACT: 7,
   JOIN_CONVO: 8,
-  SHOW_CREDITS: 9,
+  ERROR: 9,
+  END_GAME: 10,
 }); 
 
 export const MAX_CONVOS = 7;

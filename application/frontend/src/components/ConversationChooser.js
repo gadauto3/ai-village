@@ -73,7 +73,6 @@ const ConversationChooser = ({
   const makeMockLines = () => {
     const convos = [ tutorialData ];
     convos.push(...conversationData.slice(0, preInitConvos.length - 1));
-    console.log("convos", convos);
     return convos;
   };
 
@@ -181,7 +180,7 @@ const ConversationChooser = ({
         <button
           className="start-button"
           onClick={clickStart}
-          disabled={preInitConvos.length <= 1}
+          disabled={preInitConvos.length <= 2}
         >
           Start
         </button>

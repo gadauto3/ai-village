@@ -4,4 +4,4 @@ Below is the conversation so far. Make up additional dialogue to extend this con
 CURRENT_CONTEXT
 
 ===
-Do not return any lines that I provided you, just new lines.
+Do not return any lines that were provided, just return new lines.

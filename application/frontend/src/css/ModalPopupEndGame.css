@@ -1,0 +1,108 @@
+/* Modal.css */
+.modal-end-game-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;               /* Ensures its children can be centered using flexbox */
+  justify-content: center;     /* Horizontally centers children */
+  align-items: center;         /* Vertically centers children */
+}
+
+.modal-end-game {
+  background: rgb(239, 239, 239);
+  padding: 20px;
+  border-radius: 5px;
+  width: 80%; 
+  max-width: 820px;
+  height: 70%;
+  color: #000;
+  display: flex;
+  flex-direction: column;      /* stack children vertically */
+  align-items: center;         /* horizontally center */
+  z-index: 1000;               /* Make sure it sits on top of other content */
+  box-shadow: 1px 6px 9px rgba(0, 0, 1, 0.4); /* optional shadow for a bit of depth */
+  position: relative;          /* For positioning context of the button */
+}
+
+.modal-end-game h1 {
+  margin-top: 50px;
+  margin-bottom: 30px;
+}
+
+.modal-end-game p {
+  margin-left: 30px;
+  margin-right: 30px;
+  text-align: center;
+}
+
+.results-container {
+  display: flex;               /* Use flexbox to align children side-by-side */
+  justify-content: center;     /* Horizontally center children */
+  width: 100%;                 /* Take full width of parent */
+  margin-top: 20px;            /* Add some spacing at the top */
+}
+
+/* Center content and add padding to table headers */
+.conversations-table {
+  border-collapse: separate; /* Necessary to add space between cells */
+  box-shadow: 1px 6px 9px rgba(0, 0, 1, 0.4); /* optional shadow for a bit of depth */
+  margin: 20px; /* To give some space around the table for the shadow to show */
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.conversations-table th {
+  text-align: center;
+  vertical-align: middle;
+  padding: 7px 25px; /* Adjust values as needed */
+  border: 1px solid #fff; /* Optional: Add borders if desired */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Center content and add padding to table cells */
+.conversations-table td {
+  text-align: center;
+  vertical-align: middle;
+  padding: 5px 5px; /* Adjust values as needed */
+  border: 1px solid #fff; /* Optional: Add borders if desired */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Optional: Add borders and improve table appearance */
+.conversations-table {
+  border-collapse: collapse;
+}
+
+/* Optional: Add hover effect to rows for better user experience */
+.conversations-table tbody tr:hover {
+  background-color: #f5f5f5;
+}
+
+/* Optional: Adding spacing between cells to make shadow effect more pronounced */
+.table-shadow td {
+  margin: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.dismiss-button {
+  position: absolute; /* Absolute positioning */
+  top: 10px;          /* Adjust these values as needed */
+  right: 10px;        /* Adjust these values as needed */
+  border-radius: 5px;
+  border-color: white;
+  background-color: transparent; /* Optional: To make sure the button has no background */
+  box-shadow: 1px 6px 9px rgba(0, 0, 1, 0.4); /* optional shadow for a bit of depth */
+}
+
+.done-button {
+  padding: 4px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  border-radius: 8px;
+  box-shadow: 1px 6px 9px rgba(0, 0, 1, 0.4); /* optional shadow for a bit of depth */
+}

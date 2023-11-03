@@ -1,0 +1,7 @@
+.driver-identify {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 73%; /* grow, shrink, basis */
+  height: 600px; /* TODO: Try again to wrangle the css to make it work as desired */
+  overflow-y: auto; /* Add scrolling if content exceeds pane height */
+}

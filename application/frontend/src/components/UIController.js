@@ -6,6 +6,7 @@ import ConversationDriver from './ConversationDriver';
 import Instructions from './Instructions';
 import ModalPopup from "./ModalPopup";
 import ModalPopupCelebrate from './ModalPopupCelebrate';
+import ModalPopupEndGame from './ModalPopupEndGame';
 import { TutorialState } from './Tutorial';
 
 import "../css/UIController.css";
@@ -20,6 +21,7 @@ const UIController = () => {
   const [tutorialState, setTutorialState] = useState(TutorialState.WAITING);
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [isCelebrateModalShowing, setIsCelebrateModalShowing] = useState(false);
+  const [isEndGameModalShowing, setIsEndGameModalShowing] = useState(false);
   const [isNameModalShowing, setIsNameModalShowing] = useState(false);
   const [nameModalConfig, setNameModalConfig] = useState({
     textToDisplay: "Default message",
@@ -34,13 +36,14 @@ const UIController = () => {
   }, [conversations]);
 
   useEffect(() => {
-    if (
-      selectedConversation &&
-      selectedConversation.key === 0 &&
-      gameState >= GameState.INTERACT &&
-      tutorialState === TutorialState.MOVE_ON
-    ) {
-      setTutorialState(TutorialState.INTERACT_NEXT);
+    if (selectedConversation && gameState >= GameState.INTERACT) {
+      // Handle tutorial
+      if (selectedConversation.key === 0 && tutorialState === TutorialState.MOVE_ON) {
+        setTutorialState(TutorialState.INTERACT_NEXT);
+      } else if (gameState === GameState.ERROR) {
+        // Handle post-error state
+        setGameState(GameState.INTERACT);
+      }
     }
   }, [selectedConversation]);
   
@@ -53,6 +56,17 @@ const UIController = () => {
       if (allConversationsHaveResults) {
         setGameState(GameState.CELEBRATE);
         setIsCelebrateModalShowing(true);
+      }
+    } else if (gameState == GameState.ERROR) {
+      const allConversationsAreDone = conversations.every(
+        (conversation) => conversation.isDone || conversation.key === 0
+      );
+      
+      if (allConversationsAreDone) {
+        setTimeout(function () {
+          setIsEndGameModalShowing(true);
+          setGameState(GameState.END_GAME);
+        }, 700);
       }
     }
   }, [gameState]);
@@ -79,11 +93,23 @@ const UIController = () => {
     setGameState(GameState.INTERACT);
   }
 
+  const handleCloseEndGameModal = () => {
+    setIsEndGameModalShowing(false);
+    setGameState(GameState.INTERACT); // TODO???
+  }
+
   const jumpToInteract = () => {
     setGameState(GameState.CELEBRATE);
     setConversations(conversationDataInteract);
     setSelectedConversation(conversations[1]);
     setIsCelebrateModalShowing(true);
+  }
+
+  const jumpToEndGame = () => {
+    setGameState(GameState.END_GAME);
+    setConversations(conversationDataInteract);
+    setSelectedConversation(conversations[1]);
+    setIsEndGameModalShowing(true);
   }
 
   const getNameFromUser = (modalConfig) => {
@@ -103,7 +129,9 @@ const UIController = () => {
 
   return (
     <div className="outer-div">
-      <h1 className="text-center title-noto-sans">WhatsAIpp or MessAIges</h1>
+      <h1 className="text-center title-quicksand">
+        <span className="smaller-font">A</span>iMessage
+      </h1>
       <div className="ui-controller">
         <div className="top-section">
           <ConversationChooser
@@ -143,9 +171,16 @@ const UIController = () => {
           config={nameModalConfig}
         />
       )}
+      {isEndGameModalShowing && (
+        <ModalPopupEndGame
+          {...{ conversations, userName }}
+          closeModal={handleCloseEndGameModal}
+        />
+      )}
       {isLocalHost() && (
         <div>
           <button onClick={jumpToInteract}>Interact</button>
+          <button onClick={jumpToEndGame}>EndGame</button>
         </div>
       )}
     </div>

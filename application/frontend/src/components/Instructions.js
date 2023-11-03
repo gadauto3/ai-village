@@ -9,8 +9,9 @@ import {
   InstructionsNextConvo,
   InstructionsNoticeAI2,
   InstructionsSelectAI,
-  InstructionsShowCredits,
-  InstructionsJoinConvo
+  InstructionsEndGame,
+  InstructionsJoinConvo,
+  InstructionsError
 } from "./longStrings";
 
 const Instructions = (gameState) => {
@@ -30,8 +31,10 @@ const Instructions = (gameState) => {
         return InstructionsInteract;
       case GameState.JOIN_CONVO:
         return InstructionsJoinConvo;
-      case GameState.SHOW_CREDITS:
-        return InstructionsShowCredits;
+      case GameState.ERROR:
+        return InstructionsError;
+      case GameState.END_GAME:
+        return InstructionsEndGame;
       default:
         return InstructionsInit; // default or initial state
     }
