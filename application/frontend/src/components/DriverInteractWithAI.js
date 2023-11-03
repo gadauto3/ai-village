@@ -92,7 +92,7 @@ const DriverInteractWithAI = ({
   };
 
   const handleInteractAPISuccess = (moreLines) => {
-    if (!moreLines.length || conversationRef.current.lines.length > MAX_MOCK_CONVOS) {
+    if (!moreLines.length) {
       handleInteractAPIError("More lines were not added.");
       return;
     }
