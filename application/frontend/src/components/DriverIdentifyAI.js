@@ -6,7 +6,7 @@ import { retrieveAdditionalConversation } from "./APIService";
 import ScoreHandler from "./ScoreHandler";
 import AnimatedCircles from "./AnimatedCircles";
 import { TutorialState, IM_NOTICING_INDEX } from "./Tutorial";
-import { aiStartsHereMsg, retrieveConvoError } from "./longStrings";
+import { aiStartsHereMsg, errorLineText } from "./longStrings";
 
 import "../css/DriverIdentifyAI.css"
 
@@ -63,6 +63,7 @@ const DriverIdentifyAI = ({
     return (
       showCheckboxes ||
       isFetching ||
+      conversation.isDone ||
       (isTutorial() && tutorialState === TutorialState.NOTICE_BTN)
     );
   };
@@ -79,7 +80,8 @@ const DriverIdentifyAI = ({
       setGameState(GameState.NOTICE_AI);
     }
 
-    if (nextIndex === conversation.lines.length - NUM_BEFORE_API_CALL) {
+    const linesLength = conversation.lines.length;
+    if (nextIndex === linesLength - NUM_BEFORE_API_CALL) {
       setIsFetchingForIdentify(true);
       isFetchingForIdentifyRef.current = true;
       conversationRef.current = conversation;
@@ -90,9 +92,15 @@ const DriverIdentifyAI = ({
       );
     }
 
-    if (nextIndex === conversation.lines.length) {
+    if (nextIndex === linesLength - 1) {
       if (isFetchingForIdentify) {
         setIsFetching(true);
+      } else if (conversation.lines[linesLength - 1].text === errorLineText) {
+        // Set the convo as done and ask player to move on
+        const newConvo = deepCopy(conversation);
+        newConvo.isDone = true;
+        conversationRef.current = incrementIndex(newConvo);
+        setGameState(GameState.MOVE_CONVOS);
       }
       return;
     }
@@ -166,15 +174,17 @@ const DriverIdentifyAI = ({
   };
 
   const handleAPIError = (err) => {
-    if (isLocalHost()) {
+    const linesLength = conversationRef.current.lines.length;
+    if (isLocalHost() && linesLength <= 7) {
       const moreLines = makeMockLines(
         conversationRef.current.lines,
         "identify"
       );
       conversationRef.current = updateConversationLines(moreLines);
-    } else {
-      console.log("retrieveConversations api error\n", err);
-      alert(retrieveConvoError + err);
+    } else if (conversationRef.current.lines[linesLength - 1].text !== errorLineText) {
+      const newConvo = deepCopy(conversationRef.current);
+      const lastLine = { "name": fetchingName(), "text": errorLineText };
+      conversationRef.current = updateConversationLines([lastLine], newConvo);
     }
     cleanupFetchingBools();
   };

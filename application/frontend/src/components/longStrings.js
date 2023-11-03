@@ -1,6 +1,7 @@
 import React from "react";
 
 export const aiStartsHereMsg = "AI-created conversation starts here";
+export const errorLineText = "Oops, I'm out of ideas.";
 
 export const InstructionsInit =
   'Use "Add conversation" to add more conversations to the game. The more you\
