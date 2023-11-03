@@ -7,7 +7,7 @@ import {
 
 import AnimatedCircles from "./AnimatedCircles";
 import { AI_CONVO_INDEX, TutorialState } from "./Tutorial";
-import { aiStartsHereMsg, userNameError, validateMessage, retrieveConvoError } from "./longStrings";
+import { aiStartsHereMsg, userNameError, validateMessage } from "./longStrings";
 
 const DriverInteractWithAI = ({
   conversation,
@@ -92,7 +92,7 @@ const DriverInteractWithAI = ({
   };
 
   const handleInteractAPISuccess = (moreLines) => {
-    if (!moreLines.length) {
+    if (!moreLines.length || conversationRef.current.lines.length > MAX_MOCK_CONVOS) {
       handleInteractAPIError("More lines were not added.");
       return;
     }

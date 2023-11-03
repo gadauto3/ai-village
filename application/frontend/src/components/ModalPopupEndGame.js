@@ -42,9 +42,9 @@ const ModalPopupEndGame = ({ closeModal, conversations, userName }) => {
             <thead>
               <tr>
                 <th>Participants</th>
-                <th># Lines</th>
-                <th># AI calls</th>
-                <th>#Joined</th>
+                <th>Lines</th>
+                <th>AI calls</th>
+                <th>Joined</th>
               </tr>
             </thead>
             <tbody>

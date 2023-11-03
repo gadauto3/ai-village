@@ -36,13 +36,14 @@ const UIController = () => {
   }, [conversations]);
 
   useEffect(() => {
-    if (
-      selectedConversation &&
-      selectedConversation.key === 0 &&
-      gameState >= GameState.INTERACT &&
-      tutorialState === TutorialState.MOVE_ON
-    ) {
-      setTutorialState(TutorialState.INTERACT_NEXT);
+    if (selectedConversation && gameState >= GameState.INTERACT) {
+      // Handle tutorial
+      if (selectedConversation.key === 0 && tutorialState === TutorialState.MOVE_ON) {
+        setTutorialState(TutorialState.INTERACT_NEXT);
+      } else if (gameState === GameState.ERROR) {
+        // Handle post-error state
+        setGameState(GameState.INTERACT);
+      }
     }
   }, [selectedConversation]);
   
@@ -61,9 +62,11 @@ const UIController = () => {
         (conversation) => conversation.isDone || conversation.key === 0
       );
       
-      console.log("allConversationsAreDone", allConversationsAreDone, conversations[0].key, conversations[1].isDone);
       if (allConversationsAreDone) {
-        setIsEndGameModalShowing(true);
+        setTimeout(function () {
+          setIsEndGameModalShowing(true);
+          setGameState(GameState.END_GAME);
+        }, 700);
       }
     }
   }, [gameState]);

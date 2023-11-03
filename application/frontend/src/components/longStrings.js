@@ -34,8 +34,10 @@ export const InstructionsJoinConvo =
   "Press Next until it's time to join. Then enter your message into the text thread\
   followed by sending it with ⬆️";
 
-export const InstructionsShowCredits =
-  'Hope you\'re enjoying the game!';
+export const InstructionsError = "Alas, this conversation is done. Please try another!";
+
+export const InstructionsEndGame =
+  'Thanks for playing!';
 
 export const ramblingSentence = `I'm good. I'm going blab on a bit because\
   I need to test a rather long text where people will read what I say in my\

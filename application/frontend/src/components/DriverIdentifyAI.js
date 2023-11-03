@@ -6,7 +6,7 @@ import { retrieveAdditionalConversation } from "./APIService";
 import ScoreHandler from "./ScoreHandler";
 import AnimatedCircles from "./AnimatedCircles";
 import { TutorialState, IM_NOTICING_INDEX } from "./Tutorial";
-import { aiStartsHereMsg } from "./longStrings";
+import { aiStartsHereMsg, retrieveConvoError } from "./longStrings";
 
 import "../css/DriverIdentifyAI.css"
 
