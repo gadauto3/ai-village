@@ -24,6 +24,7 @@ const DriverIdentifyAI = ({
   incrementIndex,
   getIconPath,
   fetchingName,
+  displayModal,
 }) => {
   const [isFetchingForIdentify, setIsFetchingForIdentify] = useState(false); // Fetching from the API
   const [showCheckboxes, setShowCheckboxes] = useState(false); // To show/hide checkboxes
@@ -115,8 +116,8 @@ const DriverIdentifyAI = ({
     ) {
 
       // Prevent people from clicking right when it appears
-      if (conversation.currentLineIndex <= NOTICE_INDEX + 2) {
-        alert(earlyGuessAlert);
+      if (conversation.currentLineIndex <= NOTICE_INDEX + 2 && !isLocalHost()) {
+        displayModal({ textToDisplay: earlyGuessAlert, buttonText: "Ok" });
         return;
       }
 

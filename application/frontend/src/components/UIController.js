@@ -23,7 +23,8 @@ const UIController = () => {
   const [isCelebrateModalShowing, setIsCelebrateModalShowing] = useState(false);
   const [isEndGameModalShowing, setIsEndGameModalShowing] = useState(false);
   const [isNameModalShowing, setIsNameModalShowing] = useState(false);
-  const [nameModalConfig, setNameModalConfig] = useState({
+  const [isGenericModalShowing, setIsGenericModalShowing] = useState(false);
+  const [modalConfig, setModalConfig] = useState({
     textToDisplay: "Default message",
     buttonText: "Ok",
     onClose: () => {}
@@ -113,13 +114,22 @@ const UIController = () => {
   }
 
   const getNameFromUser = (modalConfig) => {
-    setNameModalConfig(modalConfig);
+    setModalConfig(modalConfig);
     setIsNameModalShowing(true);
   };
 
   const handleCloseNameModal = (name) => {
     setUserName(name);
     setIsNameModalShowing(false);
+  }
+
+  const displayGenericModal = (modalConfig) => {
+    setModalConfig(modalConfig);
+    setIsGenericModalShowing(true);
+  };
+
+  const handleCloseGenericModal = () => {
+    setIsGenericModalShowing(false);
   }
 
   const isTutorial = () => {
@@ -152,6 +162,7 @@ const UIController = () => {
             isTutorial={isTutorial}
             tutorialState={tutorialState}
             setTutorialState={setTutorialState}
+            displayModal={displayGenericModal}
           />
         </div>
         <Instructions gameState={gameState} />
@@ -168,7 +179,14 @@ const UIController = () => {
         <ModalPopup
           isVisible={isNameModalShowing}
           closeModal={handleCloseNameModal}
-          config={nameModalConfig}
+          config={modalConfig}
+        />
+      )}
+      {isGenericModalShowing && (
+        <ModalPopup
+          isVisible={isGenericModalShowing}
+          closeModal={handleCloseGenericModal}
+          config={modalConfig}
         />
       )}
       {isEndGameModalShowing && (
