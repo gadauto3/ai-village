@@ -6,7 +6,7 @@ import { retrieveAdditionalConversation } from "./APIService";
 import ScoreHandler from "./ScoreHandler";
 import AnimatedCircles from "./AnimatedCircles";
 import { TutorialState, IM_NOTICING_INDEX } from "./Tutorial";
-import { aiStartsHereMsg, errorLineText } from "./longStrings";
+import { aiStartsHereMsg, earlyGuessAlert, errorLineText } from "./longStrings";
 
 import "../css/DriverIdentifyAI.css"
 
@@ -113,6 +113,13 @@ const DriverIdentifyAI = ({
       gameState == GameState.NOTICE_AI ||
       gameState == GameState.MOVE_CONVOS
     ) {
+
+      // Prevent people from clicking right when it appears
+      if (conversation.currentLineIndex <= NOTICE_INDEX + 2) {
+        alert(earlyGuessAlert);
+        return;
+      }
+
       setGameState(GameState.SELECT_AI);
       setShowCheckboxes(true);
 

@@ -46,6 +46,10 @@ export const ramblingSentence = `I'm good. I'm going blab on a bit because\
 
 export const userNameError = `Would you please provide a name?`;
 
+export const earlyGuessAlert = `A common new player mistake is pressing this\
+  button as soon as it comes up. Maybe my instructions need work. Either way,\
+  please click "Next" 2-7 more times before pressing this button.`;
+
 export const validateMessage = (userInput, userName, maxChars = 140) => {
   const entry = userInput.trim();
   const regex = /^[a-zA-Z0-9-. ,()\'!?]+$/;
