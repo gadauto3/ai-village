@@ -148,7 +148,7 @@ class ConversationExtender {
     }
 
     this.openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model: "gpt-4-1106-preview",
       messages: [
         { "role": "system", "content": systemPromptTextFromFile },
         { "role": "user",   "content": fullContext }
@@ -166,8 +166,19 @@ class ConversationExtender {
         // Safely extract the text part
         responseCapture = "got a response"
         const message = response.choices[0].message;
-        responseCapture = message;
-        let responseJson = JSON.parse(message.content);
+        responseCapture = message.content;
+
+        // Extract json if there's words around it from gpt
+        const jsonRegex = /(\[.*\]|\{.*\})/s;
+        console.log("responseCapture", responseCapture);
+        const match = responseCapture.match(jsonRegex);
+        let responseJson = "before match";
+        if (match) {
+          const validJsonString = match[0];
+          responseJson = JSON.parse(validJsonString);
+        } else {
+          throw new Error("No valid JSON matched from the response.");
+        }
 
         // Sometimes I just get back an array of lines which is reasonable
         responseJson = Array.isArray(responseJson) ? {"lines":responseJson} : responseJson;
