@@ -205,6 +205,7 @@ const DriverInteractWithAI = ({
         filterLinesByName([...conversationRef.current.lines], userName),
         label
       );
+      moreLines[0].message = `Mock AI provided ${moreLines.length} more lines.`;
       const latestConvo = deepCopy(conversationRef.current);
       conversationRef.current = updateConversationLines(moreLines, latestConvo);
     } else {

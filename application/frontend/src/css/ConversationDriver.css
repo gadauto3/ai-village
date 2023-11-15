@@ -47,6 +47,15 @@
   margin-right: 20px;
 }
 
+@keyframes fadeToGray {
+  from {
+    color: #00a67d; /* Bright green */
+  }
+  to {
+    color: #7a7a7a; /* The final color */
+  }
+}
+
 .line-message {
   padding: 0px 6px;
   border-radius: 3px;
@@ -54,6 +63,9 @@
   color: #7a7a7a;
   text-align: center;
   margin-bottom: 5px; /* Space between message and the line content */
+  animation-name: fadeToGray; /* Name of the animation */
+  animation-duration: 8s; /* Duration of the animation */
+  animation-fill-mode: forwards; /* Ensures the final state persists after the animation completes */
 }
 
 /* Row of content in the line - image, text field, checkbox (when active) */
