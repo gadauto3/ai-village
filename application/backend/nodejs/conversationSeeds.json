@@ -158,5 +158,71 @@
                 "text": "Right?!? Anyways, what have you been up to?"
             }
         ]
+    },
+    {
+        "people": [
+            {
+                "name": "Maria",
+                "icon": "icons8-old-woman-medium-light-skin-tone-48.png"
+            },
+            {
+                "name": "Leo",
+                "icon": "icons8-man-medium-skin-tone-48.png"
+            }
+        ],
+        "lines": [
+            {
+                "name": "Maria",
+                "text": "Can I please vent?"
+            },
+            {
+                "name": "Leo",
+                "text": "Sure, que pasó?"
+            },
+            {
+                "name": "Maria",
+                "text": "so my sister asked me to borrow money so we can split a mini cake, the kind we like from Sue's. She comes back, splits the cake, and I saved mine for this morning with a Cafecito. I get up late and there's two bites left. ARE YOU KIDDING ME?"
+            },
+            {
+                "name": "Leo",
+                "text": "Not cool"
+            },
+            {
+                "name": "Maria",
+                "text": "Ugh, she didn't even give me a real apology 😤"
+            },
+            {
+                "name": "Leo",
+                "text": "That's weak... so speaking of sibling issues there's these moths 🐜🦋"
+            },
+            {
+                "name": "Maria",
+                "text": "???"
+            },
+            {
+                "name": "Leo",
+                "text": "They start as caterpillars and they produce a sweet milk that ants love. Then caterpillars bribe the ants with this treat, and the ants protect them from predators. Some ants even bring them into their nests. While some caterpillars eat the ant's food or get fed like the other ant babies, some go a darker path… by eating their so-called siblings o_O."
+            },
+            {
+                "name": "Maria",
+                "text": "Did you seriously type all that out?"
+            },
+            {
+                "name": "Leo",
+                "text": "Nah, copied from Reddit"
+            },
+            {
+                "name": "Maria",
+                "text": "It's only kinda related to my sister thing"
+            },
+            {
+                "name": "Leo",
+                "text": "Agreed"
+            },
+            {
+                "name": "Maria",
+                "text": "You're so weird, that's why I like you Leo!"
+            }
+        ]
     }
 ]

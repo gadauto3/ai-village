@@ -3,7 +3,7 @@ const Conversations = require('../conversations');
 
 describe('Conversations - Tests using the seeds file', () => {
 
-    let NUM_CONVOS = 4;
+    let NUM_CONVOS = 5;
 
     it(`ensures conversationSeeds.json is valid JSON and contains an array of ${NUM_CONVOS} elements`, () => {
         // The actual readFileSync call without mocking

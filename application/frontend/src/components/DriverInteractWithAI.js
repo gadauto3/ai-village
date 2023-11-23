@@ -35,7 +35,8 @@ const DriverInteractWithAI = ({
   const linesContainerRef = useRef(null);
   const conversationRef = useRef(conversation);
 
-  const MAX_MOCK_CONVOS = 10;
+  const MAX_MOCK_CONVOS = 30;
+  const API_CALL_TIME_THRESHOLD = 20;
 
   useEffect(() => {
     if (linesContainerRef.current) {
@@ -91,13 +92,15 @@ const DriverInteractWithAI = ({
     conversationRef.current = incrementIndex();
   };
 
-  const handleInteractAPISuccess = (moreLines) => {
+  const handleInteractAPISuccess = (moreLines, callDurationInSecs) => {
     if (!moreLines.length) {
       handleInteractAPIError("More lines were not added.");
       return;
     }
 
     const newConvo = deepCopy(conversationRef.current);
+    newConvo.apiCallTime += callDurationInSecs;
+    console.log("newConvo.apiCallTime", newConvo.apiCallTime);
     // This async call is holding onto state from when retrieve was called
     const convoLines = newConvo.lines;
     moreLines[0].message = `AI provided ${moreLines.length} more lines.`;
@@ -124,6 +127,11 @@ const DriverInteractWithAI = ({
     handleErrorWithLabel(err, "fromInteract");
   };
 
+  const handleImDoneClick = () => {
+    endConversation(conversation);
+  };
+
+  /** Join Conversation */
   const handleJoinConvo = () => {
     setGameState(GameState.JOIN_CONVO);
   };
@@ -174,8 +182,8 @@ const DriverInteractWithAI = ({
     return lines.filter((line) => line.name !== name);
   };
 
-  const handleInteractWithUserAPISuccess = (moreLines) => {
-    handleInteractAPISuccess(moreLines);
+  const handleInteractWithUserAPISuccess = (moreLines, callDurationInSecs) => {
+    handleInteractAPISuccess(moreLines, callDurationInSecs);
     cleanupUserInteraction();
   };
 
@@ -190,8 +198,8 @@ const DriverInteractWithAI = ({
     setUserInput("");
   };
 
-  const endConversation = () => {
-    const endConvo = deepCopy(conversationRef.current);
+  const endConversation = (convo) => {
+    const endConvo = convo ?? deepCopy(conversationRef.current);
     endConvo.isDone = true;
     const lastLine = { "name": fetchingName(), "text": errorLineText};
     conversationRef.current = updateConversationLines([lastLine], endConvo);
@@ -207,6 +215,8 @@ const DriverInteractWithAI = ({
       );
       moreLines[0].message = `Mock AI provided ${moreLines.length} more lines.`;
       const latestConvo = deepCopy(conversationRef.current);
+      latestConvo.apiCallTime += 10;
+      console.log("latestConvo.apiCallTime", latestConvo.apiCallTime);
       conversationRef.current = updateConversationLines(moreLines, latestConvo);
     } else {
       console.log(`retrieveConversations ${label} api error\n`, err);
@@ -227,7 +237,7 @@ const DriverInteractWithAI = ({
   };
 
   // INTERACT Stage functions
-  const handleTutorialAPISuccess = (moreLines) => {
+  const handleTutorialAPISuccess = (moreLines, callDurationInSecs) => {
     // Split the lines before and after the AI index
     const convoLines = [...conversationRef.current.lines];
     const tutorialEndLines = convoLines.splice(AI_CONVO_INDEX + 1);
@@ -240,6 +250,8 @@ const DriverInteractWithAI = ({
     tutorialSoFarLines[aiIndex].message =
       aiStartsHereMsg + `, added ${aiAdded} lines.`;
     const newConvo = deepCopy(conversationRef.current);
+    newConvo.apiCallTime += callDurationInSecs;
+    console.log("newConvo.apiCallTime", newConvo.apiCallTime);
     newConvo.lines = tutorialSoFarLines;
     newConvo.currentLineIndex++; // Increment twice with the function below
     conversationRef.current = incrementIndex(newConvo);
@@ -250,7 +262,8 @@ const DriverInteractWithAI = ({
   const handleTutorialAPIFailure = (err) => {
     if (isLocalHost()) {
       const moreLines = makeMockLines(conversation.lines, "tutorial");
-      handleTutorialAPISuccess(moreLines);
+      console.log("add 10 lines");
+      handleTutorialAPISuccess(moreLines, 10);
     }
   };
 
@@ -305,6 +318,16 @@ const DriverInteractWithAI = ({
           >
             Next
           </button>
+
+          {conversation.apiCallTime > API_CALL_TIME_THRESHOLD && (
+            <button
+              className="im-done-button"
+              onClick={handleImDoneClick}
+              disabled={conversation.isDone}
+            >
+              I'm done
+            </button>
+          )}
 
           {gameState !== GameState.JOIN_CONVO && (
             <button

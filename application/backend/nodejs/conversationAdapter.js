@@ -3,10 +3,11 @@ class ConversationAdapter {
     return parsedJson.map((conversation, index) => {
       return {
         aiGuess: null,
+        apiCallTime: 0,
         currentLineIndex: 0,
+        isDone: false,
         initialLength: conversation.lines.length,
         key: index,
-        isDone: false,
         people: [
           {
             name: conversation.people[0].name,

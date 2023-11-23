@@ -54,7 +54,7 @@ export const retrieveAdditionalConversation = (lines, onSuccess, onError) => {
         const durationInSeconds = (new Date() - startTime) / 1000;
         console.log("responseData in", durationInSeconds, "seconds:", responseData);
         if (responseData.moreLines.length) {
-            onSuccess(responseData.moreLines);
+            onSuccess(responseData.moreLines, durationInSeconds);
         } else {
             onError("Did not receive additional lines");
         }
@@ -86,7 +86,7 @@ export const retrieveAdditionalConversation = (lines, onSuccess, onError) => {
         const durationInSeconds = (new Date() - startTime) / 1000;
         console.log("responseData in", durationInSeconds, "seconds:", responseData);
         if (responseData.moreLines.length) {
-            onSuccess(responseData.moreLines);
+            onSuccess(responseData.moreLines, durationInSeconds);
         } else {
             onError("Did not receive additional lines");
         }

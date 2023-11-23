@@ -5,6 +5,7 @@
         "initialLength": 6,
         "aiGuess": null,
         "isDone": false,
+        "apiCallTime": 0,
         "people": [
             {
                 "name": "Maria",
@@ -56,6 +57,7 @@
         "initialLength": 9,
         "aiGuess": null,
         "isDone": false,
+        "apiCallTime": 0,
         "people": [
             {
                 "name": "Mika",
@@ -122,6 +124,7 @@
         "initialLength": 7,
         "aiGuess": null,
         "isDone": false,
+        "apiCallTime": 0,
         "people": [
             {
                 "name": "Sivan",
