@@ -52,7 +52,7 @@ export const earlyGuessAlert = `A common new player mistake is pressing this\
 
 export const validateMessage = (userInput, userName, maxChars = 140) => {
   const entry = userInput.trim();
-  const regex = /^[a-zA-Z0-9-. ,()\'!?]+$/;
+  const regex = /^[a-zA-Z0-9-. ,()\'’!?]+$/;
   
   if (entry.length < 20) {
     return `Please provide a longer sentence with more details, up to ${maxChars} characters.`;
