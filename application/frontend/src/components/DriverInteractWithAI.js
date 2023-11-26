@@ -151,7 +151,9 @@ const DriverInteractWithAI = ({
           entryLengthMin: 3,
           entryLengthMax: 20,
           onClose: () => {
-            console.log("handleMessageSubmit");
+            if (userInputError) {
+              setUserInputError(null);
+            }
           },
         });
       }
