@@ -28,11 +28,6 @@ cd application/frontend
 npm install
 ```
 
-- Compile React App
-```
-npx babel src --out-dir public/js --presets react-app/prod
-```
-
 ### Compile Backend
 Note: the backend must be in a "nodejs" directory due to deployment to AWS Lambda.
 
