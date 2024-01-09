@@ -6,6 +6,7 @@
         "aiGuess": null,
         "isDone": false,
         "apiCallTime": 0,
+        "numApiCalls": 0,
         "people": [
             {
                 "name": "Maria",
@@ -58,6 +59,7 @@
         "aiGuess": null,
         "isDone": false,
         "apiCallTime": 0,
+        "numApiCalls": 0,
         "people": [
             {
                 "name": "Mika",
@@ -125,6 +127,7 @@
         "aiGuess": null,
         "isDone": false,
         "apiCallTime": 0,
+        "numApiCalls": 0,
         "people": [
             {
                 "name": "Sivan",

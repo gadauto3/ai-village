@@ -66,7 +66,7 @@ describe("ConversationExtender", () => {
       ]);      
     };
 
-    await instance.extendConversation(context, callback);
+    await instance.extendConversation(context, 1, callback);
   }, 6000); // 6s wait
 
   it('should adjust the prompt based on the provided context', () => {

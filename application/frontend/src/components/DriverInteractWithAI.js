@@ -52,6 +52,7 @@ const DriverInteractWithAI = ({
       setIsFetching(true);
       isFetchingRef.current = true;
       retrieveAdditionalConversation(
+        conversation.numApiCalls,
         conversation.lines,
         handleTutorialAPISuccess,
         handleTutorialAPIFailure
@@ -82,6 +83,7 @@ const DriverInteractWithAI = ({
         setIsFetching(true);
         isFetchingRef.current = true;
         retrieveAdditionalConversation(
+          conversation.numApiCalls,
           filterLinesByName(conversation.lines, userName),
           handleInteractAPISuccess,
           handleInteractAPIError
@@ -174,6 +176,7 @@ const DriverInteractWithAI = ({
     retrieveAdditionalConversationWithUserInput(
       userName,
       userInput,
+      conversation.numApiCalls,
       filterLinesByName(conversation.lines, userName),
       handleInteractWithUserAPISuccess,
       handleInteractWithUserAPIError

@@ -7,6 +7,7 @@
     "aiGuess": 3,
     "isDone": false,
     "apiCallTime": 10,
+    "numApiCalls": 0,
     "people": [
       {
         "name": "Maria",
@@ -80,6 +81,7 @@
     "aiGuess": 7,
     "isDone": false,
     "apiCallTime": 10,
+    "numApiCalls": 0,
     "people": [
       {
         "name": "Mika",

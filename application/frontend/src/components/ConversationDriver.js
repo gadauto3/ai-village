@@ -30,6 +30,7 @@ const ConversationDriver = ({
 
   const updateConversationLines = (moreLines, currConvo = null) => {
     const updatedConvo = currConvo ?? deepCopy(conversation);
+    updatedConvo.numApiCalls++;
     updatedConvo.lines.push(...moreLines);
     safeUpdateConversation(updatedConvo);
     return updatedConvo;

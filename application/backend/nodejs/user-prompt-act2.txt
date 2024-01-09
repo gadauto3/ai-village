@@ -1,0 +1,18 @@
+CURRENT_CONTEXT
+
+Above is the ongoing conversation between CURRENT_USERS in our interactive narrative game. You are now tasked with crafting the dialogue that transitions our story into Act 2. This part of the story is crucial for escalating the conflict and deepening the narrative. Your dialogue should:
+
+1. Escalate the Established Conflict: Introduce new obstacles or complications that intensify the current situation. Think about how these challenges can be woven into the conversation to heighten the drama.
+
+2. Deepen Character Interactions: Use this opportunity to reveal more about the characters' personalities, motivations, and their dynamics with each other. How do they react under pressure? What hidden aspects of their personalities are revealed?
+
+3. Set the Stage for the Climax: Conclude this act with a significant revelation or a turning point. This should be a moment that changes the direction of the story or reveals something unexpected, preparing the players for the final act.
+
+Your response should:
+Start with NEXT_USER initiating the new segment of the conversation.
+Flow naturally from the above dialogue, without repeating any previous lines.
+Be engaging, clear, and true to the characters' voices.
+
+Format:
+Provide your dialogue in the same JSON format as that aboe, including only new content starting from NEXT_USER.
+This stage of the game is key in building suspense and keeping the players invested in the story. Your creative input here will significantly impact how players perceive and engage with the narrative. We look forward to seeing your unique contribution to this unfolding story!

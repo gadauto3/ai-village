@@ -8,6 +8,8 @@ class ConversationAdapter {
         isDone: false,
         initialLength: conversation.lines.length,
         key: index,
+        lines: conversation.lines.map((line) => ({ ...line, message: null })),
+        numApiCalls: 0,
         people: [
           {
             name: conversation.people[0].name,
@@ -19,8 +21,7 @@ class ConversationAdapter {
             icon: conversation.people[1].icon,
             currentLine: "",
           },
-        ],
-        lines: conversation.lines.map((line) => ({ ...line, message: null })),
+        ]
       };
     });
   }

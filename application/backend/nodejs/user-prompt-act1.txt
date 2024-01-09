@@ -1,0 +1,16 @@
+CURRENT_CONTEXT
+
+===
+The above is the ongoing conversation between CURRENT_USERS in our interactive narrative game. Your task is to extend this dialogue, focusing on deepening the story between these characters. Your response will shape the path of our narrative, following the principles of a three-act play.
+
+For this stage of the game, we are in the beginning of the first act. The dialogue you create should:
+
+Start with NEXT_USER as the initiator of the new conversation.
+Introduce a central conflict or problem that captures the player's interest. Think about what kind of challenges or intriguing situations these characters might face in their current setting.
+Your new lines should not repeat any part of the above dialogue, but should naturally flow from it.
+Conclude your response with a compelling cliffhanger or an inciting incident. This should leave the players curious and eager to move into Act Two, setting the stage for the confrontation and further development of the story.
+
+Format:
+Return your dialogue in the same JSON format as the above dialogue, with only new content starting from NEXT_USER.
+Ensure that the text is clear, engaging, and true to the characters' voices.
+Remember, your writing here is crucial for engaging the players and driving the narrative forward. We're excited to see how you'll contribute to this evolving story!

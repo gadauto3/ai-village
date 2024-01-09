@@ -87,6 +87,7 @@ const DriverIdentifyAI = ({
       isFetchingForIdentifyRef.current = true;
       conversationRef.current = conversation;
       retrieveAdditionalConversation(
+        0,
         conversation.lines,
         handleAPISuccess,
         handleAPIError
@@ -190,9 +191,10 @@ const DriverIdentifyAI = ({
       );
       conversationRef.current = updateConversationLines(moreLines);
     } else if (conversationRef.current.lines[linesLength - 1].text !== errorLineText) {
-      const newConvo = deepCopy(conversationRef.current);
-      const lastLine = { "name": fetchingName(), "text": errorLineText };
-      conversationRef.current = updateConversationLines([lastLine], newConvo);
+      console.log("ERROR last line was: ", conversationRef.current.lines[linesLength - 1].text);
+      // const newConvo = deepCopy(conversationRef.current);
+      // const lastLine = { "name": fetchingName(), "text": errorLineText };
+      // conversationRef.current = updateConversationLines([lastLine], newConvo);
     }
     cleanupFetchingBools();
   };

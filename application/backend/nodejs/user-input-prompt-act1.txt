@@ -1,0 +1,17 @@
+CURRENT_CONTEXT
+
+===
+Above is the ongoing conversation between CURRENT_USERS in our interactive narrative game. Additionally, the player - PLAYER_NAME - has chosen to interact with the storyline, providing their input: ""PLAYER_MESSAGE""
+
+Your task now is to weave this player input into the ongoing dialogue, enriching the story and adding depth to the characters' interactions. As we are in the beginning of the first act, your response should:
+
+Start with NEXT_USER initiating the new segment of the conversation.
+Seamlessly integrate PLAYER_NAME's input, allowing it to influence the direction or tone of the dialogue.
+Introduce a central conflict or problem, drawing from both the existing context and the player's contribution. Think creatively about how PLAYER_NAME's message could spark new challenges or interesting situations.
+Ensure the dialogue flows naturally from the existing conversation and player input, without repeating previous content.
+Conclude with a cliffhanger or an inciting incident, setting the stage for Act Two and keeping players engaged and curious about what comes next.
+Format:
+
+Provide your dialogue in the same JSON format as the dialogue above, focusing on new content starting from NEXT_USER.
+Maintain clarity, engagement, and authenticity to the characters' voices in your writing.
+Your role in crafting this part of the narrative is vital for immersing the players in the game world and driving the story forward. We look forward to your imaginative and engaging continuation of this evolving story, now uniquely influenced by PLAYER_NAME's involvement!
