@@ -1,16 +1,22 @@
 CURRENT_CONTEXT
 
 ===
-The above is the ongoing conversation between CURRENT_USERS in our interactive narrative game. Your task is to extend this dialogue, focusing on deepening the story between these characters. Your response will shape the path of our narrative, following the principles of a three-act play.
+The dialogue  above features CURRENT_USERS, key characters in our interactive narrative game. We are currently in the first act of the story, and your task is to extend their dialogue, introducing a central conflict or intriguing situation that leads to a compelling cliffhanger or an inciting incident. This will set the stage for Act Two and further story development. Please follow these guidelines closely:
 
-For this stage of the game, we are in the beginning of the first act. The dialogue you create should:
+1. Begin the dialogue extension with Adisu initiating the conversation.
+2. Write between 4 and 8 new lines of dialogue, alternating between CURRENT_USERS.
+3. Ensure the new lines naturally progress from the existing dialogue without repeating any content.
+4. Introduce a central conflict or problem, capturing the player's interest and setting the stage for upcoming challenges.
+5. Conclude your response with a cliffhanger or an inciting incident, leaving players eager for the next part of the story.
+6. Maintain clear, engaging text that stays true to each character's voice.
+7. Format your response in the same JSON structure as shown above, beginning with Adisu.
 
-Start with NEXT_USER as the initiator of the new conversation.
-Introduce a central conflict or problem that captures the player's interest. Think about what kind of challenges or intriguing situations these characters might face in their current setting.
-Your new lines should not repeat any part of the above dialogue, but should naturally flow from it.
-Conclude your response with a compelling cliffhanger or an inciting incident. This should leave the players curious and eager to move into Act Two, setting the stage for the confrontation and further development of the story.
+Your response:
 
-Format:
-Return your dialogue in the same JSON format as the above dialogue, with only new content starting from NEXT_USER.
-Ensure that the text is clear, engaging, and true to the characters' voices.
-Remember, your writing here is crucial for engaging the players and driving the narrative forward. We're excited to see how you'll contribute to this evolving story!
+[
+  {"name": "Character1", "text": "Your new dialogue line here"},
+  {"name": "Character2", "text": "Response line here"},
+  // Continue with additional lines, ensuring to alternate between characters
+]
+
+Your contribution is crucial in shaping the direction of the story and keeping players engaged. We're looking forward to your creative and strategically crafted dialogue extension!

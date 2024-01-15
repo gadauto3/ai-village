@@ -52,7 +52,7 @@ const DriverInteractWithAI = ({
       setIsFetching(true);
       isFetchingRef.current = true;
       retrieveAdditionalConversation(
-        conversation.numApiCalls,
+        conversation.numApiCalls + 1,
         conversation.lines,
         handleTutorialAPISuccess,
         handleTutorialAPIFailure
@@ -83,7 +83,7 @@ const DriverInteractWithAI = ({
         setIsFetching(true);
         isFetchingRef.current = true;
         retrieveAdditionalConversation(
-          conversation.numApiCalls,
+          conversation.numApiCalls + 1,
           filterLinesByName(conversation.lines, userName),
           handleInteractAPISuccess,
           handleInteractAPIError
@@ -120,9 +120,11 @@ const DriverInteractWithAI = ({
     }
 
     newConvo.lines = convoLines;
+    newConvo.numApiCalls++;
     conversationRef.current = updateConversation(newConvo);
 
     setIsFetching(false);
+    setGameState(GameState.MOVE_CONVOS);
   };
 
   const handleInteractAPIError = (err) => {
@@ -176,7 +178,7 @@ const DriverInteractWithAI = ({
     retrieveAdditionalConversationWithUserInput(
       userName,
       userInput,
-      conversation.numApiCalls,
+      conversation.numApiCalls + 1,
       filterLinesByName(conversation.lines, userName),
       handleInteractWithUserAPISuccess,
       handleInteractWithUserAPIError

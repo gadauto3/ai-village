@@ -1,7 +1,21 @@
-Below is the conversation so far. Make up additional dialogue to extend this conversation (in the same json format) between CURRENT_USERS. Return only new content starting with NEXT_USER.
-===
- 
 CURRENT_CONTEXT
 
 ===
 Do not return any lines that were provided, just return new lines.
+
+
+The conversation snippet above is from our interactive narrative game, featuring characters CURRENT_USERS. Your task is to extend their dialogue. Please adhere to the following guidelines strictly:
+
+1. Start the extension with NEXT_USER initiating the conversation.
+2. Write a total of two to four lines only, alternating between CURRENT_USERS (one or two lines from each character).
+3. Ensure each line naturally follows from the existing dialogue without repetition.
+4. The responses should be clear, engaging, and reflect the distinct voices and backgrounds of CURRENT_USERS.
+5. Your response must be in the JSON format shown below:
+
+   [
+     {"name": "Character1", "text": "Your dialogue line here"},
+     {"name": "Character2", "text": "Response line here"},
+     // Optional: Up to two additional lines alternating between characters
+   ]
+
+This succinct extension is crucial for maintaining the pace and engagement of the game. Please focus on quality and conciseness in each line, advancing the narrative in a meaningful way. We look forward to your creative and concise continuation of CURRENT_USERS's story!

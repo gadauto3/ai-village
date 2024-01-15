@@ -117,7 +117,10 @@ const DriverIdentifyAI = ({
     ) {
 
       // Prevent people from clicking right when it appears
-      if (conversation.currentLineIndex <= NOTICE_INDEX + 2 && !isLocalHost()) {
+      if (conversation.currentLineIndex <= NOTICE_INDEX + 2 && !isLocalHost() &&
+        // and this is not the last line
+        conversation.currentLineIndex !== conversation.lines.length - 1
+      ) {
         displayModal({ textToDisplay: earlyGuessAlert, buttonText: "Ok" });
         return;
       }

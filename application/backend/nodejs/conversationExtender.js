@@ -70,8 +70,8 @@ class ConversationExtender {
     const nextUser = allNames[allNames.length - 2];
     
     userText = userText.replace('CURRENT_CONTEXT', currentContext);
-    userText = userText.replace('CURRENT_USERS', currentUsers);
-    userText = userText.replace('NEXT_USER', nextUser);
+    userText = userText.replace(/CURRENT_USERS/g, currentUsers);
+    userText = userText.replace(/NEXT_USER/g, nextUser);
 
     return userText.trim();
   }
@@ -194,6 +194,9 @@ class ConversationExtender {
     .then(response => {
       const endTime = new Date(); // End time after API response
       const apiCallTime = (endTime - startTime) / 1000; // Calculate duration in seconds
+      // if (apiCallTime > 30) {
+        console.log(`Call time ${apiCallTime}s, here's the request content:`, fullContext);
+      // }
   
       // Check if the response is valid JSON
       try {
