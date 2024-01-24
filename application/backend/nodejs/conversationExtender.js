@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const AWS = require('aws-sdk');
 const OpenAI = require("openai");
+const logger = require('./logger');
 const { response } = require('express');
 const ConversationAdapter = require('./conversationAdapter');
 
@@ -50,7 +51,7 @@ class ConversationExtender {
         if (!this.openaiApiKey) {
             console.error("Could not find the specified API key parameter.");
         } else {
-            console.log("Successfully retrieved API key.");
+            logger.info("Successfully retrieved API key.");
             this.openai = new OpenAI({ apiKey: this.openaiApiKey });
             this.isInitialized = true;
         }
@@ -120,7 +121,7 @@ class ConversationExtender {
     const playerLine = context.playerMessage;
     if (!playerName || !playerLine) {
       const err = `Invalid values for player name (${playerName}) or message (${playerLine})`;
-      console.log(err);
+      logger.info(err);
       callback(err, null);
     }
     
@@ -137,7 +138,7 @@ class ConversationExtender {
   }
 
   promptForAct(act, isUserInput=false) {
-    console.log(`ACT ${act} for ${isUserInput?"user input":"unprompted"}`);
+    logger.info({act: act, isUserInput: isUserInput});
     if (isUserInput) {
       switch(act) {
         case 1: return userInputPromptAct1;
@@ -195,7 +196,7 @@ class ConversationExtender {
       const endTime = new Date(); // End time after API response
       const apiCallTime = (endTime - startTime) / 1000; // Calculate duration in seconds
       // if (apiCallTime > 30) {
-        console.log(`Call time ${apiCallTime}s, here's the request content:`, fullContext);
+        logger.info({context: fullContext});
       // }
   
       // Check if the response is valid JSON
@@ -207,7 +208,7 @@ class ConversationExtender {
 
         // Extract json if there's words around it from gpt
         const jsonRegex = /(\[.*\]|\{.*\})/s;
-        console.log(`OpenAI response in ${apiCallTime}s:`, responseCapture);
+        logger.info({callTime: apiCallTime, response: responseCapture});
         const match = responseCapture.match(jsonRegex);
         let responseJson = "before match";
         if (match) {
@@ -228,7 +229,7 @@ class ConversationExtender {
         len3 = responseLines.length;
         responseLines = ConversationAdapter.adaptLines(responseLines);
         const len4 = responseLines.length;
-        console.log("Initial: ", len1, "removeMatching", len2, "removeOthers", len3, "adaptLines", len4, "names", this.extractUniqueNames(responseLines));
+        logger.info({initialLen: len1, removeMatchingLen: len2, removeOthersLen: len3, adaptLinesLen: len4, names: this.extractUniqueNames(responseLines)});
         callback(null, responseLines);
       } catch (e) {
         console.error("Problematic message: ", responseCapture.content, "with context:", fullContext);
@@ -236,7 +237,7 @@ class ConversationExtender {
       }
     })
     .catch(err => {
-      console.log("extendConversation response error in", responseCapture.content, "\n\nError:", err);
+      logger.error(err, {responseContent: responseCapture.content});
       callback(err, null);
     });
   }

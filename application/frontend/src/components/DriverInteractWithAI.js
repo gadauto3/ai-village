@@ -124,7 +124,6 @@ const DriverInteractWithAI = ({
     conversationRef.current = updateConversation(newConvo);
 
     setIsFetching(false);
-    setGameState(GameState.MOVE_CONVOS);
   };
 
   const handleInteractAPIError = (err) => {
