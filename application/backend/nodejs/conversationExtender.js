@@ -167,10 +167,10 @@ class ConversationExtender {
       delete convo.message;
       return convo;
     });
-    this.callOpenAI(fullContext, filteredLines, callback);
+    this.callOpenAI(fullContext, filteredLines, act, callback);
   }
 
-  async callOpenAI(fullContext, originalLines, callback, playerName = null) {
+  async callOpenAI(fullContext, originalLines, act, callback, playerName = null) {
 
     let responseCapture = "uninitialized";
     if (!this.isInitialized) {
@@ -208,7 +208,8 @@ class ConversationExtender {
 
         // Extract json if there's words around it from gpt
         const jsonRegex = /(\[.*\]|\{.*\})/s;
-        logger.info({callTime: apiCallTime, response: responseCapture});
+        const people = `${originalLines[0].name} & ${originalLines[1].name}`;
+        logger.info({act: act, callTime: apiCallTime, people: people, response: responseCapture});
         const match = responseCapture.match(jsonRegex);
         let responseJson = "before match";
         if (match) {
