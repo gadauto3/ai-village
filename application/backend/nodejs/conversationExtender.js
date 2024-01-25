@@ -134,7 +134,7 @@ class ConversationExtender {
     });
     prompt = this.adjustPromptWithPlayerInfo(prompt, playerName, playerLine);
 
-    this.callOpenAI(prompt, filteredLines, callback);
+    this.callOpenAI(prompt, filteredLines, act, callback);
   }
 
   promptForAct(act, isUserInput=false) {
@@ -231,9 +231,11 @@ class ConversationExtender {
         responseLines = ConversationAdapter.adaptLines(responseLines);
         const len4 = responseLines.length;
         logger.info({initialLen: len1, removeMatchingLen: len2, removeOthersLen: len3, adaptLinesLen: len4, names: this.extractUniqueNames(responseLines)});
+        console.log("222");
         callback(null, responseLines);
+        console.log("333");
       } catch (e) {
-        console.error("Problematic message: ", responseCapture.content, "with context:", fullContext);
+        console.error("Problematic message:\n", responseCapture, "with context:\n", fullContext);
         callback(e, null);
       }
     })
