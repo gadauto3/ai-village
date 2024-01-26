@@ -1,12 +1,12 @@
 const fs = require('fs');
 const path = require('path');
-const AWS = require('aws-sdk');
+const { SSM } = require('@aws-sdk/client-ssm');
 const OpenAI = require("openai");
 const logger = require('./logger');
 const { response } = require('express');
 const ConversationAdapter = require('./conversationAdapter');
 
-const ssm = new AWS.SSM();
+const ssm = new SSM();
 // Read and clean up the prompt text
 const systemPromptTextFromFile = fs.readFileSync(path.join(__dirname, 'system-prompt.txt'), 'utf8').trim().replace(/\s+/g, ' ');
 const userPromptTextFromFile = fs.readFileSync(path.join(__dirname, 'user-prompt.txt'), 'utf8').trim().replace(/\s+/g, ' ');
@@ -43,7 +43,7 @@ class ConversationExtender {
             WithDecryption: true
         };
 
-        const response = await ssm.getParameters(params).promise();
+        const response = await ssm.getParameters(params);
 
         response.Parameters.forEach(parameter => {
           if (parameter.Name === '/aivillage/apikeys/openai') {
