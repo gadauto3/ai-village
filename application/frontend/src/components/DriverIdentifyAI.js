@@ -121,7 +121,7 @@ const DriverIdentifyAI = ({
         // and this is not the last line
         conversation.currentLineIndex !== conversation.lines.length - 1
       ) {
-        displayModal({ textToDisplay: earlyGuessAlert, buttonText: "Ok" });
+        displayModal({ textToDisplay: earlyGuessAlert, buttonText: "Ok", onClose: () => {} });
         return;
       }
 

@@ -82,8 +82,9 @@ const DriverInteractWithAI = ({
       } else {
         setIsFetching(true);
         isFetchingRef.current = true;
+        const callIdx = conversation.numApiCalls == 0 ? 1 : conversation.numApiCalls;
         retrieveAdditionalConversation(
-          conversation.numApiCalls,
+          callIdx,
           filterLinesByName(conversation.lines, userName),
           handleInteractAPISuccess,
           handleInteractAPIError
@@ -120,6 +121,10 @@ const DriverInteractWithAI = ({
     }
 
     newConvo.lines = convoLines;
+    // numApiCalls should not be 0 in this driver, update if so.
+    if (newConvo.numApiCalls == 0) {
+      newConvo.numApiCalls = 1;
+    }
     newConvo.numApiCalls++;
     conversationRef.current = updateConversation(newConvo);
 
