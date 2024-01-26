@@ -44,6 +44,7 @@ const ModalPopupEndGame = ({ closeModal, conversations, userName }) => {
                 <th>Participants</th>
                 <th>Total lines</th>
                 <th>AI calls</th>
+                <th>Wait time</th>
                 <th>Joined</th>
               </tr>
             </thead>
@@ -65,6 +66,7 @@ const ModalPopupEndGame = ({ closeModal, conversations, userName }) => {
                     </td>
                     <td>{conversation.lines.length}</td>
                     <td>{aiCalls}</td>
+                    <td>{Math.round(conversation.apiCallTime)}s</td>
                     <td>{joined}</td>
                   </tr>
                 );

@@ -23,7 +23,8 @@ const UIController = () => {
   const [isCelebrateModalShowing, setIsCelebrateModalShowing] = useState(false);
   const [isEndGameModalShowing, setIsEndGameModalShowing] = useState(false);
   const [isNameModalShowing, setIsNameModalShowing] = useState(false);
-  const [nameModalConfig, setNameModalConfig] = useState({
+  const [isGenericModalShowing, setIsGenericModalShowing] = useState(false);
+  const [modalConfig, setModalConfig] = useState({
     textToDisplay: "Default message",
     buttonText: "Ok",
     onClose: () => {}
@@ -56,6 +57,7 @@ const UIController = () => {
       if (allConversationsHaveResults) {
         setGameState(GameState.CELEBRATE);
         setIsCelebrateModalShowing(true);
+        updateNumApiCallsForAll();
       }
     } else if (gameState == GameState.ERROR) {
       const allConversationsAreDone = conversations.every(
@@ -113,7 +115,7 @@ const UIController = () => {
   }
 
   const getNameFromUser = (modalConfig) => {
-    setNameModalConfig(modalConfig);
+    setModalConfig(modalConfig);
     setIsNameModalShowing(true);
   };
 
@@ -122,9 +124,34 @@ const UIController = () => {
     setIsNameModalShowing(false);
   }
 
+  const displayGenericModal = (modalConfig) => {
+    setModalConfig(modalConfig);
+    setIsGenericModalShowing(true);
+  };
+
+  const handleCloseGenericModal = () => {
+    setIsGenericModalShowing(false);
+  }
+
   const isTutorial = () => {
-    return selectedConversation && selectedConversation.key === 0 && 
-      tutorialState !== TutorialState.MOVE_ON && tutorialState !== TutorialState.DONE;
+    return (
+      selectedConversation &&
+      selectedConversation.key === 0 &&
+      tutorialState !== TutorialState.MOVE_ON &&
+      tutorialState !== TutorialState.DONE
+    );
+  };
+
+  // Function to set numApiCalls to 1 for all conversations
+  const updateNumApiCallsForAll = () => {
+    // Map over the conversations and update numApiCalls
+    const updatedConversations = conversations.map((convo) => ({
+      ...convo,
+      numApiCalls: 1,
+    }));
+    console.log("lines updated");
+    // Update the state with the new conversations array
+    setConversations(updatedConversations);
   };
 
   return (
@@ -152,6 +179,7 @@ const UIController = () => {
             isTutorial={isTutorial}
             tutorialState={tutorialState}
             setTutorialState={setTutorialState}
+            displayModal={displayGenericModal}
           />
         </div>
         <Instructions gameState={gameState} />
@@ -168,7 +196,14 @@ const UIController = () => {
         <ModalPopup
           isVisible={isNameModalShowing}
           closeModal={handleCloseNameModal}
-          config={nameModalConfig}
+          config={modalConfig}
+        />
+      )}
+      {isGenericModalShowing && (
+        <ModalPopup
+          isVisible={isGenericModalShowing}
+          closeModal={handleCloseGenericModal}
+          config={modalConfig}
         />
       )}
       {isEndGameModalShowing && (

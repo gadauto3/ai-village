@@ -1,0 +1,22 @@
+CURRENT_CONTEXT
+
+===
+The dialogue  above features CURRENT_USERS, key characters in our interactive narrative game. We are currently in the first act of the story, and your task is to extend their dialogue, introducing a central conflict or intriguing situation that leads to a compelling cliffhanger or an inciting incident. This will set the stage for Act Two and further story development. Please follow these guidelines closely:
+
+1. Begin the dialogue extension with Adisu initiating the conversation.
+2. Write between 4 and 8 new lines of dialogue, alternating between CURRENT_USERS.
+3. Ensure the new lines naturally progress from the existing dialogue without repeating any content.
+4. Introduce a central conflict or problem, capturing the player's interest and setting the stage for upcoming challenges.
+5. Conclude your response with a cliffhanger or an inciting incident, leaving players eager for the next part of the story.
+6. Maintain clear, engaging text that stays true to each character's voice.
+7. Format your response in the same JSON structure as shown above, beginning with Adisu.
+
+Your response:
+
+[
+  {"name": "Character1", "text": "Your new dialogue line here"},
+  {"name": "Character2", "text": "Response line here"},
+  // Continue with additional lines, ensuring to alternate between characters
+]
+
+Your contribution is crucial in shaping the direction of the story and keeping players engaged. We're looking forward to your creative and strategically crafted dialogue extension!

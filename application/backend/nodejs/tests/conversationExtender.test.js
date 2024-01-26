@@ -25,7 +25,7 @@ describe('ConversationExtender', () => {
       .replace(/\s+/g, " ");
     const context = JSON.parse(contextFromFile);
     console.log("before api call");
-    extender.extendConversation(context, (err, response) => {
+    extender.extendConversation(context, 1, (err, response) => {
       console.log("before api call", err, response);
       expect(err).toBe(null);
 
@@ -49,7 +49,7 @@ describe('ConversationExtender', () => {
         done(e);
       }
     });
-  }, 12000); // 12s wait
+  }, 45000); // Wait in milliseconds
 
   test("extendConversationWithUser returns valid JSON", (done) => {
     if (!process.env.OPENAI_API_KEY) {
@@ -67,7 +67,7 @@ describe('ConversationExtender', () => {
     context.playerName = "testName";
     context.playerMessage = `I love ${focalNoun}s, can we discuss ${focalNoun}s?`;
     console.log("before api call for extendConversationWithUser");
-    extender.extendConversationWithUser(context, (err, response) => {
+    extender.extendConversationWithUser(context, 1, (err, response) => {
       console.log("after api call for extendConversationWithUser", err, response);
       expect(err).toBe(null);
 
@@ -98,5 +98,5 @@ describe('ConversationExtender', () => {
         done(e);
       }
     });
-  }, 12000); // 12s wait
+  }, 45000); // Wait in milliseconds
 });

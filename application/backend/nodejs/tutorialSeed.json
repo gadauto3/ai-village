@@ -3,6 +3,7 @@
   "currentLineIndex": 0,
   "initialLength": 11,
   "aiGuess": null,
+  "numApiCalls": 0,
   "people": [
     {
       "name": "Maria",

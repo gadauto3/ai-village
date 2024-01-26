@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const AWS = require('aws-sdk');
 const OpenAI = require("openai");
+const logger = require('./logger');
 const { response } = require('express');
 const ConversationAdapter = require('./conversationAdapter');
 
@@ -10,6 +11,17 @@ const ssm = new AWS.SSM();
 const systemPromptTextFromFile = fs.readFileSync(path.join(__dirname, 'system-prompt.txt'), 'utf8').trim().replace(/\s+/g, ' ');
 const userPromptTextFromFile = fs.readFileSync(path.join(__dirname, 'user-prompt.txt'), 'utf8').trim().replace(/\s+/g, ' ');
 const userInputPromptTextFromFile = fs.readFileSync(path.join(__dirname, 'user-input-prompt.txt'), 'utf8').trim().replace(/\s+/g, ' ');
+// Act-oriented prompts
+const userPromptAct1 = fs.readFileSync(path.join(__dirname, 'user-prompt-act1.txt'), 'utf8').trim().replace(/\s+/g, ' ');
+const userPromptAct2 = fs.readFileSync(path.join(__dirname, 'user-prompt-act2.txt'), 'utf8').trim().replace(/\s+/g, ' ');
+const userPromptAct3 = fs.readFileSync(path.join(__dirname, 'user-prompt-act3.txt'), 'utf8').trim().replace(/\s+/g, ' ');
+const userInputPromptAct1 = fs.readFileSync(path.join(__dirname, 'user-input-prompt-act1.txt'), 'utf8').trim().replace(/\s+/g, ' ');
+const userInputPromptAct2 = fs.readFileSync(path.join(__dirname, 'user-input-prompt-act2.txt'), 'utf8').trim().replace(/\s+/g, ' ');
+const userInputPromptAct3 = fs.readFileSync(path.join(__dirname, 'user-input-prompt-act3.txt'), 'utf8').trim().replace(/\s+/g, ' ');
+
+const isModel4 = false;
+const model4 = "gpt-4-1106-preview";
+const model3 = "gpt-3.5-turbo";
 
 class ConversationExtender {
   constructor() {
@@ -42,7 +54,7 @@ class ConversationExtender {
         if (!this.openaiApiKey) {
             console.error("Could not find the specified API key parameter.");
         } else {
-            console.log("Successfully retrieved API key.");
+            logger.info("Successfully retrieved API key.");
             this.openai = new OpenAI({ apiKey: this.openaiApiKey });
             this.isInitialized = true;
         }
@@ -62,8 +74,8 @@ class ConversationExtender {
     const nextUser = allNames[allNames.length - 2];
     
     userText = userText.replace('CURRENT_CONTEXT', currentContext);
-    userText = userText.replace('CURRENT_USERS', currentUsers);
-    userText = userText.replace('NEXT_USER', nextUser);
+    userText = userText.replace(/CURRENT_USERS/g, currentUsers);
+    userText = userText.replace(/NEXT_USER/g, nextUser);
 
     return userText.trim();
   }
@@ -107,12 +119,12 @@ class ConversationExtender {
     });
   }
   
-  async extendConversationWithUser(context, callback) {
+  async extendConversationWithUser(context, act, callback) {
     const playerName = context.playerName;
     const playerLine = context.playerMessage;
     if (!playerName || !playerLine) {
       const err = `Invalid values for player name (${playerName}) or message (${playerLine})`;
-      console.log(err);
+      logger.info(err);
       callback(err, null);
     }
     
@@ -120,26 +132,48 @@ class ConversationExtender {
       delete convo.message;
       return convo;
     });
-    let prompt = this.adjustPrompt(userPromptTextFromFile, {
+    let prompt = this.adjustPrompt(this.promptForAct(act, true), {
       lines: filteredLines,
     });
     prompt = this.adjustPromptWithPlayerInfo(prompt, playerName, playerLine);
 
-    this.callOpenAI(prompt, filteredLines, callback);
+    this.callOpenAI(prompt, filteredLines, act, callback);
   }
 
-  async extendConversation(context, callback) {
+  promptForAct(act, isUserInput=false) {
+    logger.info({act: act, isUserInput: isUserInput});
+    if (isUserInput) {
+      switch(act) {
+        case 1: return userInputPromptAct1;
+        case 2: return userInputPromptAct2;
+        case 3: return userInputPromptAct3;
+        default: console.error("Unexpected act", act); 
+          return userInputPromptTextFromFile;
+      }
+    } else {
+      switch(act) {
+        case 0: userPromptTextFromFile;
+        case 1: return userPromptAct1;
+        case 2: return userPromptAct2;
+        case 3: return userPromptAct3;
+        default: console.error("Unexpected input act", act); 
+          return userPromptTextFromFile;
+      }
+    }
+  }
 
-    const fullContext = this.adjustPrompt(userPromptTextFromFile, context); // Use the cleaned-up prompt
+  async extendConversation(context, act, callback) {
+
+    const fullContext = this.adjustPrompt(this.promptForAct(act), context); // Use the cleaned-up prompt
 
     const filteredLines = context.lines.map((convo) => {
       delete convo.message;
       return convo;
     });
-    this.callOpenAI(fullContext, filteredLines, callback);
+    this.callOpenAI(fullContext, filteredLines, act, callback);
   }
 
-  async callOpenAI(fullContext, originalLines, callback, playerName = null) {
+  async callOpenAI(fullContext, originalLines, act, callback, playerName = null) {
 
     let responseCapture = "uninitialized";
     if (!this.isInitialized) {
@@ -147,8 +181,10 @@ class ConversationExtender {
       await new Promise(resolve => setTimeout(resolve, timeout)); // wait for 5s
     }
 
+    const startTime = new Date(); // Start time before API call
+
     this.openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model: (isModel4 ? model4 : model3),
       messages: [
         { "role": "system", "content": systemPromptTextFromFile },
         { "role": "user",   "content": fullContext }
@@ -160,14 +196,31 @@ class ConversationExtender {
       presence_penalty: 0,
     })
     .then(response => {
-
+      const endTime = new Date(); // End time after API response
+      const apiCallTime = (endTime - startTime) / 1000; // Calculate duration in seconds
+      // if (apiCallTime > 30) {
+        logger.info({context: fullContext});
+      // }
+  
       // Check if the response is valid JSON
       try {
         // Safely extract the text part
-        responseCapture = "got a response"
+        responseCapture = "got a response";
         const message = response.choices[0].message;
-        responseCapture = message;
-        let responseJson = JSON.parse(message.content);
+        responseCapture = message.content;
+
+        // Extract json if there's words around it from gpt
+        const jsonRegex = /(\[.*\]|\{.*\})/s;
+        const people = `${originalLines[0].name} & ${originalLines[1].name}`;
+        logger.info({act: act, callTime: apiCallTime, people: people, response: responseCapture});
+        const match = responseCapture.match(jsonRegex);
+        let responseJson = "before match";
+        if (match) {
+          const validJsonString = match[0];
+          responseJson = JSON.parse(validJsonString);
+        } else {
+          throw new Error("No valid JSON matched from the response.");
+        }
 
         // Sometimes I just get back an array of lines which is reasonable
         responseJson = Array.isArray(responseJson) ? {"lines":responseJson} : responseJson;
@@ -180,16 +233,15 @@ class ConversationExtender {
         len3 = responseLines.length;
         responseLines = ConversationAdapter.adaptLines(responseLines);
         const len4 = responseLines.length;
-        console.log("Initial: ", len1, "removeMatching", len2, "removeOthers", len3, "adaptLines", len4, "names", this.extractUniqueNames(responseLines));
+        logger.info({initialLen: len1, removeMatchingLen: len2, removeOthersLen: len3, adaptLinesLen: len4, names: this.extractUniqueNames(responseLines)});
         callback(null, responseLines);
       } catch (e) {
-        console.log("Error context:", fullContext);
-        console.error("Problematic message: ", responseCapture.content);
+        console.error("Problematic message:\n", responseCapture, "with context:\n", fullContext);
         callback(e, null);
       }
     })
     .catch(err => {
-      console.log("extendConversation response error in", responseCapture.content, "\n\nError:", err);
+      logger.error(err, {responseContent: responseCapture.content});
       callback(err, null);
     });
   }

@@ -6,7 +6,7 @@ import { retrieveAdditionalConversation } from "./APIService";
 import ScoreHandler from "./ScoreHandler";
 import AnimatedCircles from "./AnimatedCircles";
 import { TutorialState, IM_NOTICING_INDEX } from "./Tutorial";
-import { aiStartsHereMsg, errorLineText } from "./longStrings";
+import { aiStartsHereMsg, earlyGuessAlert, errorLineText } from "./longStrings";
 
 import "../css/DriverIdentifyAI.css"
 
@@ -24,6 +24,7 @@ const DriverIdentifyAI = ({
   incrementIndex,
   getIconPath,
   fetchingName,
+  displayModal,
 }) => {
   const [isFetchingForIdentify, setIsFetchingForIdentify] = useState(false); // Fetching from the API
   const [showCheckboxes, setShowCheckboxes] = useState(false); // To show/hide checkboxes
@@ -86,6 +87,7 @@ const DriverIdentifyAI = ({
       isFetchingForIdentifyRef.current = true;
       conversationRef.current = conversation;
       retrieveAdditionalConversation(
+        0,
         conversation.lines,
         handleAPISuccess,
         handleAPIError
@@ -113,6 +115,16 @@ const DriverIdentifyAI = ({
       gameState == GameState.NOTICE_AI ||
       gameState == GameState.MOVE_CONVOS
     ) {
+
+      // Prevent people from clicking right when it appears
+      if (conversation.currentLineIndex <= NOTICE_INDEX + 2 && !isLocalHost() &&
+        // and this is not the last line
+        conversation.currentLineIndex !== conversation.lines.length - 1
+      ) {
+        displayModal({ textToDisplay: earlyGuessAlert, buttonText: "Ok", onClose: () => {} });
+        return;
+      }
+
       setGameState(GameState.SELECT_AI);
       setShowCheckboxes(true);
 
@@ -182,9 +194,10 @@ const DriverIdentifyAI = ({
       );
       conversationRef.current = updateConversationLines(moreLines);
     } else if (conversationRef.current.lines[linesLength - 1].text !== errorLineText) {
-      const newConvo = deepCopy(conversationRef.current);
-      const lastLine = { "name": fetchingName(), "text": errorLineText };
-      conversationRef.current = updateConversationLines([lastLine], newConvo);
+      console.log("ERROR last line was: ", conversationRef.current.lines[linesLength - 1].text);
+      // const newConvo = deepCopy(conversationRef.current);
+      // const lastLine = { "name": fetchingName(), "text": errorLineText };
+      // conversationRef.current = updateConversationLines([lastLine], newConvo);
     }
     cleanupFetchingBools();
   };

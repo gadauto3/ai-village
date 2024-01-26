@@ -15,6 +15,7 @@ const ConversationDriver = ({
   isTutorial,
   tutorialState,
   setTutorialState,
+  displayModal,
 }) => {
   const [isFetching, setIsFetching] = useState(false); // Fetching from the API
   
@@ -87,6 +88,7 @@ const ConversationDriver = ({
             incrementIndex,
             getIconPath,
             fetchingName,
+            displayModal,
           }}
           updateConversation={safeUpdateConversation}
         />

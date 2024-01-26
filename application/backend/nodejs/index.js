@@ -16,11 +16,13 @@ app.get('/api/getConversations', (req, res) => {
     res.send({ conversations: data });
 });
 
+//https://d05czxd62e.execute-api.us-east-1.amazonaws.com/dev/api/addToConversation?numApiCalls=0
 app.post('/api/addToConversation', (req, res) => {
     // Get data from request body
     const data = req.body;
+    const act = parseInt(req.query.numApiCalls);
 
-    conversationExtender.extendConversation(data, (err, response) => {
+    conversationExtender.extendConversation(data, act, (err, response) => {
         if (err) {
             console.error("Conversation extension failed: ", err);
             res.send({ moreLines: [] });
@@ -34,8 +36,9 @@ app.post('/api/addToConversation', (req, res) => {
 app.post('/api/addPlayerToConversation', (req, res) => {
     // Get data from request body
     const data = req.body;
+    const act = parseInt(req.query.numApiCalls);
 
-    conversationExtender.extendConversationWithUser(data, (err, response) => {
+    conversationExtender.extendConversationWithUser(data, act, (err, response) => {
         if (err) {
             console.error("Conversation with user extension failed: ", err);
             res.send({ moreLines: [] });

@@ -36,8 +36,8 @@ export const getConversations = (numConvos, onSuccess, onError) => {
   });
 };
 
-export const retrieveAdditionalConversation = (lines, onSuccess, onError) => {
-    const endPoint = "/api/addToConversation";
+export const retrieveAdditionalConversation = (numApiCalls, lines, onSuccess, onError) => {
+    const endPoint = `/api/addToConversation?numApiCalls=${numApiCalls}`;
     console.log("endPoint", endPoint);
 
     const startTime = new Date();
@@ -54,7 +54,7 @@ export const retrieveAdditionalConversation = (lines, onSuccess, onError) => {
         const durationInSeconds = (new Date() - startTime) / 1000;
         console.log("responseData in", durationInSeconds, "seconds:", responseData);
         if (responseData.moreLines.length) {
-            onSuccess(responseData.moreLines);
+            onSuccess(responseData.moreLines, durationInSeconds);
         } else {
             onError("Did not receive additional lines");
         }
@@ -64,8 +64,8 @@ export const retrieveAdditionalConversation = (lines, onSuccess, onError) => {
       });
   }
 
-  export const retrieveAdditionalConversationWithUserInput = (userName, userInput, lines, onSuccess, onError) => {
-    const endPoint = "/api/addPlayerToConversation";
+  export const retrieveAdditionalConversationWithUserInput = (userName, userInput, numApiCalls, lines, onSuccess, onError) => {
+    const endPoint = `/api/addPlayerToConversation?numApiCalls=${numApiCalls}`;
     console.log("endPoint", endPoint);
 
     const startTime = new Date();
@@ -86,7 +86,7 @@ export const retrieveAdditionalConversation = (lines, onSuccess, onError) => {
         const durationInSeconds = (new Date() - startTime) / 1000;
         console.log("responseData in", durationInSeconds, "seconds:", responseData);
         if (responseData.moreLines.length) {
-            onSuccess(responseData.moreLines);
+            onSuccess(responseData.moreLines, durationInSeconds);
         } else {
             onError("Did not receive additional lines");
         }

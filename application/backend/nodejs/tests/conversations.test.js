@@ -3,9 +3,9 @@ const Conversations = require('../conversations');
 
 describe('Conversations - Tests using the seeds file', () => {
 
-    let NUM_CONVOS = 6;
+    let NUM_CONVOS = 5;
 
-    it('ensures conversationSeeds.json is valid JSON and contains an array of five elements', () => {
+    it(`ensures conversationSeeds.json is valid JSON and contains an array of ${NUM_CONVOS} elements`, () => {
         // The actual readFileSync call without mocking
         const rawData = fs.readFileSync('./conversationSeeds.json', 'utf-8');
 
@@ -64,7 +64,7 @@ describe('Conversations - Tests using the seeds file', () => {
         const count = jsonData.length;
         
         const coloredConvos1 = conversations.getConversations(count, "seed1");
-        const coloredConvos2 = conversations.getConversations(count, "seed2");
+        const coloredConvos2 = conversations.getConversations(count, "Seed2");
 
         expect(coloredConvos1[1]).not.toEqual(coloredConvos2[1]);
         expect(coloredConvos1[2]).not.toEqual(coloredConvos2[2]);

@@ -1,0 +1,16 @@
+CURRENT_CONTEXT
+
+The conversation above showcases the ongoing dialogue between CURRENT_USERS in our interactive narrative game. In this phase, the player - PLAYER_NAME - has actively contributed to the storyline with their input: ""PLAYER_MESSAGE""
+
+Your mission is to skilfully integrate this player input into the unfolding narrative of Act 2. This act is about escalating the story's tension and deepening character dynamics. Your response should:
+
+1. Begin with NEXT_USER initiating the new part of the conversation, taking into account the existing scenario and the player's input.
+2. Artfully blend PLAYER_NAME's message into the dialogue. Consider how this input can introduce new obstacles, complications, or deepen character interactions.
+3. Escalate the established conflict, using PLAYER_NAME's input as a catalyst for new challenges or plot twists.
+4. Reveal more about the characters' personalities, motivations, and their relationships, influenced by the player's contribution.
+5. Lead towards a significant revelation or turning point that sets the stage for the final act, ensuring that the player's involvement has a tangible impact on the narrative direction.
+
+Format:
+Present your dialogue in the same JSON format as the dialogue above, adding only new content starting from NEXT_USER.
+Keep the dialogue clear, engaging, and consistent with the characters' established voices, while also reflecting the influence of PLAYER_NAME's input.
+Your creative input at this stage is crucial for maintaining player engagement and driving the narrative forward in a dynamic and responsive way. We're eager to see how you incorporate PLAYER_NAME's unique contribution into this critical phase of our story!

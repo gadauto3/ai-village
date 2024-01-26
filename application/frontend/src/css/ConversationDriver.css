@@ -47,6 +47,15 @@
   margin-right: 20px;
 }
 
+@keyframes fadeToGray {
+  from {
+    color: #00a67d; /* Bright green */
+  }
+  to {
+    color: #7a7a7a; /* The final color */
+  }
+}
+
 .line-message {
   padding: 0px 6px;
   border-radius: 3px;
@@ -54,6 +63,9 @@
   color: #7a7a7a;
   text-align: center;
   margin-bottom: 5px; /* Space between message and the line content */
+  animation-name: fadeToGray; /* Name of the animation */
+  animation-duration: 8s; /* Duration of the animation */
+  animation-fill-mode: forwards; /* Ensures the final state persists after the animation completes */
 }
 
 /* Row of content in the line - image, text field, checkbox (when active) */
@@ -110,24 +122,34 @@
   margin: 20px;
 }
 
-.next-button, .notice-button {
+.next-button, .notice-button, .im-done-button {
   padding: 4px 20px;
   border: 1px solid #fff;
   border-radius: 5px;
   background-color: #e6e6e8;
   cursor: pointer;
   position: relative;
-  transition: all 0.3s ease; /* Smoothens the effect of pressing the button */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); /* Adds a soft shadow beneath the button */
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
 }
 
-.next-button:disabled, .notice-button:disabled {
+.next-button:disabled, .notice-button:disabled, .im-done-button:disabled {
   box-shadow: none;
 }
 
-.next-button:hover, .notice-button:hover {
+.next-button:hover, .notice-button:hover, .im-done-button:hover {
   background-color: #d5d5d5;
 }
+
+/* Specific spacing adjustments */
+.next-button {
+  margin-right: 14px;
+}
+
+.im-done-button {
+  margin-right: auto;
+}
+
 
 /* Bottom buttons for Interact state */
 
