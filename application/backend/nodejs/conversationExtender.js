@@ -19,6 +19,9 @@ const userInputPromptAct1 = fs.readFileSync(path.join(__dirname, 'user-input-pro
 const userInputPromptAct2 = fs.readFileSync(path.join(__dirname, 'user-input-prompt-act2.txt'), 'utf8').trim().replace(/\s+/g, ' ');
 const userInputPromptAct3 = fs.readFileSync(path.join(__dirname, 'user-input-prompt-act3.txt'), 'utf8').trim().replace(/\s+/g, ' ');
 
+const isModel4 = false;
+const model4 = "gpt-4-1106-preview";
+const model3 = "gpt-3.5-turbo";
 
 class ConversationExtender {
   constructor() {
@@ -181,7 +184,7 @@ class ConversationExtender {
     const startTime = new Date(); // Start time before API call
 
     this.openai.chat.completions.create({
-      model: "gpt-4-1106-preview",
+      model: (isModel4 ? model4 : model3),
       messages: [
         { "role": "system", "content": systemPromptTextFromFile },
         { "role": "user",   "content": fullContext }
@@ -202,7 +205,7 @@ class ConversationExtender {
       // Check if the response is valid JSON
       try {
         // Safely extract the text part
-        responseCapture = "got a response"
+        responseCapture = "got a response";
         const message = response.choices[0].message;
         responseCapture = message.content;
 
