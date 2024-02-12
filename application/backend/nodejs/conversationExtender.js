@@ -81,12 +81,10 @@ class ConversationExtender {
   }
 
   adjustPromptWithPlayerInfo(prompt, playerName, playerMessage) {
-    let newPrompt = userInputPromptTextFromFile;
-
-    newPrompt = newPrompt.replace(/PLAYER_NAME/g, playerName);
+    let newPrompt = prompt.replace(/PLAYER_NAME/g, playerName);
     newPrompt = newPrompt.replace('PLAYER_MESSAGE', playerMessage);
     
-    return prompt + newPrompt;
+    return newPrompt;
   }
   
   removeOthersFromLines(originalLines, newLines) {
@@ -120,6 +118,13 @@ class ConversationExtender {
   }
   
   async extendConversationWithUser(context, act, callback) {
+    if (act > 3) {
+      const err = "Acts above 3 are not currently supported.";
+      logger.error(err);
+      callback(err, null);
+      return;
+    }
+
     const playerName = context.playerName;
     const playerLine = context.playerMessage;
     if (!playerName || !playerLine) {
@@ -163,6 +168,12 @@ class ConversationExtender {
   }
 
   async extendConversation(context, act, callback) {
+    if (act > 3) {
+      const err = "Acts above 3 are not currently supported.";
+      logger.error(err);
+      callback(err, null);
+      return;
+    }
 
     const fullContext = this.adjustPrompt(this.promptForAct(act), context); // Use the cleaned-up prompt
 
@@ -198,9 +209,6 @@ class ConversationExtender {
     .then(response => {
       const endTime = new Date(); // End time after API response
       const apiCallTime = (endTime - startTime) / 1000; // Calculate duration in seconds
-      // if (apiCallTime > 30) {
-        logger.info({context: fullContext});
-      // }
   
       // Check if the response is valid JSON
       try {
