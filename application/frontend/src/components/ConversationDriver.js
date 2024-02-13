@@ -18,7 +18,7 @@ const ConversationDriver = ({
   displayModal,
 }) => {
   const [isFetching, setIsFetching] = useState(false); // Fetching from the API
-  
+
   if (!conversation) {
     return <div className="conversation-driver"></div>;
   }
@@ -30,9 +30,28 @@ const ConversationDriver = ({
 
   const updateConversationLines = (moreLines, currConvo = null) => {
     const updatedConvo = currConvo ?? deepCopy(conversation);
+    if (!areLinesForThisConversation(moreLines, updatedConvo)) {
+      // If the lines are not for this convo, do not add them, just return
+      return currConvo ?? conversation;
+    }
+
     updatedConvo.lines.push(...moreLines);
     safeUpdateConversation(updatedConvo);
     return updatedConvo;
+  };
+
+  /**
+   * Check if all names in the provided lines are participants of the conversation.
+   * @param {Array} lines - The lines to check, each with a `name` property.
+   * @param {Object} convo - The conversation object with a `people` property.
+   * @returns {boolean} True if all names in lines are found among conversation people; false otherwise.
+   */
+  const areLinesForThisConversation = (lines, convo) => {
+    // Extract the names of people involved in the conversation
+    const participantNames = convo.people.map((person) => person.name);
+
+    // Check if every line's name is a participant in the conversation
+    return lines.every((line) => participantNames.includes(line.name));
   };
 
   const incrementIndex = (convoCopy = null) => {
