@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { GameState, isLocalHost } from './utils';
 
 import ConversationChooser from './ConversationChooser';
@@ -48,22 +48,26 @@ const UIController = () => {
     }
   }, [selectedConversation]);
   
+  const allConversationsHaveResults = useMemo(() => {
+    return conversations.every(
+      (conversation) => conversation.aiGuess !== null || conversation.key === 0
+    );
+  }, [conversations]);
+
+  const allConversationsAreDone = useMemo(() => {
+    return conversations.every(
+      (conversation) => conversation.isDone || conversation.key === 0
+    );
+  }, [conversations]);
+
   useEffect(() => {
     if (gameState === GameState.MOVE_CONVOS) {
-      const allConversationsHaveResults = conversations.every(
-        (conversation) => conversation.aiGuess !== null || conversation.key === 0
-      );
-
       if (allConversationsHaveResults) {
         setGameState(GameState.CELEBRATE);
         setIsCelebrateModalShowing(true);
         updateNumApiCallsForAll();
       }
     } else if (gameState === GameState.ERROR) {
-      const allConversationsAreDone = conversations.every(
-        (conversation) => conversation.isDone || conversation.key === 0
-      );
-      
       if (allConversationsAreDone) {
         setTimeout(() => {
           setIsEndGameModalShowing(true);
@@ -71,9 +75,9 @@ const UIController = () => {
         }, 700);
       }
     }
-  }, [gameState]);
+  }, [gameState, allConversationsHaveResults, allConversationsAreDone, updateNumApiCallsForAll]);
   
-  const handleUpdateConversation = (updatedConversation) => {
+  const handleUpdateConversation = useCallback((updatedConversation) => {
     const conversationIndex = conversations.findIndex(
       (conversation) => conversation.key === updatedConversation.key
     );
@@ -85,17 +89,17 @@ const UIController = () => {
       setConversations(updatedConversations);
       setSelectedConversation(updatedConversation);
     }
-  };  
+  }, [conversations]);  
 
-  const handleCloseCelebrateModal = () => {
+  const handleCloseCelebrateModal = useCallback(() => {
     setIsCelebrateModalShowing(false);
     setGameState(GameState.INTERACT);
-  };
+  }, []);
 
-  const handleCloseEndGameModal = () => {
+  const handleCloseEndGameModal = useCallback(() => {
     setIsEndGameModalShowing(false);
     setGameState(GameState.INTERACT);
-  };
+  }, []);
 
   const jumpToInteract = () => {
     setGameState(GameState.CELEBRATE);
@@ -111,42 +115,47 @@ const UIController = () => {
     setIsEndGameModalShowing(true);
   };
 
-  const getNameFromUser = (modalConfig) => {
+  const getNameFromUser = useCallback((modalConfig) => {
     setModalConfig(modalConfig);
     setIsNameModalShowing(true);
-  };
+  }, []);
 
-  const handleCloseNameModal = (name) => {
+  const handleCloseNameModal = useCallback((name) => {
     setUserName(name);
     setIsNameModalShowing(false);
-  };
+  }, []);
 
-  const displayGenericModal = (modalConfig) => {
+  const displayGenericModal = useCallback((modalConfig) => {
     setModalConfig(modalConfig);
     setIsGenericModalShowing(true);
-  };
+  }, []);
 
-  const handleCloseGenericModal = () => {
+  const handleCloseGenericModal = useCallback(() => {
     setIsGenericModalShowing(false);
-  };
+  }, []);
 
-  const isTutorial = () => {
+  const isTutorial = useMemo(() => {
     return (
       selectedConversation &&
       selectedConversation.key === 0 &&
       tutorialState !== TutorialState.MOVE_ON &&
       tutorialState !== TutorialState.DONE
     );
-  };
+  }, [selectedConversation, tutorialState]);
 
-  const updateNumApiCallsForAll = () => {
+  const updateNumApiCallsForAll = useCallback(() => {
     const updatedConversations = conversations.map((conversation) => ({
       ...conversation,
       numApiCalls: 1,
     }));
     console.log("lines updated");
     setConversations(updatedConversations);
-  };
+  }, [conversations]);
+
+  const endGameModalProps = useMemo(() => ({
+    conversations,
+    userName
+  }), [conversations, userName]);
 
   return (
     <div className="outer-div">
@@ -202,7 +211,7 @@ const UIController = () => {
       )}
       {isEndGameModalShowing && (
         <ModalPopupEndGame
-          {...{ conversations, userName }}
+          {...endGameModalProps}
           closeModal={handleCloseEndGameModal}
         />
       )}

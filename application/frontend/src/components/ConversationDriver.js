@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { GameState, deepCopy, iconsPath } from "./utils";
 
 import "../css/ConversationDriver.css";
@@ -23,11 +23,11 @@ const ConversationDriver = ({
     return <div className="conversation-driver"></div>;
   }
 
-  const safeUpdateConversation = (updatedConversation) => {
+  const safeUpdateConversation = useCallback((updatedConversation) => {
     updateConversation(updatedConversation);
-  };
+  }, [updateConversation]);
 
-  const updateConversationLines = (moreLines, currentConversation = null) => {
+  const updateConversationLines = useCallback((moreLines, currentConversation = null) => {
     const updatedConversation = currentConversation ?? deepCopy(conversation);
     if (!areLinesForThisConversation(moreLines, updatedConversation)) {
       return currentConversation ?? conversation;
@@ -36,35 +36,63 @@ const ConversationDriver = ({
     updatedConversation.lines.push(...moreLines);
     safeUpdateConversation(updatedConversation);
     return updatedConversation;
-  };
+  }, [conversation, safeUpdateConversation, areLinesForThisConversation]);
 
-  const areLinesForThisConversation = (lines, conversationToCheck) => {
+  const areLinesForThisConversation = useCallback((lines, conversationToCheck) => {
     const participantNames = conversationToCheck.people.map((person) => person.name);
     return lines.every((line) => participantNames.includes(line.name));
-  };
+  }, []);
 
-  const incrementIndex = (conversationCopy = null) => {
+  const incrementIndex = useCallback((conversationCopy = null) => {
     const updatedConversation = conversationCopy ?? deepCopy(conversation);
     updatedConversation.currentLineIndex = updatedConversation.currentLineIndex + 1;
     safeUpdateConversation(updatedConversation);
     return updatedConversation;
-  };
+  }, [conversation, safeUpdateConversation]);
 
-  const getIconPath = (name) => {
+  const getIconPath = useCallback((name) => {
     const person = conversation.people.find((person) => person.name === name);
     if (person && person.icon) {
       return `${iconsPath}${person.icon}`;
     }
     return '';
-  };
+  }, [conversation.people]);
 
-  const fetchingName = () => {
+  const fetchingName = useCallback(() => {
     let penultimateLine = conversation.lines[conversation.lines.length - 2];
     if (penultimateLine.name === userName) {
       penultimateLine = conversation.lines[conversation.lines.length - 3];
     }
     return penultimateLine.name;
-  };
+  }, [conversation.lines, userName]);
+
+  const sharedDriverProps = useMemo(() => ({
+    conversation,
+    gameState,
+    setGameState,
+    isFetching,
+    setIsFetching,
+    isTutorial,
+    tutorialState,
+    setTutorialState,
+    updateConversationLines,
+    incrementIndex,
+    getIconPath,
+    fetchingName,
+  }), [
+    conversation,
+    gameState,
+    setGameState,
+    isFetching,
+    setIsFetching,
+    isTutorial,
+    tutorialState,
+    setTutorialState,
+    updateConversationLines,
+    incrementIndex,
+    getIconPath,
+    fetchingName,
+  ]);
 
   return (
     <div className="conversation-driver">
@@ -83,41 +111,15 @@ const ConversationDriver = ({
 
       {gameState < GameState.INTERACT ? (
         <DriverIdentifyAI
-          {...{
-            conversation,
-            gameState,
-            setGameState,
-            isFetching,
-            setIsFetching,
-            isTutorial,
-            tutorialState,
-            setTutorialState,
-            updateConversationLines,
-            incrementIndex,
-            getIconPath,
-            fetchingName,
-            displayModal,
-          }}
+          {...sharedDriverProps}
+          displayModal={displayModal}
           updateConversation={safeUpdateConversation}
         />
       ) : (
         <DriverInteractWithAI
-          {...{
-            conversation,
-            gameState,
-            setGameState,
-            isFetching,
-            setIsFetching,
-            userName,
-            getUserName,
-            isTutorial,
-            tutorialState,
-            setTutorialState,
-            updateConversationLines,
-            incrementIndex,
-            getIconPath,
-            fetchingName,
-          }}
+          {...sharedDriverProps}
+          userName={userName}
+          getUserName={getUserName}
           updateConversation={safeUpdateConversation}
         />
       )}
@@ -125,4 +127,4 @@ const ConversationDriver = ({
   );
 };
 
-export default ConversationDriver;
+export default React.memo(ConversationDriver);

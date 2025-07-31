@@ -189,4 +189,4 @@ const ConversationChooser = ({
   );
 };
 
-export default ConversationChooser;
+export default React.memo(ConversationChooser);

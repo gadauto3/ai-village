@@ -50,4 +50,4 @@ const Instructions = (gameState) => {
   );
 };
 
-export default Instructions;
+export default React.memo(Instructions);

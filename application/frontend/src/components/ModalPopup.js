@@ -65,4 +65,4 @@ ModalPopup.propTypes = {
   }).isRequired
 };
 
-export default ModalPopup;
+export default React.memo(ModalPopup);
