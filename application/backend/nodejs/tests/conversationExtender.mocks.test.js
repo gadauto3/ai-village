@@ -152,4 +152,27 @@ describe("ConversationExtender", () => {
     const result = instance.removeOthersFromLines(expectedLines, linesWithOtherPeople);
     expect(result).toEqual(expectedLines);
   });
+
+  it("should return an error for extendConversation when act is greater than 3", async () => {
+    const instance = new ConversationExtender();
+    const context = { /* ... context setup ... */ };
+    const act = 5; // Act greater than 3
+    const callback = jest.fn();
+  
+    await instance.extendConversation(context, act, callback);
+  
+    expect(callback).toHaveBeenCalledWith("Acts above 3 are not currently supported.", null);
+  });
+
+  it("should return an error for extendConversationWithUser when act is greater than 3", async () => {
+    const instance = new ConversationExtender();
+    const context = { /* ... context setup ... */ };
+    const act = 4; // Act greater than 3
+    const callback = jest.fn();
+  
+    await instance.extendConversationWithUser(context, act, callback);
+  
+    expect(callback).toHaveBeenCalledWith("Acts above 3 are not currently supported.", null);
+  });
+  
 });

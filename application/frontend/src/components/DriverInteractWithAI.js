@@ -179,10 +179,11 @@ const DriverInteractWithAI = ({
     // Set fetching state and make the api call
     setIsFetching(true);
     isFetchingRef.current = true;
+    const callIdx = conversation.numApiCalls == 0 ? 1 : conversation.numApiCalls;
     retrieveAdditionalConversationWithUserInput(
       userName,
       userInput,
-      conversation.numApiCalls,
+      callIdx,
       filterLinesByName(conversation.lines, userName),
       handleInteractWithUserAPISuccess,
       handleInteractWithUserAPIError

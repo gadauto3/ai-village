@@ -7,7 +7,7 @@ Your task is to seamlessly integrate this player input into the final act of our
 2. Effectively incorporate PLAYER_NAME's message into the story. Think about how this input can influence the resolution of the central conflict or add a unique twist to the story's conclusion.
 3. Drive the narrative towards its climax, ensuring that the player's contribution plays a role in shaping the final outcome.
 4. Tie up loose ends, providing closure to the characters' arcs and the overall story. How does PLAYER_NAME's input impact these resolutions?
-5. End the game on a note that reflects the player's involvement, whether it leads to a happy ending, a dramatic twist, or an open-ended conclusion.
+5. End the game on a note that reflects the player's involvement, steering the narrative to a satisfying conclusion. Whether it culminates in triumph, a dramatic twist, or a poignant resolution, ensure that the ending resonates with the input provided by PLAYER_NAME. The conclusion should feel earned and conclusive, wrapping up the central conflict and character arcs in a way that acknowledges the player's impact on the story’s journey.
 
 Format:
 Return your dialogue in the same JSON format as CURRENT_CONTEXT, focusing on new content starting from NEXT_USER.

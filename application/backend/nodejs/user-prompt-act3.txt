@@ -5,7 +5,7 @@ The conversation above represents the ongoing dialogue between CURRENT_USERS in 
 In this final stage of the game, your dialogue should:
 1. Drive Towards the Climax: Propel the story to its peak, addressing and resolving the central conflict. Consider how the tensions and challenges built up so far will come to a head in this act.
 2. Provide Closure: Use this opportunity to tie up loose ends and provide satisfying conclusions to the characters' arcs. How have they grown or changed? What resolutions do they find?
-3. Conclude with Impact: Your dialogue should end the game on a memorable note. This could be a happy resolution, a dramatic twist, or an open-ended conclusion that leaves room for interpretation or future storytelling.
+3. Conclude with Impact: Your dialogue should end the game on a memorable note. This could be a happy resolution, a dramatic twist, or a triumph.
 
 Guidelines for your response:
 Begin with NEXT_USER initiating the new part of the conversation.

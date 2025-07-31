@@ -64,7 +64,7 @@ describe('ConversationExtender', () => {
       .replace(/\s+/g, " ");
     let context = JSON.parse(contextFromFile);
     const focalNoun = "dog";
-    context.playerName = "testName";
+    context.playerName = "TestName";
     context.playerMessage = `I love ${focalNoun}s, can we discuss ${focalNoun}s?`;
     console.log("before api call for extendConversationWithUser");
     extender.extendConversationWithUser(context, 1, (err, response) => {

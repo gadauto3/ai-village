@@ -34,7 +34,7 @@ const ScoreHandler = () => {
         ", your guess was very late. Take time to look for clues in the conversation before deciding."
       );
     } else {
-      return "You're on the right track honestly. You'll have an advantage when you get conversations that you've already seen.";
+      return "You're on the right track honestly. You'll have an advantage with conversations that you've already seen.";
     }
   };
 

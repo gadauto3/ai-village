@@ -1,12 +1,12 @@
 const fs = require('fs');
 const path = require('path');
-const AWS = require('aws-sdk');
+const { SSM } = require('@aws-sdk/client-ssm');
 const OpenAI = require("openai");
 const logger = require('./logger');
 const { response } = require('express');
 const ConversationAdapter = require('./conversationAdapter');
 
-const ssm = new AWS.SSM();
+const ssm = new SSM();
 // Read and clean up the prompt text
 const systemPromptTextFromFile = fs.readFileSync(path.join(__dirname, 'system-prompt.txt'), 'utf8').trim().replace(/\s+/g, ' ');
 const userPromptTextFromFile = fs.readFileSync(path.join(__dirname, 'user-prompt.txt'), 'utf8').trim().replace(/\s+/g, ' ');
@@ -19,8 +19,8 @@ const userInputPromptAct1 = fs.readFileSync(path.join(__dirname, 'user-input-pro
 const userInputPromptAct2 = fs.readFileSync(path.join(__dirname, 'user-input-prompt-act2.txt'), 'utf8').trim().replace(/\s+/g, ' ');
 const userInputPromptAct3 = fs.readFileSync(path.join(__dirname, 'user-input-prompt-act3.txt'), 'utf8').trim().replace(/\s+/g, ' ');
 
-const isModel4 = false;
-const model4 = "gpt-4-1106-preview";
+const isModel4 = true;
+const model4 = "gpt-4o-mini";
 const model3 = "gpt-3.5-turbo";
 
 class ConversationExtender {
@@ -43,7 +43,7 @@ class ConversationExtender {
             WithDecryption: true
         };
 
-        const response = await ssm.getParameters(params).promise();
+        const response = await ssm.getParameters(params);
 
         response.Parameters.forEach(parameter => {
           if (parameter.Name === '/aivillage/apikeys/openai') {
@@ -81,12 +81,10 @@ class ConversationExtender {
   }
 
   adjustPromptWithPlayerInfo(prompt, playerName, playerMessage) {
-    let newPrompt = userInputPromptTextFromFile;
-
-    newPrompt = newPrompt.replace(/PLAYER_NAME/g, playerName);
+    let newPrompt = prompt.replace(/PLAYER_NAME/g, playerName);
     newPrompt = newPrompt.replace('PLAYER_MESSAGE', playerMessage);
-    
-    return prompt + newPrompt;
+    console.log("newPrompt", newPrompt);
+    return newPrompt;
   }
   
   removeOthersFromLines(originalLines, newLines) {
@@ -120,6 +118,13 @@ class ConversationExtender {
   }
   
   async extendConversationWithUser(context, act, callback) {
+    if (act > 3) {
+      const err = "Acts above 3 are not currently supported.";
+      logger.error(err);
+      callback(err, null);
+      return;
+    }
+
     const playerName = context.playerName;
     const playerLine = context.playerMessage;
     if (!playerName || !playerLine) {
@@ -163,6 +168,12 @@ class ConversationExtender {
   }
 
   async extendConversation(context, act, callback) {
+    if (act > 3) {
+      const err = "Acts above 3 are not currently supported.";
+      logger.error(err);
+      callback(err, null);
+      return;
+    }
 
     const fullContext = this.adjustPrompt(this.promptForAct(act), context); // Use the cleaned-up prompt
 
@@ -189,8 +200,8 @@ class ConversationExtender {
         { "role": "system", "content": systemPromptTextFromFile },
         { "role": "user",   "content": fullContext }
       ],
-      temperature: 1.2,
-      max_tokens: 768,
+      // temperature: 1.2,   // o4-mini message: "Unsupported value: 'temperature' does not support 1.2 with this model. Only the default (1) value is supported."
+      max_completion_tokens: 768,
       top_p: 1,
       frequency_penalty: 0,
       presence_penalty: 0,
@@ -198,9 +209,6 @@ class ConversationExtender {
     .then(response => {
       const endTime = new Date(); // End time after API response
       const apiCallTime = (endTime - startTime) / 1000; // Calculate duration in seconds
-      // if (apiCallTime > 30) {
-        logger.info({context: fullContext});
-      // }
   
       // Check if the response is valid JSON
       try {
