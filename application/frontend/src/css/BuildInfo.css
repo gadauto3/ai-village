@@ -1,0 +1,30 @@
+.build-info {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  z-index: 1000;
+  color: rgba(132, 130, 130, 0.87);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+  pointer-events: none;
+  user-select: none;
+}
+
+.commit-hash {
+  cursor: help;
+  pointer-events: auto;
+}
+
+.commit-hash:hover {
+  background: rgba(0, 0, 0, 0.9);
+  border-radius: 2px;
+}
+
+/* Hide on mobile to avoid clutter */
+@media (max-width: 768px) {
+  .build-info {
+    display: none;
+  }
+}

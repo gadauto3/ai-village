@@ -7,6 +7,7 @@ import Instructions from './Instructions';
 import ModalPopup from "./ModalPopup";
 import ModalPopupCelebrate from './ModalPopupCelebrate';
 import ModalPopupEndGame from './ModalPopupEndGame';
+import BuildInfo from './BuildInfo';
 import { TutorialState } from './Tutorial';
 
 import "../css/UIController.css";
@@ -221,6 +222,7 @@ const UIController = () => {
           <button onClick={jumpToEndGame}>EndGame</button>
         </div>
       )}
+      <BuildInfo />
     </div>
   );
 };
