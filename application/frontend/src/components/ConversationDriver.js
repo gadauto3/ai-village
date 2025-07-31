@@ -23,50 +23,39 @@ const ConversationDriver = ({
     return <div className="conversation-driver"></div>;
   }
 
-  /** Update Conversation parameters */
-  const safeUpdateConversation = (updatedConvo) => {
-    updateConversation(updatedConvo);
+  const safeUpdateConversation = (updatedConversation) => {
+    updateConversation(updatedConversation);
   };
 
-  const updateConversationLines = (moreLines, currConvo = null) => {
-    const updatedConvo = currConvo ?? deepCopy(conversation);
-    if (!areLinesForThisConversation(moreLines, updatedConvo)) {
-      // If the lines are not for this convo, do not add them, just return
-      return currConvo ?? conversation;
+  const updateConversationLines = (moreLines, currentConversation = null) => {
+    const updatedConversation = currentConversation ?? deepCopy(conversation);
+    if (!areLinesForThisConversation(moreLines, updatedConversation)) {
+      return currentConversation ?? conversation;
     }
 
-    updatedConvo.lines.push(...moreLines);
-    safeUpdateConversation(updatedConvo);
-    return updatedConvo;
+    updatedConversation.lines.push(...moreLines);
+    safeUpdateConversation(updatedConversation);
+    return updatedConversation;
   };
 
-  /**
-   * Check if all names in the provided lines are participants of the conversation.
-   * @param {Array} lines - The lines to check, each with a `name` property.
-   * @param {Object} convo - The conversation object with a `people` property.
-   * @returns {boolean} True if all names in lines are found among conversation people; false otherwise.
-   */
-  const areLinesForThisConversation = (lines, convo) => {
-    // Extract the names of people involved in the conversation
-    const participantNames = convo.people.map((person) => person.name);
-
-    // Check if every line's name is a participant in the conversation
+  const areLinesForThisConversation = (lines, conversationToCheck) => {
+    const participantNames = conversationToCheck.people.map((person) => person.name);
     return lines.every((line) => participantNames.includes(line.name));
   };
 
-  const incrementIndex = (convoCopy = null) => {
-    const updatedConvo = convoCopy ?? deepCopy(conversation);
-    updatedConvo.currentLineIndex = updatedConvo.currentLineIndex + 1;
-    safeUpdateConversation(updatedConvo);
-    return updatedConvo;
+  const incrementIndex = (conversationCopy = null) => {
+    const updatedConversation = conversationCopy ?? deepCopy(conversation);
+    updatedConversation.currentLineIndex = updatedConversation.currentLineIndex + 1;
+    safeUpdateConversation(updatedConversation);
+    return updatedConversation;
   };
 
   const getIconPath = (name) => {
-    const person = conversation.people.find((p) => p.name === name);
+    const person = conversation.people.find((person) => person.name === name);
     if (person && person.icon) {
       return `${iconsPath}${person.icon}`;
     }
-    return "";
+    return '';
   };
 
   const fetchingName = () => {

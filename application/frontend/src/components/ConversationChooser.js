@@ -18,7 +18,7 @@ const ConversationChooser = ({
   selectedConversation,
   setSelectedConversation,
   isTutorial,
-  tutorialState
+  tutorialState,
 }) => {
   const [areConversationsSet, setAreConversationsSet] = useState(false);
   const [isConvosMax, setIsConvosMax] = useState(false);
@@ -30,7 +30,7 @@ const ConversationChooser = ({
 
   // TODO: For dev, remove later.
   useEffect(() => {
-    if (gameState == GameState.CELEBRATE && conversations.length > 1) {
+    if (gameState === GameState.CELEBRATE && conversations.length > 1) {
       setAreConversationsSet(true);
     }
   }, [conversations]);
@@ -84,8 +84,8 @@ const ConversationChooser = ({
 
   const isDivDisabled = (convo) => {
     return (
-      gameState == GameState.SELECT_AI ||
-      gameState == GameState.JOIN_CONVO ||
+      gameState === GameState.SELECT_AI ||
+      gameState === GameState.JOIN_CONVO ||
       isTutorial() ||
       (convo && convo.key === 0 && tutorialState === TutorialState.DONE)
     );
@@ -166,7 +166,7 @@ const ConversationChooser = ({
         </div>
       )}
 
-      {gameState == GameState.INIT && (
+      {gameState === GameState.INIT && (
         <button
           className="add-conversation-button"
           onClick={addConversation}
@@ -176,7 +176,7 @@ const ConversationChooser = ({
         </button>
       )}
 
-      {gameState == GameState.INIT && (
+      {gameState === GameState.INIT && (
         <button
           className="start-button"
           onClick={clickStart}

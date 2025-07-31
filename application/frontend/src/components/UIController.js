@@ -31,7 +31,7 @@ const UIController = () => {
   });
 
   useEffect(() => {
-    if (conversations.length > 1 && gameState == GameState.INIT) {
+    if (conversations.length > 1 && gameState === GameState.INIT) {
       setGameState(GameState.NEXT_CONVO);
     }
   }, [conversations]);
@@ -49,7 +49,7 @@ const UIController = () => {
   }, [selectedConversation]);
   
   useEffect(() => {
-    if (gameState == GameState.MOVE_CONVOS) {
+    if (gameState === GameState.MOVE_CONVOS) {
       const allConversationsHaveResults = conversations.every(
         (conversation) => conversation.aiGuess !== null || conversation.key === 0
       );
@@ -59,13 +59,13 @@ const UIController = () => {
         setIsCelebrateModalShowing(true);
         updateNumApiCallsForAll();
       }
-    } else if (gameState == GameState.ERROR) {
+    } else if (gameState === GameState.ERROR) {
       const allConversationsAreDone = conversations.every(
         (conversation) => conversation.isDone || conversation.key === 0
       );
       
       if (allConversationsAreDone) {
-        setTimeout(function () {
+        setTimeout(() => {
           setIsEndGameModalShowing(true);
           setGameState(GameState.END_GAME);
         }, 700);
@@ -74,18 +74,15 @@ const UIController = () => {
   }, [gameState]);
   
   const handleUpdateConversation = (updatedConversation) => {
-    // Find the index of the conversation with the same key as updatedConversation
-    const index = conversations.findIndex(convo => convo.key === updatedConversation.key);
+    const conversationIndex = conversations.findIndex(
+      (conversation) => conversation.key === updatedConversation.key
+    );
   
-    if (index !== -1) {
-      // Create a copy of the conversations array
-      const newConversations = [...conversations];
+    if (conversationIndex !== -1) {
+      const updatedConversations = [...conversations];
+      updatedConversations[conversationIndex] = updatedConversation;
   
-      // Replace the old conversation with the updated one
-      newConversations[index] = updatedConversation;
-  
-      // Update the state
-      setConversations(newConversations);
+      setConversations(updatedConversations);
       setSelectedConversation(updatedConversation);
     }
   };  
@@ -93,26 +90,26 @@ const UIController = () => {
   const handleCloseCelebrateModal = () => {
     setIsCelebrateModalShowing(false);
     setGameState(GameState.INTERACT);
-  }
+  };
 
   const handleCloseEndGameModal = () => {
     setIsEndGameModalShowing(false);
-    setGameState(GameState.INTERACT); // TODO???
-  }
+    setGameState(GameState.INTERACT);
+  };
 
   const jumpToInteract = () => {
     setGameState(GameState.CELEBRATE);
     setConversations(conversationDataInteract);
     setSelectedConversation(conversations[1]);
     setIsCelebrateModalShowing(true);
-  }
+  };
 
   const jumpToEndGame = () => {
     setGameState(GameState.END_GAME);
     setConversations(conversationDataInteract);
     setSelectedConversation(conversations[1]);
     setIsEndGameModalShowing(true);
-  }
+  };
 
   const getNameFromUser = (modalConfig) => {
     setModalConfig(modalConfig);
@@ -122,7 +119,7 @@ const UIController = () => {
   const handleCloseNameModal = (name) => {
     setUserName(name);
     setIsNameModalShowing(false);
-  }
+  };
 
   const displayGenericModal = (modalConfig) => {
     setModalConfig(modalConfig);
@@ -131,7 +128,7 @@ const UIController = () => {
 
   const handleCloseGenericModal = () => {
     setIsGenericModalShowing(false);
-  }
+  };
 
   const isTutorial = () => {
     return (
@@ -142,15 +139,12 @@ const UIController = () => {
     );
   };
 
-  // Function to set numApiCalls to 1 for all conversations
   const updateNumApiCallsForAll = () => {
-    // Map over the conversations and update numApiCalls
-    const updatedConversations = conversations.map((convo) => ({
-      ...convo,
+    const updatedConversations = conversations.map((conversation) => ({
+      ...conversation,
       numApiCalls: 1,
     }));
     console.log("lines updated");
-    // Update the state with the new conversations array
     setConversations(updatedConversations);
   };
 
