@@ -83,7 +83,7 @@ class ConversationExtender {
   adjustPromptWithPlayerInfo(prompt, playerName, playerMessage) {
     let newPrompt = prompt.replace(/PLAYER_NAME/g, playerName);
     newPrompt = newPrompt.replace('PLAYER_MESSAGE', playerMessage);
-    
+    console.log("newPrompt", newPrompt);
     return newPrompt;
   }
   
