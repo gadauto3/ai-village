@@ -65,14 +65,14 @@ const DriverIdentifyAI = ({
       showCheckboxes ||
       isFetching ||
       conversation.isDone ||
-      (isTutorial() && tutorialState === TutorialState.NOTICE_BTN)
+      (isTutorial && tutorialState === TutorialState.NOTICE_BTN)
     );
   };
 
   const handleNextClick = () => {
     const nextIndex = conversation.currentLineIndex;
 
-    if (isTutorial()) {
+    if (isTutorial) {
       handleTutorialNext();
       return;
     }
@@ -128,7 +128,7 @@ const DriverIdentifyAI = ({
       setGameState(GameState.SELECT_AI);
       setShowCheckboxes(true);
 
-      if (isTutorial()) {
+      if (isTutorial) {
         conversationRef.current = incrementIndex();
       }
     } else {
@@ -150,7 +150,7 @@ const DriverIdentifyAI = ({
           aiStartsHereMsg;
       }
 
-      if (isTutorial()) {
+      if (isTutorial) {
         updatedLine.message = "You did it!";
         conversationRef.current = incrementIndex(updatedConvo);
         setTutorialState(TutorialState.MOVE_ON);
@@ -171,7 +171,7 @@ const DriverIdentifyAI = ({
       conversation.currentLineIndex < NOTICE_INDEX ||
       (gameState === GameState.SELECT_AI && checkedIndex === null) ||
       isFetching ||
-      (isTutorial() && tutorialState === TutorialState.NEXT_BTN)
+      (isTutorial && tutorialState === TutorialState.NEXT_BTN)
     );
   };
 

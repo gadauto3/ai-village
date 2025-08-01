@@ -89,7 +89,7 @@ const ConversationChooser = () => {
     return (
       gameState === GameState.SELECT_AI ||
       gameState === GameState.JOIN_CONVO ||
-      isTutorial() ||
+      isTutorial ||
       (convo && convo.key === 0 && tutorialState === TutorialState.DONE)
     );
   };

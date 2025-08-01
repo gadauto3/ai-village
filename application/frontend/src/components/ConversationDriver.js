@@ -22,15 +22,18 @@ const ConversationDriver = () => {
   } = useGameContext();
   const [isFetching, setIsFetching] = useState(false); // Fetching from the API
 
-  if (!conversation) {
-    return <div className="conversation-driver"></div>;
-  }
-
+  // All hooks must be called before any conditional returns
   const safeUpdateConversation = useCallback((updatedConversation) => {
     updateConversation(updatedConversation);
   }, [updateConversation]);
 
+  const areLinesForThisConversation = useCallback((lines, conversationToCheck) => {
+    const participantNames = conversationToCheck.people.map((person) => person.name);
+    return lines.every((line) => participantNames.includes(line.name));
+  }, []);
+
   const updateConversationLines = useCallback((moreLines, currentConversation = null) => {
+    if (!conversation) return null;
     const updatedConversation = currentConversation ?? deepCopy(conversation);
     if (!areLinesForThisConversation(moreLines, updatedConversation)) {
       return currentConversation ?? conversation;
@@ -41,12 +44,8 @@ const ConversationDriver = () => {
     return updatedConversation;
   }, [conversation, safeUpdateConversation, areLinesForThisConversation]);
 
-  const areLinesForThisConversation = useCallback((lines, conversationToCheck) => {
-    const participantNames = conversationToCheck.people.map((person) => person.name);
-    return lines.every((line) => participantNames.includes(line.name));
-  }, []);
-
   const incrementIndex = useCallback((conversationCopy = null) => {
+    if (!conversation) return null;
     const updatedConversation = conversationCopy ?? deepCopy(conversation);
     updatedConversation.currentLineIndex = updatedConversation.currentLineIndex + 1;
     safeUpdateConversation(updatedConversation);
@@ -54,20 +53,22 @@ const ConversationDriver = () => {
   }, [conversation, safeUpdateConversation]);
 
   const getIconPath = useCallback((name) => {
+    if (!conversation) return '';
     const person = conversation.people.find((person) => person.name === name);
     if (person && person.icon) {
       return `${iconsPath}${person.icon}`;
     }
     return '';
-  }, [conversation.people]);
+  }, [conversation]);
 
   const fetchingName = useCallback(() => {
+    if (!conversation || !conversation.lines || conversation.lines.length < 2) return '';
     let penultimateLine = conversation.lines[conversation.lines.length - 2];
     if (penultimateLine.name === userName) {
       penultimateLine = conversation.lines[conversation.lines.length - 3];
     }
     return penultimateLine.name;
-  }, [conversation.lines, userName]);
+  }, [conversation, userName]);
 
   const sharedDriverProps = useMemo(() => ({
     conversation,
@@ -96,6 +97,11 @@ const ConversationDriver = () => {
     getIconPath,
     fetchingName,
   ]);
+
+  // Early return AFTER all hooks have been called
+  if (!conversation) {
+    return <div className="conversation-driver"></div>;
+  }
 
   return (
     <div className="conversation-driver">
