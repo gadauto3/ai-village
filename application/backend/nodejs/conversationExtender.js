@@ -243,7 +243,7 @@ class ConversationExtender {
         responseLines = ConversationAdapter.adaptLines(responseLines);
         const len4 = responseLines.length;
         logger.info({initialLen: len1, removeMatchingLen: len2, removeOthersLen: len3, adaptLinesLen: len4, names: this.extractUniqueNames(responseLines)});
-        console.log("responseLines", responseLines);
+        console.log("len1", len1, "len2", len2, "len3", len3, "len4", len4, "responseLines", responseLines);
         callback(null, responseLines);
       } catch (e) {
         console.error("Problematic message:\n", responseCapture, "with context:\n", fullContext);
