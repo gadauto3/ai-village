@@ -1,6 +1,11 @@
-import React, { useState, useMemo, useCallback } from "react";
-import { GameState, deepCopy, iconsPath } from "./utils";
+import React, { useState, useMemo } from "react";
+import { GameState } from "./utils";
 import { useGameContext } from "../context/GameContext";
+
+import useConversationState from "../hooks/useConversationState";
+import useConversationValidation from "../hooks/useConversationValidation";
+import useConversationUtils from "../hooks/useConversationUtils";
+import ParticipantsList from "./ParticipantsList";
 
 import "../css/ConversationDriver.css";
 import DriverIdentifyAI from "./DriverIdentifyAI";
@@ -20,55 +25,21 @@ const ConversationDriver = () => {
     showNameModal,
     showGenericModal,
   } = useGameContext();
-  const [isFetching, setIsFetching] = useState(false); // Fetching from the API
+  const [isFetching, setIsFetching] = useState(false);
 
-  // All hooks must be called before any conditional returns
-  const safeUpdateConversation = useCallback((updatedConversation) => {
-    updateConversation(updatedConversation);
-  }, [updateConversation]);
+  // Initialize specialized hooks
+  const conversationState = useConversationState({ conversation, updateConversation });
+  const conversationValidation = useConversationValidation();
+  const conversationUtils = useConversationUtils({ conversation, userName });
 
-  const areLinesForThisConversation = useCallback((lines, conversationToCheck) => {
-    const participantNames = conversationToCheck.people.map((person) => person.name);
-    return lines.every((line) => participantNames.includes(line.name));
-  }, []);
-
-  const updateConversationLines = useCallback((moreLines, currentConversation = null) => {
-    if (!conversation) return null;
-    const updatedConversation = currentConversation ?? deepCopy(conversation);
-    if (!areLinesForThisConversation(moreLines, updatedConversation)) {
-      return currentConversation ?? conversation;
-    }
-
-    updatedConversation.lines.push(...moreLines);
-    safeUpdateConversation(updatedConversation);
-    return updatedConversation;
-  }, [conversation, safeUpdateConversation, areLinesForThisConversation]);
-
-  const incrementIndex = useCallback((conversationCopy = null) => {
-    if (!conversation) return null;
-    const updatedConversation = conversationCopy ?? deepCopy(conversation);
-    updatedConversation.currentLineIndex = updatedConversation.currentLineIndex + 1;
-    safeUpdateConversation(updatedConversation);
-    return updatedConversation;
-  }, [conversation, safeUpdateConversation]);
-
-  const getIconPath = useCallback((name) => {
-    if (!conversation) return '';
-    const person = conversation.people.find((person) => person.name === name);
-    if (person && person.icon) {
-      return `${iconsPath}${person.icon}`;
-    }
-    return '';
-  }, [conversation]);
-
-  const fetchingName = useCallback(() => {
-    if (!conversation || !conversation.lines || conversation.lines.length < 2) return '';
-    let penultimateLine = conversation.lines[conversation.lines.length - 2];
-    if (penultimateLine.name === userName) {
-      penultimateLine = conversation.lines[conversation.lines.length - 3];
-    }
-    return penultimateLine.name;
-  }, [conversation, userName]);
+  // Enhanced updateConversationLines with validation
+  const updateConversationLines = (moreLines, currentConversation = null) => {
+    return conversationState.updateConversationLines(
+      moreLines, 
+      currentConversation, 
+      conversationValidation.areLinesForThisConversation
+    );
+  };
 
   const sharedDriverProps = useMemo(() => ({
     conversation,
@@ -80,9 +51,9 @@ const ConversationDriver = () => {
     tutorialState,
     setTutorialState,
     updateConversationLines,
-    incrementIndex,
-    getIconPath,
-    fetchingName,
+    incrementIndex: conversationState.incrementIndex,
+    getIconPath: conversationUtils.getIconPath,
+    fetchingName: conversationUtils.getFetchingName,
   }), [
     conversation,
     gameState,
@@ -93,9 +64,9 @@ const ConversationDriver = () => {
     tutorialState,
     setTutorialState,
     updateConversationLines,
-    incrementIndex,
-    getIconPath,
-    fetchingName,
+    conversationState.incrementIndex,
+    conversationUtils.getIconPath,
+    conversationUtils.getFetchingName,
   ]);
 
   // Early return AFTER all hooks have been called
@@ -105,31 +76,20 @@ const ConversationDriver = () => {
 
   return (
     <div className="conversation-driver">
-      <div className="participants">
-        <span className="to-label">To:</span>
-        {conversation.people.map((person, index) => (
-          <span
-            key={index}
-            className={`participant ${index === 0 ? "first" : ""}`}
-          >
-            {person.name}
-            {index < conversation.people.length - 1 && ", "}
-          </span>
-        ))}
-      </div>
+      <ParticipantsList participants={conversation.people} />
 
       {gameState < GameState.INTERACT ? (
         <DriverIdentifyAI
           {...sharedDriverProps}
           displayModal={showGenericModal}
-          updateConversation={safeUpdateConversation}
+          updateConversation={conversationState.safeUpdateConversation}
         />
       ) : (
         <DriverInteractWithAI
           {...sharedDriverProps}
           userName={userName}
           getUserName={showNameModal}
-          updateConversation={safeUpdateConversation}
+          updateConversation={conversationState.safeUpdateConversation}
         />
       )}
     </div>
