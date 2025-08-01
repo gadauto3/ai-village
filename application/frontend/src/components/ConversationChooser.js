@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { GameState, MAX_CONVOS, iconsPath, isLocalHost } from "./utils";
 import { getConversations } from "./APIService";
 import AnimatedCircles from "./AnimatedCircles";
+import { useGameContext } from "../context/GameContext";
 
 import conversationData from "./conversationSeeds.json";
 import tutorialData from "../../../backend/nodejs/tutorialSeed.json";
@@ -11,15 +12,17 @@ import "../css/ConversationChooser.css";
 import "../css/utils.css";
 import { TutorialState } from "./Tutorial";
 
-const ConversationChooser = ({
-  conversations,
-  setConversations,
-  gameState,
-  selectedConversation,
-  setSelectedConversation,
-  isTutorial,
-  tutorialState,
-}) => {
+const ConversationChooser = () => {
+  // Use GameContext instead of props
+  const {
+    conversations,
+    setConversations,
+    gameState,
+    selectedConversation,
+    setSelectedConversation,
+    isTutorial,
+    tutorialState,
+  } = useGameContext();
   const [areConversationsSet, setAreConversationsSet] = useState(false);
   const [isConvosMax, setIsConvosMax] = useState(false);
   const [isLoading, setIsLoading] = useState(false);

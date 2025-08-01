@@ -1,22 +1,25 @@
 import React, { useState, useMemo, useCallback } from "react";
 import { GameState, deepCopy, iconsPath } from "./utils";
+import { useGameContext } from "../context/GameContext";
 
 import "../css/ConversationDriver.css";
 import DriverIdentifyAI from "./DriverIdentifyAI";
 import DriverInteractWithAI from "./DriverInteractWithAI";
 
-const ConversationDriver = ({
-  conversation,
-  updateConversation,
-  gameState,
-  setGameState,
-  userName,
-  getUserName,
-  isTutorial,
-  tutorialState,
-  setTutorialState,
-  displayModal,
-}) => {
+const ConversationDriver = () => {
+  // Use GameContext for most props
+  const {
+    selectedConversation: conversation,
+    updateConversation,
+    gameState,
+    setGameState,
+    userName,
+    isTutorial,
+    tutorialState,
+    setTutorialState,
+    showNameModal,
+    showGenericModal,
+  } = useGameContext();
   const [isFetching, setIsFetching] = useState(false); // Fetching from the API
 
   if (!conversation) {
@@ -112,14 +115,14 @@ const ConversationDriver = ({
       {gameState < GameState.INTERACT ? (
         <DriverIdentifyAI
           {...sharedDriverProps}
-          displayModal={displayModal}
+          displayModal={showGenericModal}
           updateConversation={safeUpdateConversation}
         />
       ) : (
         <DriverInteractWithAI
           {...sharedDriverProps}
           userName={userName}
-          getUserName={getUserName}
+          getUserName={showNameModal}
           updateConversation={safeUpdateConversation}
         />
       )}

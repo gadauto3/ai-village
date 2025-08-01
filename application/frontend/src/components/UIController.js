@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useEffect } from 'react';
 import { GameState, isLocalHost } from './utils';
 
 import ConversationChooser from './ConversationChooser';
@@ -10,220 +10,158 @@ import ModalPopupEndGame from './ModalPopupEndGame';
 import BuildInfo from './BuildInfo';
 import { TutorialState } from './Tutorial';
 
+import useGameState from '../hooks/useGameState';
+import useModalState from '../hooks/useModalState';
+import { GameProvider } from '../context/GameContext';
+
 import "../css/UIController.css";
 
 import conversationDataInteract from './conversationSeedsForInteract.json';
 
 const UIController = () => {
-  
-  const [gameState, setGameState] = useState(GameState.INIT);
-  const [conversations, setConversations] = useState([]);
-  const [userName, setUserName] = useState(null);
-  const [tutorialState, setTutorialState] = useState(TutorialState.WAITING);
-  const [selectedConversation, setSelectedConversation] = useState(null);
-  const [isCelebrateModalShowing, setIsCelebrateModalShowing] = useState(false);
-  const [isEndGameModalShowing, setIsEndGameModalShowing] = useState(false);
-  const [isNameModalShowing, setIsNameModalShowing] = useState(false);
-  const [isGenericModalShowing, setIsGenericModalShowing] = useState(false);
-  const [modalConfig, setModalConfig] = useState({
-    textToDisplay: "Default message",
-    buttonText: "Ok",
-    onClose: () => {}
-  });
+  // Use custom hooks for state management
+  const gameStateHook = useGameState();
+  const modalStateHook = useModalState();
 
   useEffect(() => {
-    if (conversations.length > 1 && gameState === GameState.INIT) {
-      setGameState(GameState.NEXT_CONVO);
+    if (gameStateHook.conversations.length > 1 && gameStateHook.gameState === GameState.INIT) {
+      gameStateHook.setGameState(GameState.NEXT_CONVO);
     }
-  }, [conversations]);
+  }, [gameStateHook.conversations, gameStateHook.gameState, gameStateHook.setGameState]);
 
   useEffect(() => {
-    if (selectedConversation && gameState >= GameState.INTERACT) {
+    if (gameStateHook.selectedConversation && gameStateHook.gameState >= GameState.INTERACT) {
       // Handle tutorial
-      if (selectedConversation.key === 0 && tutorialState === TutorialState.MOVE_ON) {
-        setTutorialState(TutorialState.INTERACT_NEXT);
-      } else if (gameState === GameState.ERROR) {
+      if (gameStateHook.selectedConversation.key === 0 && gameStateHook.tutorialState === TutorialState.MOVE_ON) {
+        gameStateHook.setTutorialState(TutorialState.INTERACT_NEXT);
+      } else if (gameStateHook.gameState === GameState.ERROR) {
         // Handle post-error state
-        setGameState(GameState.INTERACT);
+        gameStateHook.setGameState(GameState.INTERACT);
       }
     }
-  }, [selectedConversation]);
-  
-  const allConversationsHaveResults = useMemo(() => {
-    return conversations.every(
+  }, [gameStateHook.selectedConversation, gameStateHook.gameState, gameStateHook.tutorialState, gameStateHook.setTutorialState, gameStateHook.setGameState]);
+  useEffect(() => {
+    const allConversationsHaveResults = gameStateHook.conversations.every(
       (conversation) => conversation.aiGuess !== null || conversation.key === 0
     );
-  }, [conversations]);
-
-  const allConversationsAreDone = useMemo(() => {
-    return conversations.every(
+    
+    const allConversationsAreDone = gameStateHook.conversations.every(
       (conversation) => conversation.isDone || conversation.key === 0
     );
-  }, [conversations]);
 
-  useEffect(() => {
-    if (gameState === GameState.MOVE_CONVOS) {
+    if (gameStateHook.gameState === GameState.MOVE_CONVOS) {
       if (allConversationsHaveResults) {
-        setGameState(GameState.CELEBRATE);
-        setIsCelebrateModalShowing(true);
-        updateNumApiCallsForAll();
+        gameStateHook.setGameState(GameState.CELEBRATE);
+        modalStateHook.showCelebrateModal();
+        gameStateHook.updateAllApiCalls();
       }
-    } else if (gameState === GameState.ERROR) {
+    } else if (gameStateHook.gameState === GameState.ERROR) {
       if (allConversationsAreDone) {
         setTimeout(() => {
-          setIsEndGameModalShowing(true);
-          setGameState(GameState.END_GAME);
+          modalStateHook.showEndGameModal();
+          gameStateHook.setGameState(GameState.END_GAME);
         }, 700);
       }
     }
-  }, [gameState, allConversationsHaveResults, allConversationsAreDone, updateNumApiCallsForAll]);
-  
-  const handleUpdateConversation = useCallback((updatedConversation) => {
-    const conversationIndex = conversations.findIndex(
-      (conversation) => conversation.key === updatedConversation.key
-    );
-  
-    if (conversationIndex !== -1) {
-      const updatedConversations = [...conversations];
-      updatedConversations[conversationIndex] = updatedConversation;
-  
-      setConversations(updatedConversations);
-      setSelectedConversation(updatedConversation);
-    }
-  }, [conversations]);  
-
-  const handleCloseCelebrateModal = useCallback(() => {
-    setIsCelebrateModalShowing(false);
-    setGameState(GameState.INTERACT);
-  }, []);
-
-  const handleCloseEndGameModal = useCallback(() => {
-    setIsEndGameModalShowing(false);
-    setGameState(GameState.INTERACT);
-  }, []);
-
-  const jumpToInteract = () => {
-    setGameState(GameState.CELEBRATE);
-    setConversations(conversationDataInteract);
-    setSelectedConversation(conversations[1]);
-    setIsCelebrateModalShowing(true);
+  }, [gameStateHook.gameState, gameStateHook.conversations, gameStateHook.setGameState, gameStateHook.updateAllApiCalls, modalStateHook.showCelebrateModal, modalStateHook.showEndGameModal]);
+  // Event handlers using the new hooks
+  const handleCloseCelebrateModal = () => {
+    modalStateHook.hideCelebrateModal();
+    gameStateHook.setGameState(GameState.INTERACT);
   };
 
-  const jumpToEndGame = () => {
-    setGameState(GameState.END_GAME);
-    setConversations(conversationDataInteract);
-    setSelectedConversation(conversations[1]);
-    setIsEndGameModalShowing(true);
+  const handleCloseEndGameModal = () => {
+    modalStateHook.hideEndGameModal();
+    gameStateHook.setGameState(GameState.INTERACT);
   };
 
-  const getNameFromUser = useCallback((modalConfig) => {
-    setModalConfig(modalConfig);
-    setIsNameModalShowing(true);
-  }, []);
+  const handleCloseNameModal = (name) => {
+    gameStateHook.setUserName(name);
+    modalStateHook.hideNameModal();
+  };
 
-  const handleCloseNameModal = useCallback((name) => {
-    setUserName(name);
-    setIsNameModalShowing(false);
-  }, []);
+  const handleJumpToInteract = () => {
+    gameStateHook.jumpToInteract(conversationDataInteract);
+    modalStateHook.showCelebrateModal();
+  };
 
-  const displayGenericModal = useCallback((modalConfig) => {
-    setModalConfig(modalConfig);
-    setIsGenericModalShowing(true);
-  }, []);
-
-  const handleCloseGenericModal = useCallback(() => {
-    setIsGenericModalShowing(false);
-  }, []);
-
-  const isTutorial = useMemo(() => {
-    return (
-      selectedConversation &&
-      selectedConversation.key === 0 &&
-      tutorialState !== TutorialState.MOVE_ON &&
-      tutorialState !== TutorialState.DONE
-    );
-  }, [selectedConversation, tutorialState]);
-
-  const updateNumApiCallsForAll = useCallback(() => {
-    const updatedConversations = conversations.map((conversation) => ({
-      ...conversation,
-      numApiCalls: 1,
-    }));
-    console.log("lines updated");
-    setConversations(updatedConversations);
-  }, [conversations]);
-
-  const endGameModalProps = useMemo(() => ({
-    conversations,
-    userName
-  }), [conversations, userName]);
+  const handleJumpToEndGame = () => {
+    gameStateHook.jumpToEndGame(conversationDataInteract);
+    modalStateHook.showEndGameModal();
+  };
 
   return (
-    <div className="outer-div">
-      <h1 className="text-center title-quicksand">
-        <span className="smaller-font">A</span>iMessage
-      </h1>
-      <div className="ui-controller">
-        <div className="top-section">
-          <ConversationChooser
-            conversations={conversations}
-            setConversations={setConversations}
-            gameState={gameState}
-            selectedConversation={selectedConversation}
-            setSelectedConversation={setSelectedConversation}
-            isTutorial={isTutorial}
-          />
-          <ConversationDriver
-            conversation={selectedConversation}
-            updateConversation={handleUpdateConversation}
-            gameState={gameState}
-            setGameState={setGameState}
-            userName={userName}
-            getUserName={getNameFromUser}
-            isTutorial={isTutorial}
-            tutorialState={tutorialState}
-            setTutorialState={setTutorialState}
-            displayModal={displayGenericModal}
-          />
+    <GameProvider
+      // Game state props
+      gameState={gameStateHook.gameState}
+      conversations={gameStateHook.conversations}
+      selectedConversation={gameStateHook.selectedConversation}
+      userName={gameStateHook.userName}
+      tutorialState={gameStateHook.tutorialState}
+      // Game state actions
+      setGameState={gameStateHook.setGameState}
+      setConversations={gameStateHook.setConversations}
+      setSelectedConversation={gameStateHook.setSelectedConversation}
+      setUserName={gameStateHook.setUserName}
+      setTutorialState={gameStateHook.setTutorialState}
+      updateConversation={gameStateHook.updateConversation}
+      updateAllApiCalls={gameStateHook.updateAllApiCalls}
+      jumpToInteract={gameStateHook.jumpToInteract}
+      jumpToEndGame={gameStateHook.jumpToEndGame}
+      // Modal actions
+      showCelebrateModal={modalStateHook.showCelebrateModal}
+      hideCelebrateModal={modalStateHook.hideCelebrateModal}
+      showEndGameModal={modalStateHook.showEndGameModal}
+      hideEndGameModal={modalStateHook.hideEndGameModal}
+      showNameModal={modalStateHook.showNameModal}
+      hideNameModal={modalStateHook.hideNameModal}
+      showGenericModal={modalStateHook.showGenericModal}
+      hideGenericModal={modalStateHook.hideGenericModal}
+    >
+      <div className="outer-div">
+        <h1 className="text-center title-quicksand">
+          <span className="smaller-font">A</span>iMessage
+        </h1>
+        <div className="ui-controller">
+          <div className="top-section">
+            <ConversationChooser />
+            <ConversationDriver />
+          </div>
+          <Instructions />
         </div>
-        <Instructions gameState={gameState} />
+        {modalStateHook.isCelebrateModalShowing && (
+          <ModalPopupCelebrate
+            closeModal={handleCloseCelebrateModal}
+          />
+        )}
+        {modalStateHook.isNameModalShowing && (
+          <ModalPopup
+            isVisible={modalStateHook.isNameModalShowing}
+            closeModal={handleCloseNameModal}
+            config={modalStateHook.modalConfig}
+          />
+        )}
+        {modalStateHook.isGenericModalShowing && (
+          <ModalPopup
+            isVisible={modalStateHook.isGenericModalShowing}
+            closeModal={modalStateHook.hideGenericModal}
+            config={modalStateHook.modalConfig}
+          />
+        )}
+        {modalStateHook.isEndGameModalShowing && (
+          <ModalPopupEndGame
+            closeModal={handleCloseEndGameModal}
+          />
+        )}
+        {isLocalHost() && (
+          <div>
+            <button onClick={handleJumpToInteract}>Interact</button>
+            <button onClick={handleJumpToEndGame}>EndGame</button>
+          </div>
+        )}
+        <BuildInfo />
       </div>
-      {isCelebrateModalShowing && (
-        <ModalPopupCelebrate
-          closeModal={handleCloseCelebrateModal}
-          conversations={conversations}
-          isTutorial={isTutorial}
-          tutorialState={tutorialState}
-        />
-      )}
-      {isNameModalShowing && (
-        <ModalPopup
-          isVisible={isNameModalShowing}
-          closeModal={handleCloseNameModal}
-          config={modalConfig}
-        />
-      )}
-      {isGenericModalShowing && (
-        <ModalPopup
-          isVisible={isGenericModalShowing}
-          closeModal={handleCloseGenericModal}
-          config={modalConfig}
-        />
-      )}
-      {isEndGameModalShowing && (
-        <ModalPopupEndGame
-          {...endGameModalProps}
-          closeModal={handleCloseEndGameModal}
-        />
-      )}
-      {isLocalHost() && (
-        <div>
-          <button onClick={jumpToInteract}>Interact</button>
-          <button onClick={jumpToEndGame}>EndGame</button>
-        </div>
-      )}
-      <BuildInfo />
-    </div>
+    </GameProvider>
   );
 };
 

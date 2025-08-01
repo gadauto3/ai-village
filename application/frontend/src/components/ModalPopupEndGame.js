@@ -1,9 +1,11 @@
 import React from "react";
+import { useGameContext } from "../context/GameContext";
 
 import "../css/ModalPopupEndGame.css";
 import ScoreHandler from "./ScoreHandler";
 
-const ModalPopupEndGame = ({ closeModal, conversations, userName }) => {
+const ModalPopupEndGame = ({ closeModal }) => {
+  const { conversations, userName } = useGameContext();
   const scoreHandler = ScoreHandler();
 
   const handleDismiss = () => {
