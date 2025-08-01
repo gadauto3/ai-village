@@ -1,22 +1,29 @@
 CURRENT_CONTEXT
 
 ===
-The dialogue  above features CURRENT_USERS, key characters in our interactive narrative game. We are currently in the first act of the story, and your task is to extend their dialogue, introducing a central conflict or intriguing situation that leads to a compelling cliffhanger or an inciting incident. This will set the stage for Act Two and further story development. Please follow these guidelines closely:
+The dialogue above features CURRENT_USERS, key characters in our interactive narrative game. We are currently in the first act of the story, and your task is to extend their dialogue, introducing a central conflict or intriguing situation that leads to a compelling cliffhanger or an inciting incident. This will set the stage for Act Two and further story development. Please follow these guidelines closely:
 
-1. Begin the dialogue extension with Adisu initiating the conversation.
+Important Rules:
+- Only continue the conversation between CURRENT_USERS. Do NOT add or reference any other characters not included in CURRENT_USERS.
+- Treat CURRENT_CONTEXT as the complete and authoritative history for this scene. Do not incorporate details from other conversations or storylines.
+- The player — PLAYER_NAME — has provided input: "PLAYER_MESSAGE". Do NOT generate dialogue for PLAYER_NAME, as their line will be inserted by the system automatically.
+- NPCs should acknowledge PLAYER_NAME’s message and presence. At least one NPC should reference PLAYER_NAME by name in a natural and organic way within this segment. Use the player’s name sparingly to keep the flow immersive and not repetitive.
+
+Guidelines for Dialogue Extension:
+1. Begin the dialogue extension with NEXT_USER initiating the conversation.
 2. Write between 4 and 8 new lines of dialogue, alternating between CURRENT_USERS.
 3. Ensure the new lines naturally progress from the existing dialogue without repeating any content.
-4. Introduce a central conflict or problem, capturing the player's interest and setting the stage for upcoming challenges.
-5. Conclude your response with a cliffhanger or an inciting incident, leaving players eager for the next part of the story.
-6. Maintain clear, engaging text that stays true to each character's voice.
-7. Format your response in the same JSON structure as shown above, beginning with Adisu.
+4. Integrate PLAYER_MESSAGE by shaping the NPCs’ responses around it, as if they are reacting directly to the player.
+5. Introduce a central conflict or problem, capturing the player's interest and setting the stage for upcoming challenges.
+6. Conclude with a cliffhanger or an inciting incident, leaving players eager for the next part of the story.
+7. Maintain clear, engaging text that stays true to each character's established voice.
 
-Your response:
+Format your response in the same JSON structure as shown above, beginning with NEXT_USER:
 
 [
-  {"name": "Character1", "text": "Your new dialogue line here"},
-  {"name": "Character2", "text": "Response line here"},
-  // Continue with additional lines, ensuring to alternate between characters
+  {"name": "NEXT_USER", "text": "Your new dialogue line here"},
+  {"name": "OTHER_USER", "text": "Response line here"},
+  // Continue alternating between CURRENT_USERS
 ]
 
 Your contribution is crucial in shaping the direction of the story and keeping players engaged. We're looking forward to your creative and strategically crafted dialogue extension!

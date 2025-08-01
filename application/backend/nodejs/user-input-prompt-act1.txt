@@ -3,18 +3,27 @@ CURRENT_CONTEXT
 ===
 Above is the ongoing conversation between CURRENT_USERS in our interactive narrative game. Additionally, the player — PLAYER_NAME — has chosen to interact with the storyline, providing their input: "PLAYER_MESSAGE".
 
-Important: 
-- Do NOT generate dialogue for PLAYER_NAME. The player's line will be inserted automatically by the system. 
-- NPCs should respond to the player's message, acknowledging PLAYER_NAME’s presence and influence.
-- At least one NPC should naturally reference PLAYER_NAME by name in this segment to make the player feel included. 
-- Use the player’s name sparingly so it feels organic and not repetitive.
+Important Rules:
+- Only continue the conversation between CURRENT_USERS. Do NOT add or reference any other characters not included in CURRENT_USERS.
+- Treat CURRENT_CONTEXT as the complete and authoritative history for this scene. Do not incorporate details from other conversations or storylines.
+- Do NOT generate dialogue for PLAYER_NAME. Their line will be inserted automatically by the system.
+- NPCs must respond to PLAYER_NAME’s message, acknowledging their presence and influence.
+- At least one NPC should naturally reference PLAYER_NAME by name in this segment to make the player feel included. Use the player’s name sparingly so it feels organic and not repetitive.
 
 Your task now is to:
 - Start with NEXT_USER initiating the new segment of the conversation.
-- Have the NPCs naturally acknowledge and react to the player's input, letting it shape the tone or direction of the dialogue.
+- Have the NPCs naturally acknowledge and react to the player's input, shaping the tone or direction of the dialogue around it.
 - Introduce a central conflict or problem, drawing from both the existing context and the player's contribution.
 - Ensure the dialogue flows naturally without repeating the player's line.
-- Conclude with a cliffhanger or inciting incident to set the stage for Act Two.
+- Conclude with a cliffhanger or inciting incident, setting the stage for Act Two.
 
 Format:
-Provide only NPC dialogue in the same JSON format as above, starting from NEXT_USER.
+Provide only NPC dialogue in the same JSON format as shown above, starting from NEXT_USER:
+
+[
+  {"name": "NEXT_USER", "text": "Your new dialogue line here"},
+  {"name": "OTHER_USER", "text": "Response line here"}
+  // Continue alternating between NEXT_USER and OTHER_USER
+]
+
+Your contribution is crucial in shaping the direction of the story and keeping players engaged. We're looking forward to your creative and strategically crafted dialogue extension!
