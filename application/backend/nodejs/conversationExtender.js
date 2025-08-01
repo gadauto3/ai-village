@@ -232,6 +232,7 @@ class ConversationExtender {
 
         // Sometimes I just get back an array of lines which is reasonable
         responseJson = Array.isArray(responseJson) ? {"lines":responseJson} : responseJson;
+        console.log("responseJson", responseJson);
         // TODO: remove this debugging, but it's helpful right now.
         const len1 = responseJson.lines.length;
         let responseLines = this.removeMatchingElements(originalLines, responseJson.lines);
@@ -242,6 +243,7 @@ class ConversationExtender {
         responseLines = ConversationAdapter.adaptLines(responseLines);
         const len4 = responseLines.length;
         logger.info({initialLen: len1, removeMatchingLen: len2, removeOthersLen: len3, adaptLinesLen: len4, names: this.extractUniqueNames(responseLines)});
+        console.log("responseLines", responseLines);
         callback(null, responseLines);
       } catch (e) {
         console.error("Problematic message:\n", responseCapture, "with context:\n", fullContext);
