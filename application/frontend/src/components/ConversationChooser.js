@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { GameState, MAX_CONVOS, iconsPath, isLocalHost } from "./utils";
 import { getConversations } from "./APIService";
 import AnimatedCircles from "./AnimatedCircles";
+import { useGameContext } from "../context/GameContext";
 
 import conversationData from "./conversationSeeds.json";
 import tutorialData from "../../../backend/nodejs/tutorialSeed.json";
@@ -11,15 +12,17 @@ import "../css/ConversationChooser.css";
 import "../css/utils.css";
 import { TutorialState } from "./Tutorial";
 
-const ConversationChooser = ({
-  conversations,
-  setConversations,
-  gameState,
-  selectedConversation,
-  setSelectedConversation,
-  isTutorial,
-  tutorialState
-}) => {
+const ConversationChooser = () => {
+  // Use GameContext instead of props
+  const {
+    conversations,
+    setConversations,
+    gameState,
+    selectedConversation,
+    setSelectedConversation,
+    isTutorial,
+    tutorialState,
+  } = useGameContext();
   const [areConversationsSet, setAreConversationsSet] = useState(false);
   const [isConvosMax, setIsConvosMax] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -30,7 +33,7 @@ const ConversationChooser = ({
 
   // TODO: For dev, remove later.
   useEffect(() => {
-    if (gameState == GameState.CELEBRATE && conversations.length > 1) {
+    if (gameState === GameState.CELEBRATE && conversations.length > 1) {
       setAreConversationsSet(true);
     }
   }, [conversations]);
@@ -84,9 +87,9 @@ const ConversationChooser = ({
 
   const isDivDisabled = (convo) => {
     return (
-      gameState == GameState.SELECT_AI ||
-      gameState == GameState.JOIN_CONVO ||
-      isTutorial() ||
+      gameState === GameState.SELECT_AI ||
+      gameState === GameState.JOIN_CONVO ||
+      isTutorial ||
       (convo && convo.key === 0 && tutorialState === TutorialState.DONE)
     );
   };
@@ -166,7 +169,7 @@ const ConversationChooser = ({
         </div>
       )}
 
-      {gameState == GameState.INIT && (
+      {gameState === GameState.INIT && (
         <button
           className="add-conversation-button"
           onClick={addConversation}
@@ -176,7 +179,7 @@ const ConversationChooser = ({
         </button>
       )}
 
-      {gameState == GameState.INIT && (
+      {gameState === GameState.INIT && (
         <button
           className="start-button"
           onClick={clickStart}
@@ -189,4 +192,4 @@ const ConversationChooser = ({
   );
 };
 
-export default ConversationChooser;
+export default React.memo(ConversationChooser);

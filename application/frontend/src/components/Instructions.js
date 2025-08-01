@@ -1,5 +1,6 @@
 import React from "react";
 import { GameState } from "./utils";
+import { useGameContext } from "../context/GameContext";
 
 import {
   InstructionsCelebrate,
@@ -14,9 +15,11 @@ import {
   InstructionsError
 } from "./longStrings";
 
-const Instructions = (gameState) => {
+const Instructions = () => {
+  const { gameState } = useGameContext();
+  
   const getInstructionsForState = (gameState) => {
-    switch (gameState.gameState) {
+    switch (gameState) {
       case GameState.NEXT_CONVO:
         return InstructionsNextConvo;
       case GameState.NOTICE_AI:
@@ -50,4 +53,4 @@ const Instructions = (gameState) => {
   );
 };
 
-export default Instructions;
+export default React.memo(Instructions);

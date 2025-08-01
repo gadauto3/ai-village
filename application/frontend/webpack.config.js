@@ -1,6 +1,27 @@
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
+const { execSync } = require('child_process');
+
+// Get git commit hash
+const getGitCommitHash = () => {
+  try {
+    return execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim();
+  } catch (error) {
+    console.warn('Could not get git commit hash:', error.message);
+    return 'unknown';
+  }
+};
+
+const getGitCommitShort = () => {
+  try {
+    return execSync('git rev-parse --short HEAD', { encoding: 'utf8' }).trim();
+  } catch (error) {
+    console.warn('Could not get short git commit hash:', error.message);
+    return 'unknown';
+  }
+};
 
 module.exports = {
   entry: path.join(__dirname, "src", "index.js"),
@@ -41,6 +62,11 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: path.join(__dirname, "src", "index.html"),
+    }),
+    new webpack.DefinePlugin({
+      'process.env.REACT_APP_GIT_COMMIT_HASH': JSON.stringify(getGitCommitHash()),
+      'process.env.REACT_APP_GIT_COMMIT_SHORT': JSON.stringify(getGitCommitShort()),
+      'process.env.REACT_APP_BUILD_TIME': JSON.stringify(new Date().toISOString()),
     }),
     new CopyPlugin({
       patterns: [

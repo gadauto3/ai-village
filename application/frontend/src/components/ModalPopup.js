@@ -1,4 +1,3 @@
-// Modal.js
 import React, { useState } from "react";
 import PropTypes from 'prop-types';
 import "../css/ModalPopup.css";
@@ -66,4 +65,4 @@ ModalPopup.propTypes = {
   }).isRequired
 };
 
-export default ModalPopup;
+export default React.memo(ModalPopup);

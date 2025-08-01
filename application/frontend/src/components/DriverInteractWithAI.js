@@ -71,7 +71,7 @@ const DriverInteractWithAI = ({
   const handleNextInteractClick = () => {
     const nextIndex = conversation.currentLineIndex;
 
-    if (isTutorial()) {
+    if (isTutorial) {
       handleNextInteractTutorialClick();
       return;
     }
@@ -346,7 +346,7 @@ const DriverInteractWithAI = ({
               className="notice-button"
               onClick={handleJoinConvo}
               disabled={
-                isTutorial() || conversation.isDone || conversation.key == 0
+                isTutorial || conversation.isDone || conversation.key == 0
               } // TODO: more tutorial needed
             >
               Join conversation

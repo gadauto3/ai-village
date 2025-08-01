@@ -65,14 +65,14 @@ const DriverIdentifyAI = ({
       showCheckboxes ||
       isFetching ||
       conversation.isDone ||
-      (isTutorial() && tutorialState === TutorialState.NOTICE_BTN)
+      (isTutorial && tutorialState === TutorialState.NOTICE_BTN)
     );
   };
 
   const handleNextClick = () => {
     const nextIndex = conversation.currentLineIndex;
 
-    if (isTutorial()) {
+    if (isTutorial) {
       handleTutorialNext();
       return;
     }
@@ -112,8 +112,8 @@ const DriverIdentifyAI = ({
 
   const handleNoticeClick = () => {
     if (
-      gameState == GameState.NOTICE_AI ||
-      gameState == GameState.MOVE_CONVOS
+      gameState === GameState.NOTICE_AI ||
+      gameState === GameState.MOVE_CONVOS
     ) {
 
       // Prevent people from clicking right when it appears
@@ -128,7 +128,7 @@ const DriverIdentifyAI = ({
       setGameState(GameState.SELECT_AI);
       setShowCheckboxes(true);
 
-      if (isTutorial()) {
+      if (isTutorial) {
         conversationRef.current = incrementIndex();
       }
     } else {
@@ -150,7 +150,7 @@ const DriverIdentifyAI = ({
           aiStartsHereMsg;
       }
 
-      if (isTutorial()) {
+      if (isTutorial) {
         updatedLine.message = "You did it!";
         conversationRef.current = incrementIndex(updatedConvo);
         setTutorialState(TutorialState.MOVE_ON);
@@ -169,9 +169,9 @@ const DriverIdentifyAI = ({
     return (
       gameState < GameState.NOTICE_AI ||
       conversation.currentLineIndex < NOTICE_INDEX ||
-      (gameState == GameState.SELECT_AI && checkedIndex == null) ||
+      (gameState === GameState.SELECT_AI && checkedIndex === null) ||
       isFetching ||
-      (isTutorial() && tutorialState === TutorialState.NEXT_BTN)
+      (isTutorial && tutorialState === TutorialState.NEXT_BTN)
     );
   };
 
@@ -269,7 +269,7 @@ const DriverIdentifyAI = ({
               onClick={handleNoticeClick}
               disabled={isNoticeDisabled()}
             >
-              {gameState == GameState.SELECT_AI
+              {gameState === GameState.SELECT_AI
                 ? "Submit guess"
                 : "I'm noticing AI generation"}
             </button>

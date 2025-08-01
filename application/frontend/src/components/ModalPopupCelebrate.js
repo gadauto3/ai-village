@@ -1,11 +1,12 @@
-// Modal.js
 import React from "react";
+import { useGameContext } from "../context/GameContext";
 
 import "../css/ModalPopupCelebrate.css";
 import ScoreHandler from "./ScoreHandler";
 import TargetVisualizer from "./TargetVisualizer";
 
-const ModalPopupCelebrate = ({ closeModal, conversations }) => {
+const ModalPopupCelebrate = ({ closeModal }) => {
+  const { conversations, isTutorial, tutorialState } = useGameContext();
   const scoreHandler = ScoreHandler();
 
   const handleDismiss = () => {
