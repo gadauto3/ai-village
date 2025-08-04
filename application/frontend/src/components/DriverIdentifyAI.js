@@ -33,6 +33,7 @@ const DriverIdentifyAI = ({
   const linesContainerRef = useRef(null);
   const conversationRef = useRef(conversation);
   const isFetchingForIdentifyRef = useRef(isFetchingForIdentify);
+  const isFetchingRef = useRef(isFetching);
   const scoreHandler = ScoreHandler();
 
   const NOTICE_INDEX = 2;
@@ -44,6 +45,12 @@ const DriverIdentifyAI = ({
         linesContainerRef.current.scrollHeight;
     }
   }, [conversation, isFetching]);
+
+  // Keep refs in sync with current prop values
+  useEffect(() => {
+    isFetchingRef.current = isFetching;
+    isFetchingForIdentifyRef.current = isFetchingForIdentify;
+  }, [isFetching, isFetchingForIdentify]);
 
   const handleTutorialNext = () => {
     if (tutorialState === TutorialState.WAITING) {
@@ -71,7 +78,7 @@ const DriverIdentifyAI = ({
 
   const handleNextClick = () => {
     const nextIndex = conversation.currentLineIndex;
-
+    
     if (isTutorial) {
       handleTutorialNext();
       return;
@@ -182,6 +189,9 @@ const DriverIdentifyAI = ({
 
   // Handle API calls
   const handleAPISuccess = (moreLines) => {
+    if (isFetchingRef.current) { // If we're still fetching, increment the currentLineIndex because the UI looks like a message is incoming
+      conversationRef.current = incrementIndex(conversationRef.current);
+    }
     conversationRef.current = updateConversationLines(moreLines, conversationRef.current);
     cleanupFetchingBools();
   };
