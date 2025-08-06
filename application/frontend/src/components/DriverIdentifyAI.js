@@ -201,7 +201,7 @@ const DriverIdentifyAI = ({
     if (isLocalHost() && linesLength <= 7) {
       const moreLines = makeMockLines(
         conversationRef.current.lines,
-        "identify"
+        "[identify]"
       );
       conversationRef.current = updateConversationLines(moreLines);
     } else if (conversationRef.current.lines[linesLength - 1].text !== errorLineText) {

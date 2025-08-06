@@ -36,25 +36,32 @@ export const getConversations = (numConvos, onSuccess, onError) => {
   });
 };
 
-export const retrieveAdditionalConversation = (numApiCalls, lines, onSuccess, onError) => {
+export const retrieveAdditionalConversation = (context, numApiCalls, onSuccess, onError) => {
     const endPoint = `/api/addToConversation?numApiCalls=${numApiCalls}`;
     console.log("endPoint", endPoint);
 
     const startTime = new Date();
+    const requestBody = {
+      context: context,
+      action: "add_to_conversation"
+    };
+    console.log("MCP Request Context:", JSON.stringify(requestBody, null, 2));
+
     fetch(config.apiPrefix + endPoint, {
       method: "POST",
       headers: {
         accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ lines: lines }),
+      body: JSON.stringify(requestBody),
     })
       .then((response) => response.json())
       .then((responseData) => {
         const durationInSeconds = (new Date() - startTime) / 1000;
+        console.log("MCP Response Context:", JSON.stringify(responseData, null, 2));
         console.log("responseData in", durationInSeconds, "seconds:", responseData);
-        if (responseData.moreLines.length) {
-            onSuccess(responseData.moreLines, durationInSeconds);
+        if (responseData.context && responseData.context.conversation && responseData.context.conversation.length) {
+            onSuccess(responseData.context.conversation, durationInSeconds);
         } else {
             onError("Did not receive additional lines");
         }

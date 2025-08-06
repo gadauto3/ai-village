@@ -18,17 +18,38 @@ app.get('/api/getConversations', (req, res) => {
 
 //https://d05czxd62e.execute-api.us-east-1.amazonaws.com/dev/api/addToConversation?numApiCalls=0
 app.post('/api/addToConversation', (req, res) => {
-    // Get data from request body
-    const data = req.body;
+    const { context, action } = req.body;
     const act = parseInt(req.query.numApiCalls);
+    const startTime = Date.now();
 
-    conversationExtender.extendConversation(data, act, (err, response) => {
+    conversationExtender.extendConversation(context, act, (err, updatedConversation) => {
+        const duration = (Date.now() - startTime) / 1000;
+        let newContext = { ...context, conversation: updatedConversation };
+
+        // Add trace support
+        if (!newContext.trace) newContext.trace = [];
+        newContext.trace.push({
+            agent: "backend",
+            action: action,
+            act: act,
+            timestamp: new Date().toISOString()
+        });
+
+        // Add/update metadata
+        if (!newContext.metadata) newContext.metadata = {};
+        newContext.metadata.lastApiCallDuration = duration;
+        newContext.metadata.lastAct = act;
+
+        // Log context for CloudWatch
+        console.log("MCP Context Response:", JSON.stringify(newContext));
+
         if (err) {
             console.error("Conversation extension failed: ", err);
-            res.send({ moreLines: [] });
+            newContext.error = err;
+            res.send({ context: newContext });
             return;
         } else {
-            res.send({ moreLines: response });
+            res.send({ context: newContext });
         }
     });
 });
