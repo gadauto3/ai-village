@@ -72,11 +72,13 @@ class ConversationExtender {
     const currentContext = JSON.stringify(context).trim();
     const currentUsers = uniqueNames.join(' and ');
     const nextUser = allNames[allNames.length - 2];
+    const otherUser = allNames[allNames.length - 1];
     
     userText = userText.replace('CURRENT_CONTEXT', currentContext);
     userText = userText.replace(/CURRENT_USERS/g, currentUsers);
     userText = userText.replace(/NEXT_USER/g, nextUser);
-
+    userText = userText.replace(/OTHER_USER/g, otherUser);
+    
     return userText.trim();
   }
 
@@ -184,6 +186,72 @@ class ConversationExtender {
     this.callOpenAI(fullContext, filteredLines, act, callback);
   }
 
+  processOpenAIResponse(response, originalLines, act, apiCallTime) {
+    // Safely extract the response content
+    if (!response.choices || !response.choices[0] || !response.choices[0].message) {
+      throw new Error("Invalid response structure from OpenAI API");
+    }
+    
+    const messageContent = response.choices[0].message.content;
+    if (!messageContent) {
+      throw new Error("Empty response content from OpenAI API");
+    }
+
+    // Extract JSON from the response using regex
+    const jsonRegex = /(\[.*\]|\{.*\})/s;
+    const match = messageContent.match(jsonRegex);
+    
+    if (!match) {
+      throw new Error("No valid JSON matched from the response.");
+    }
+
+    // Parse the extracted JSON
+    let responseJson;
+    try {
+      responseJson = JSON.parse(match[0]);
+    } catch (parseError) {
+      throw new Error(`Failed to parse JSON from response: ${parseError.message}`);
+    }
+
+    // Normalize response: ensure it has a 'lines' property
+    if (Array.isArray(responseJson)) {
+      responseJson = { "lines": responseJson };
+    }
+    
+    if (!responseJson.lines || !Array.isArray(responseJson.lines)) {
+      throw new Error("Response JSON does not contain a valid 'lines' array");
+    }
+
+    // Log the initial response
+    const people = `${originalLines[0].name} & ${originalLines[1].name}`;
+    logger.info({act: act, callTime: apiCallTime, people: people, response: messageContent});
+    
+    // Process the lines through filtering steps
+    const len1 = responseJson.lines.length;
+    let responseLines = this.removeMatchingElements(originalLines, responseJson.lines);
+    const len2 = responseLines.length;
+    
+    responseLines = this.removeOthersFromLines(originalLines, responseLines);
+    const len3 = responseLines.length;
+    
+    responseLines = ConversationAdapter.adaptLines(responseLines);
+    const len4 = responseLines.length;
+    
+    // Log the processing steps
+    logger.info({
+      initialLen: len1, 
+      removeMatchingLen: len2, 
+      removeOthersLen: len3, 
+      adaptLinesLen: len4, 
+      names: this.extractUniqueNames(responseLines)
+    });
+    
+    console.log("Processing steps - initial:", len1, "after removeMatching:", len2, 
+                "after removeOthers:", len3, "after adaptLines:", len4, "responseLines:", responseLines);
+    
+    return responseLines;
+  }
+
   async callOpenAI(fullContext, originalLines, act, callback, playerName = null) {
 
     let responseCapture = "uninitialized";
@@ -210,46 +278,17 @@ class ConversationExtender {
       const endTime = new Date(); // End time after API response
       const apiCallTime = (endTime - startTime) / 1000; // Calculate duration in seconds
   
-      // Check if the response is valid JSON
       try {
-        // Safely extract the text part
-        responseCapture = "got a response";
-        const message = response.choices[0].message;
-        responseCapture = message.content;
-
-        // Extract json if there's words around it from gpt
-        const jsonRegex = /(\[.*\]|\{.*\})/s;
-        const people = `${originalLines[0].name} & ${originalLines[1].name}`;
-        logger.info({act: act, callTime: apiCallTime, people: people, response: responseCapture});
-        const match = responseCapture.match(jsonRegex);
-        let responseJson = "before match";
-        if (match) {
-          const validJsonString = match[0];
-          responseJson = JSON.parse(validJsonString);
-        } else {
-          throw new Error("No valid JSON matched from the response.");
-        }
-
-        // Sometimes I just get back an array of lines which is reasonable
-        responseJson = Array.isArray(responseJson) ? {"lines":responseJson} : responseJson;
-        // TODO: remove this debugging, but it's helpful right now.
-        const len1 = responseJson.lines.length;
-        let responseLines = this.removeMatchingElements(originalLines, responseJson.lines);
-        const len2 = responseLines.length;
-        let len3 = -1;
-        responseLines = this.removeOthersFromLines(originalLines, responseLines);
-        len3 = responseLines.length;
-        responseLines = ConversationAdapter.adaptLines(responseLines);
-        const len4 = responseLines.length;
-        logger.info({initialLen: len1, removeMatchingLen: len2, removeOthersLen: len3, adaptLinesLen: len4, names: this.extractUniqueNames(responseLines)});
-        callback(null, responseLines);
+        const processedLines = this.processOpenAIResponse(response, originalLines, act, apiCallTime);
+        callback(null, processedLines);
       } catch (e) {
-        console.error("Problematic message:\n", responseCapture, "with context:\n", fullContext);
+        const responseContent = response.choices?.[0]?.message?.content || "No response content";
+        console.error("Problematic message:\n", responseContent, "with context:\n", fullContext);
         callback(e, null);
       }
     })
     .catch(err => {
-      logger.error(err, {responseContent: responseCapture.content});
+      logger.error(err, {responseContent: responseCapture});
       callback(err, null);
     });
   }

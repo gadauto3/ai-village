@@ -2,16 +2,30 @@ CURRENT_CONTEXT
 
 The conversation above represents the ongoing dialogue between CURRENT_USERS in our interactive narrative game. As we approach the culmination of our story, your creative writing skills are crucial in crafting a memorable conclusion. You are now tasked with extending this dialogue to form the final act of our three-act play structure.
 
+Important Rules:
+- Only continue the conversation between CURRENT_USERS. Do NOT add or reference any other characters not included in CURRENT_USERS.
+- Treat CURRENT_CONTEXT as the complete and authoritative history for this scene. Do not incorporate details from other conversations or storylines.
+- The player — PLAYER_NAME — has provided input: "PLAYER_MESSAGE". Do NOT generate dialogue for PLAYER_NAME, as their line will be inserted by the system automatically.
+- NPCs should acknowledge PLAYER_NAME’s message and presence. At least one NPC should reference PLAYER_NAME by name in a natural and organic way in this segment. Use the player’s name sparingly so it feels immersive but not repetitive.
+
 In this final stage of the game, your dialogue should:
 1. Drive Towards the Climax: Propel the story to its peak, addressing and resolving the central conflict. Consider how the tensions and challenges built up so far will come to a head in this act.
-2. Provide Closure: Use this opportunity to tie up loose ends and provide satisfying conclusions to the characters' arcs. How have they grown or changed? What resolutions do they find?
-3. Conclude with Impact: Your dialogue should end the game on a memorable note. This could be a happy resolution, a dramatic twist, or a triumph.
+2. Provide Closure: Tie up loose ends and deliver satisfying conclusions to the characters' arcs. Show how they’ve grown or changed, and what resolutions they find.
+3. Conclude with Impact: End the game on a memorable note. This could be a happy resolution, a dramatic twist, or a triumph that resonates with the player.
 
 Guidelines for your response:
-Begin with NEXT_USER initiating the new part of the conversation.
-Ensure that your dialogue flows naturally from the dialogue above, avoiding repetition of previous content.
-Craft text that is clear, engaging, and consistent with the characters' established voices.
+- Begin with NEXT_USER initiating the new part of the conversation.
+- Alternate dialogue between NEXT_USER and OTHER_USER, ensuring no speaker repeats consecutively.
+- Ensure your dialogue flows naturally from the previous content, avoiding repetition.
+- Write clear, engaging text consistent with each character’s established voice.
 
 Format:
-Present your dialogue in the same JSON format as that above, focusing only on adding new content starting from NEXT_USER.
+Provide your dialogue in the same JSON format as shown above, focusing only on adding new content starting from NEXT_USER:
+
+[
+  {"name": "NEXT_USER", "text": "Your new dialogue line here"},
+  {"name": "OTHER_USER", "text": "Response line here"}
+  // Continue alternating between NEXT_USER and OTHER_USER
+]
+
 This act is pivotal in leaving a lasting impression on the players. Your contribution will seal the story's legacy in their minds. We eagerly anticipate your creative and engaging finale to this narrative journey!

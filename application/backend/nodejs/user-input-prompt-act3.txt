@@ -1,15 +1,30 @@
 CURRENT_CONTEXT
 
-This is the current conversation between CURRENT_USERS in our interactive narrative game. In this concluding act, the player - PLAYER_NAME - has added their input to the story: ""PLAYER_MESSAGE""
+This is the current conversation between CURRENT_USERS in our interactive narrative game. In this concluding act, the player — PLAYER_NAME — has added their input to the story: "PLAYER_MESSAGE".
+
+Important Rules:
+- Only continue the conversation between CURRENT_USERS. Do NOT add or reference any other characters not included in CURRENT_USERS.
+- Treat CURRENT_CONTEXT as the complete and authoritative history for this scene. Do not incorporate details from other conversations or storylines.
+- Do NOT generate dialogue for PLAYER_NAME. Their line will be inserted automatically by the system.
+- NPCs must respond to PLAYER_NAME’s message, acknowledging their presence and influence.
+- At least one NPC should naturally reference PLAYER_NAME by name in this segment to make the player feel included. Use the player’s name sparingly so it feels organic and not repetitive.
 
 Your task is to seamlessly integrate this player input into the final act of our narrative. Act 3 is all about bringing the story to its climax and providing a satisfying resolution. Your dialogue should:
+
 1. Start with NEXT_USER, taking into account the player's input and the existing narrative context.
-2. Effectively incorporate PLAYER_NAME's message into the story. Think about how this input can influence the resolution of the central conflict or add a unique twist to the story's conclusion.
-3. Drive the narrative towards its climax, ensuring that the player's contribution plays a role in shaping the final outcome.
-4. Tie up loose ends, providing closure to the characters' arcs and the overall story. How does PLAYER_NAME's input impact these resolutions?
-5. End the game on a note that reflects the player's involvement, steering the narrative to a satisfying conclusion. Whether it culminates in triumph, a dramatic twist, or a poignant resolution, ensure that the ending resonates with the input provided by PLAYER_NAME. The conclusion should feel earned and conclusive, wrapping up the central conflict and character arcs in a way that acknowledges the player's impact on the story’s journey.
+2. Effectively incorporate PLAYER_NAME's message into the story. Consider how this input can influence the resolution of the central conflict or add a unique twist to the story's conclusion.
+3. Drive the narrative towards its climax, ensuring that the player's contribution plays a meaningful role in shaping the final outcome.
+4. Tie up loose ends, providing closure to the characters' arcs and the overall story. Show how PLAYER_NAME’s input impacts these resolutions.
+5. End the game on a note that reflects the player's involvement, steering the narrative to a satisfying conclusion. Whether it culminates in triumph, a dramatic twist, or a poignant resolution, ensure the ending resonates with PLAYER_NAME’s contribution and feels earned.
 
 Format:
-Return your dialogue in the same JSON format as CURRENT_CONTEXT, focusing on new content starting from NEXT_USER.
+Return your dialogue in the same JSON format as CURRENT_CONTEXT, focusing on new content starting from NEXT_USER:
+
+[
+  {"name": "NEXT_USER", "text": "Your new dialogue line here"},
+  {"name": "OTHER_USER", "text": "Response line here"}
+  // Continue alternating between NEXT_USER and OTHER_USER
+]
+
 Maintain clarity, engagement, and authenticity to the characters' voices, while echoing the impact of PLAYER_NAME's contribution.
 This final act is your opportunity to leave a lasting impression on the players, with PLAYER_NAME's input being a key component of the narrative's culmination. We look forward to seeing how you creatively and thoughtfully conclude this immersive and interactive story!

@@ -104,29 +104,30 @@ const DriverInteractWithAI = ({
     const newConvo = deepCopy(conversationRef.current);
     newConvo.apiCallTime += callDurationInSecs;
     console.log("newConvo.apiCallTime", newConvo.apiCallTime);
-    // This async call is holding onto state from when retrieve was called
-    const convoLines = newConvo.lines;
+    
+    // Add message to the first new line
     moreLines[0].message = `AI provided ${moreLines.length} more lines.`;
-    convoLines.push(...moreLines);
 
-    // Find the first AI line that may be after the user's line
+    // Find the first AI line that may be after the user's line and add message
     const firstAILine = newConvo.initialLength;
-    if (convoLines.length > firstAILine && newConvo.aiGuess != firstAILine) {
-      let msgIndex = firstAILine;
-      if (convoLines[firstAILine].name === userName) {
-        msgIndex++;
+    if (moreLines.length > 0 && newConvo.aiGuess != firstAILine) {
+      let msgIndex = 0; // Index within moreLines
+      if (newConvo.lines.length > firstAILine && newConvo.lines[firstAILine].name === userName) {
+        msgIndex = 1; // Skip to next line if first AI line is actually user
       }
-      convoLines[msgIndex].message =
-        aiStartsHereMsg + `, added ${moreLines.length} lines.`;
+      if (msgIndex < moreLines.length) {
+        moreLines[msgIndex].message = aiStartsHereMsg + `, added ${moreLines.length} lines.`;
+      }
     }
 
-    newConvo.lines = convoLines;
     // numApiCalls should not be 0 in this driver, update if so.
     if (newConvo.numApiCalls == 0) {
       newConvo.numApiCalls = 1;
     }
     newConvo.numApiCalls++;
-    conversationRef.current = updateConversation(newConvo);
+
+    // Use updateConversationLines to properly handle currentLineIndex
+    conversationRef.current = updateConversationLines(moreLines, newConvo);
 
     setIsFetching(false);
   };
