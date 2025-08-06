@@ -22,7 +22,24 @@ app.post('/api/addToConversation', (req, res) => {
     const act = parseInt(req.query.numApiCalls);
     const startTime = Date.now();
 
-    conversationExtender.extendConversation(context, act, (err, updatedConversation) => {
+    // Validate context structure
+    console.log("Received request body:", JSON.stringify(req.body, null, 2));
+    
+    if (!context) {
+        console.error("Missing context in request body");
+        res.status(400).send({ error: "Missing context in request body" });
+        return;
+    }
+
+    // Ensure context has the expected structure for the backend
+    const backendContext = {
+        lines: context.conversation || context.lines || [],
+        ...context
+    };
+
+    console.log("Processed backend context:", JSON.stringify(backendContext, null, 2));
+
+    conversationExtender.extendConversation(backendContext, act, (err, updatedConversation) => {
         const duration = (Date.now() - startTime) / 1000;
         let newContext = { ...context, conversation: updatedConversation };
 

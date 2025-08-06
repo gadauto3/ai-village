@@ -94,9 +94,16 @@ const DriverIdentifyAI = ({
       isFetchingForIdentifyRef.current = true;
       conversationRef.current = conversation;
       console.log("conversationRef.current", conversationRef.current.lines);
+      const context = {
+        conversation: conversation.lines,
+        metadata: {
+          currentLineIndex: conversation.currentLineIndex,
+          isTutorial: isTutorial
+        }
+      };
       retrieveAdditionalConversation(
+        context,
         0,
-        conversation.lines,
         handleAPISuccess,
         handleAPIError
       );
